@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --color-dark-navy: #071521;
+    --color-deep-navy: #0B1F33;
+    --color-primary-teal: #087F8C;
+    --color-secondary-teal: #0E9AA6;
+    --color-soft-blue: #EAF5F7;
+    --color-bg-sand: #F7F9F8;
+    --color-text-main: #17212B;
+    --color-text-muted: #66737F;
+    --color-accent-teal: #B9D8D6;
+    --color-border-light: #E5E7EB;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--color-text-main);
+    background-color: var(--color-bg-sand);
+    letter-spacing: -0.01em;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.025em;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F7F9F8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #087F8C;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #071521;
+}
+
+/* Professional Polish card and shadow styles */
+.polish-card {
+  background: #ffffff;
+  border: 1px solid #E5E7EB;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px -5px rgba(11, 31, 51, 0.05), 0 8px 10px -6px rgba(11, 31, 51, 0.03);
+  transition: all 0.25s ease-in-out;
+}
+
+.polish-card:hover {
+  border-color: #B9D8D6;
+  box-shadow: 0 20px 30px -10px rgba(8, 127, 140, 0.12), 0 10px 10px -5px rgba(11, 31, 51, 0.04);
+}
+
+.polish-card-highlight {
+  background: #ffffff;
+  border: 1px solid #B9D8D6;
+  border-radius: 1rem;
+  box-shadow: 0 12px 28px -6px rgba(8, 127, 140, 0.1);
+}
+
+.polish-dark-card {
+  background: linear-gradient(135deg, rgba(11, 31, 51, 0.95) 0%, rgba(7, 21, 33, 0.98) 100%);
+  border: 1px solid rgba(185, 216, 214, 0.2);
+  border-radius: 1rem;
+  box-shadow: 0 20px 35px -10px rgba(7, 21, 33, 0.5);
+}
+
+/* Glassmorphism utilities */
+.glass-dark {
+  background: rgba(11, 31, 51, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid #E5E7EB;
+}
+
+.subtle-grid-pattern {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(8, 127, 140, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(8, 127, 140, 0.05) 1px, transparent 1px);
+}
+
+.subtle-grid-pattern-light {
+  background-size: 32px 32px;
+  background-image:
+    linear-gradient(to right, rgba(11, 31, 51, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(11, 31, 51, 0.04) 1px, transparent 1px);
+}
+
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s infinite ease-in-out;
+}
+
+@keyframes float-slow {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s infinite ease-in-out;
+}

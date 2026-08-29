@@ -1,0 +1,6 @@
+{
+  "name": "NovaThera Life Sciences",
+  "description": "Premium pharmaceutical and specialty healthcare corporate website showcasing science-driven therapeutic solutions, clinical research, products, and development pipeline.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

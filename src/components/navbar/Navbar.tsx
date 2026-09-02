@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowRight, Phone, MapPin, ChevronRight, ShoppingBag } from 'lucide-react';
-import { LevixLogo } from '../common/LevixLogo';
+import {
+  Menu,
+  X,
+  ArrowRight,
+  Phone,
+  MapPin,
+  ChevronRight,
+  ShoppingBag,
+  Mail,
+  Linkedin,
+  Facebook,
+  Instagram,
+  Youtube,
+} from 'lucide-react';
+import  LevixLogo  from '../common/Levix.jpeg';
 import { companyInfo } from '../../data/company';
 
 interface NavbarProps {
@@ -10,11 +23,11 @@ interface NavbarProps {
   onOpenCart?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ 
-  activeSection = 'home', 
+export const Navbar: React.FC<NavbarProps> = ({
+  activeSection = 'home',
   onSectionClick,
   cartCount = 0,
-  onOpenCart
+  onOpenCart,
 }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -23,17 +36,21 @@ export const Navbar: React.FC<NavbarProps> = ({
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
+
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -44,218 +61,729 @@ export const Navbar: React.FC<NavbarProps> = ({
     { label: 'About Us', id: 'about' },
     { label: 'Formulations', id: 'formulations' },
     { label: 'Quality Standards', id: 'quality' },
-    { label: 'Contact', id: 'contact' },
+    { label: 'Services', id: 'services' },
+    { label: 'Contact Us', id: 'contact' },
   ];
 
   const handleNav = (id: string) => {
     setMobileMenuOpen(false);
+
     if (onSectionClick) {
       onSectionClick(id);
-    } else {
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
+      return;
+    }
+
+    const element = document.getElementById(id);
+
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
     }
   };
 
   return (
     <>
-      {/* 1. Top Direct Contact & Company Utility Bar */}
-      <div className="bg-[#060B14] text-[#CBD5E1] border-b border-white/10 text-xs py-2 px-4 sm:px-6 lg:px-8 z-50">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          {/* Left Company Identity */}
-          <div className="flex items-center gap-2.5 text-[11px] font-mono">
-            <span className="inline-flex items-center gap-1.5 text-[#38BDF8] font-bold">
-              <span className="w-2 h-2 rounded-full bg-[#00D2FF] animate-pulse" />
-              <span>LEVIX BIO SCIENCE PVT LTD</span>
-            </span>
-            <span className="hidden md:inline text-white/20">|</span>
-            <span className="hidden md:inline text-[#94A3B8] italic">
-              &quot;Science you trust, health you feel.&quot;
-            </span>
-          </div>
+      {/* =========================================================
+          TOP CONTACT BAR
+      ========================================================= */}
+      <div
+        className="
+          relative
+          z-[60]
+          bg-[#32164F]
+          text-white
+          border-b
+          border-white/10
+        "
+      >
+        <div
+          className="
+            max-w-7xl
+            mx-auto
+            px-4
+            sm:px-6
+            lg:px-8
+            py-2.5
+          "
+        >
+          <div
+            className="
+              flex
+              items-center
+              justify-between
+              gap-4
+              text-[11px]
+              sm:text-xs
+            "
+          >
+            {/* LEFT */}
+            <div className="flex items-center gap-3">
 
-          {/* Right Address & Phone Numbers */}
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-[11px] font-mono">
-            <span className="hidden lg:inline-flex items-center gap-1 text-[#CBD5E1]">
-              <MapPin className="w-3 h-3 text-[#0066CC]" />
-              <span>Kolathur, Chennai - 600099</span>
-            </span>
-            <span className="hidden lg:inline text-white/20">|</span>
-            <div className="flex items-center gap-2">
-              <span className="text-[#94A3B8]">Tel:</span>
-              <a 
+              <div className="hidden sm:flex items-center gap-2">
+                <MapPin
+                  size={13}
+                  className="text-[#E0B44C]"
+                />
+
+                <span className="text-white/90">
+                  Kolathur, Chennai - 600099
+                </span>
+              </div>
+
+              <span className="hidden sm:block text-white/20">
+                |
+              </span>
+
+              <a
                 href={`tel:${companyInfo.contact.headquarters.phone1}`}
-                className="font-bold text-[#38BDF8] hover:text-white transition-colors flex items-center gap-1"
-                title="Call Primary Line 8907608896"
+                className="
+                  flex
+                  items-center
+                  gap-1.5
+                  text-white/90
+                  hover:text-[#E8C76A]
+                  transition-colors
+                "
               >
-                <Phone className="w-3 h-3 text-[#0066CC]" />
-                <span>8907608896</span>
+                <Phone
+                  size={12}
+                  className="text-[#E0B44C]"
+                />
+
+                <span>
+                  8907608896
+                </span>
               </a>
-              <span className="text-white/30">/</span>
-              <a 
+
+              <span className="text-white/30">
+                /
+              </span>
+
+              <a
                 href={`tel:${companyInfo.contact.headquarters.phone2}`}
-                className="font-bold text-[#CBD5E1] hover:text-white transition-colors"
-                title="Call Support Line 9894344714"
+                className="
+                  text-white/90
+                  hover:text-[#E8C76A]
+                  transition-colors
+                "
               >
-                <span>9894344714</span>
+                9894344714
               </a>
             </div>
+
+            {/* RIGHT */}
+            <div className="flex items-center gap-3">
+
+              <a
+                href="mailto:info@levixbiosciences.com"
+                className="
+                  hidden
+                  md:flex
+                  items-center
+                  gap-1.5
+                  text-white/80
+                  hover:text-white
+                  transition-colors
+                "
+              >
+                <Mail
+                  size={12}
+                  className="text-[#E0B44C]"
+                />
+
+                info@levixbiosciences.com
+              </a>
+
+              <span className="hidden md:block text-white/20">
+                |
+              </span>
+
+              {/* SOCIAL ICONS */}
+              <div className="flex items-center gap-2">
+
+                <a
+                  href="#"
+                  aria-label="LinkedIn"
+                  className="
+                    w-6
+                    h-6
+                    rounded-full
+                    bg-white/10
+                    flex
+                    items-center
+                    justify-center
+                    hover:bg-[#E0B44C]
+                    hover:text-[#32164F]
+                    transition-all
+                  "
+                >
+                  <Linkedin size={12} />
+                </a>
+
+                <a
+                  href="#"
+                  aria-label="Facebook"
+                  className="
+                    w-6
+                    h-6
+                    rounded-full
+                    bg-white/10
+                    flex
+                    items-center
+                    justify-center
+                    hover:bg-[#E0B44C]
+                    hover:text-[#32164F]
+                    transition-all
+                  "
+                >
+                  <Facebook size={12} />
+                </a>
+
+                <a
+                  href="#"
+                  aria-label="Instagram"
+                  className="
+                    w-6
+                    h-6
+                    rounded-full
+                    bg-white/10
+                    flex
+                    items-center
+                    justify-center
+                    hover:bg-[#E0B44C]
+                    hover:text-[#32164F]
+                    transition-all
+                  "
+                >
+                  <Instagram size={12} />
+                </a>
+
+                <a
+                  href="#"
+                  aria-label="YouTube"
+                  className="
+                    w-6
+                    h-6
+                    rounded-full
+                    bg-white/10
+                    flex
+                    items-center
+                    justify-center
+                    hover:bg-[#E0B44C]
+                    hover:text-[#32164F]
+                    transition-all
+                  "
+                >
+                  <Youtube size={12} />
+                </a>
+
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
 
-      {/* 2. Modern Floating Glassmorphic Main Navigation Bar */}
+      {/* =========================================================
+          MAIN NAVBAR
+      ========================================================= */}
       <header
-        className={`sticky top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          scrolled
-            ? 'bg-white/95 backdrop-blur-xl border-b border-[#CBD5E1]/80 py-2.5 shadow-md shadow-[#0B1324]/5'
-            : 'bg-white border-b border-[#E2E8F0] py-3.5'
-        }`}
+        className={`
+          sticky
+          top-0
+          left-0
+          right-0
+          z-50
+          transition-all
+          duration-300
+          ${
+            scrolled
+              ? `
+                bg-white/95
+                backdrop-blur-xl
+                shadow-[0_8px_30px_rgba(55,25,75,0.08)]
+                border-b
+                border-[#EEE6F4]
+                py-2
+              `
+              : `
+                bg-white
+                border-b
+                border-[#F0EBF4]
+                py-3
+              `
+          }
+        `}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between gap-4">
-            
-            {/* Brand Logo */}
-            <button
-              onClick={() => handleNav('home')}
-              className="flex items-center text-left group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0066CC] rounded-xl"
-              id="navbar-logo-btn"
-              aria-label="LEVIX Bio Science Home"
-            >
-              <LevixLogo variant="horizontal" size="md" />
-            </button>
 
-            {/* Desktop Navigation Links with Modern Hover & Active Pill State */}
-            <nav className="hidden lg:flex items-center gap-1 bg-[#F1F5F9]/80 p-1.5 rounded-full border border-[#CBD5E1]/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+          <div className="flex items-center justify-between gap-5">
+
+            {/* =================================================
+                LOGO
+            ================================================= */}
+            <button
+  onClick={() => handleNav('home')}
+  className="
+    flex items-center shrink-0
+    rounded-xl
+    focus:outline-none
+    focus-visible:ring-2
+    focus-visible:ring-[#7137A5]
+  "
+  aria-label="LEVIX Biosciences Home"
+>
+<img
+  src={LevixLogo}
+  alt="LEVIX Biosciences"
+  className="h-12 sm:h-14 w-auto object-contain"
+/>
+</button>
+
+            {/* =================================================
+                DESKTOP NAVIGATION
+            ================================================= */}
+            <nav
+              className="
+                hidden
+                lg:flex
+                items-center
+                gap-1
+                bg-[#FAF8FC]
+                border
+                border-[#EEE6F4]
+                rounded-full
+                p-1.5
+              "
+            >
+
               {navItems.map((item) => {
-                const isActive = activeSection === item.id;
+
+                const isActive =
+                  activeSection === item.id;
+
                 return (
                   <button
                     key={item.id}
                     onClick={() => handleNav(item.id)}
-                    className={`text-xs font-bold transition-all px-4 py-2 rounded-full focus:outline-none ${
-                      isActive
-                        ? 'bg-[#0066CC] text-white shadow-sm'
-                        : 'text-[#475569] hover:text-[#0066CC] hover:bg-white/80'
-                    }`}
-                    id={`nav-link-${item.id}`}
+                    className={`
+                      relative
+                      px-4
+                      xl:px-5
+                      py-2.5
+                      rounded-full
+                      text-xs
+                      xl:text-sm
+                      font-semibold
+                      transition-all
+                      duration-200
+                      ${
+                        isActive
+                          ? `
+                            bg-[#7137A5]
+                            text-white
+                            shadow-md
+                            shadow-[#7137A5]/20
+                          `
+                          : `
+                            text-[#514758]
+                            hover:text-[#7137A5]
+                            hover:bg-white
+                          `
+                      }
+                    `}
                   >
-                    <span>{item.label}</span>
+                    {item.label}
+
+                    {/* GOLD ACTIVE LINE */}
+                    {isActive && (
+                      <span
+                        className="
+                          absolute
+                          bottom-0.5
+                          left-1/2
+                          -translate-x-1/2
+                          w-5
+                          h-[2px]
+                          bg-[#E0B44C]
+                          rounded-full
+                        "
+                      />
+                    )}
                   </button>
                 );
               })}
+
             </nav>
 
-            {/* Right Action Buttons */}
+            {/* =================================================
+                RIGHT ACTIONS
+            ================================================= */}
             <div className="flex items-center gap-2 sm:gap-3">
-              {/* Shopping Cart Button */}
+
+              {/* CART */}
               {onOpenCart && (
                 <button
                   onClick={onOpenCart}
-                  className="relative p-2.5 rounded-full bg-[#F1F5F9] hover:bg-[#E2E8F0] text-[#0B1324] border border-[#CBD5E1] transition-all flex items-center justify-center touch-target"
+                  className="
+                    relative
+                    w-10
+                    h-10
+                    rounded-full
+                    bg-[#FAF8FC]
+                    border
+                    border-[#E8DFF0]
+                    flex
+                    items-center
+                    justify-center
+                    text-[#7137A5]
+                    hover:bg-[#F3EAF8]
+                    hover:border-[#D9C2E7]
+                    transition-all
+                  "
                   aria-label="Open order cart"
                   title="View Cart"
                 >
-                  <ShoppingBag className="w-4 h-4 text-[#0066CC]" />
+                  <ShoppingBag size={17} />
+
                   {cartCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-[#0066CC] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md animate-in zoom-in-50">
+                    <span
+                      className="
+                        absolute
+                        -top-1
+                        -right-1
+                        min-w-[19px]
+                        h-[19px]
+                        px-1
+                        rounded-full
+                        bg-[#D49B24]
+                        text-white
+                        text-[9px]
+                        font-bold
+                        flex
+                        items-center
+                        justify-center
+                        shadow-sm
+                      "
+                    >
                       {cartCount}
                     </span>
                   )}
                 </button>
               )}
 
-              {/* Clean Contact Button */}
-              <div className="hidden sm:block">
-                <button
-                  onClick={() => handleNav('contact')}
-                  className="relative inline-flex items-center gap-2 bg-gradient-to-r from-[#0066CC] to-[#0A84FF] hover:from-[#0052CC] hover:to-[#0066CC] text-white px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-md shadow-[#0066CC]/20 hover:shadow-lg hover:scale-[1.02] group focus:outline-none"
-                  id="navbar-contact-cta-btn"
-                >
-                  <span>Contact Us</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                </button>
-              </div>
+              {/* CONTACT CTA */}
+              <button
+                onClick={() => handleNav('contact')}
+                className="
+                  hidden
+                  sm:inline-flex
+                  items-center
+                  gap-2
+                  px-5
+                  py-2.5
+                  rounded-full
+                  bg-[#7137A5]
+                  hover:bg-[#5D278C]
+                  text-white
+                  text-xs
+                  font-bold
+                  shadow-lg
+                  shadow-[#7137A5]/20
+                  transition-all
+                  hover:-translate-y-0.5
+                  group
+                "
+              >
+                <span>
+                  Get In Touch
+                </span>
 
-              {/* Mobile Header Hamburger Toggle (< 1024px) */}
-              <div className="flex items-center lg:hidden">
-                <button
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="p-2.5 rounded-xl bg-[#0B1324] text-white hover:bg-[#0066CC] transition-colors focus:outline-none touch-target"
-                  aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-                  aria-expanded={mobileMenuOpen}
-                  id="mobile-menu-toggle"
-                >
-                  {mobileMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-white" />}
-                </button>
-              </div>
+                <ArrowRight
+                  size={15}
+                  className="
+                    group-hover:translate-x-1
+                    transition-transform
+                  "
+                />
+              </button>
+
+              {/* MOBILE MENU */}
+              <button
+                onClick={() =>
+                  setMobileMenuOpen(!mobileMenuOpen)
+                }
+                className="
+                  lg:hidden
+                  w-10
+                  h-10
+                  rounded-xl
+                  bg-[#32164F]
+                  text-white
+                  flex
+                  items-center
+                  justify-center
+                  hover:bg-[#7137A5]
+                  transition-colors
+                "
+                aria-label={
+                  mobileMenuOpen
+                    ? 'Close navigation menu'
+                    : 'Open navigation menu'
+                }
+                aria-expanded={mobileMenuOpen}
+              >
+                {mobileMenuOpen ? (
+                  <X size={20} />
+                ) : (
+                  <Menu size={20} />
+                )}
+              </button>
+
             </div>
-
           </div>
         </div>
 
-        {/* Mobile Fullscreen Animated Glassmorphism Drawer */}
+        {/* =====================================================
+            MOBILE MENU
+        ===================================================== */}
         {mobileMenuOpen && (
-          <div className="lg:hidden fixed inset-x-0 top-[59px] bottom-0 bg-[#0B1324]/98 backdrop-blur-2xl border-t border-white/10 z-50 overflow-y-auto p-5 flex flex-col justify-between animate-in fade-in slide-in-from-top-3 duration-200">
-            
-            <div className="space-y-5">
-              {/* Brand Tagline Header */}
-              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-left space-y-1">
-                <div className="text-white font-extrabold text-base font-['Manrope']">
-                  LEVIX bio science pvt ltd
-                </div>
-                <p className="text-xs text-[#38BDF8] italic">
-                  &quot;Science you trust, health you feel.&quot;
+          <div
+            className="
+              lg:hidden
+              absolute
+              top-full
+              left-0
+              right-0
+              bg-white
+              border-t
+              border-[#EEE6F4]
+              shadow-[0_20px_40px_rgba(45,20,60,0.12)]
+              animate-in
+              fade-in
+              slide-in-from-top-2
+              duration-200
+            "
+          >
+
+            <div className="p-5">
+
+              {/* MOBILE BRAND CARD */}
+              <div
+                className="
+                  rounded-2xl
+                  p-5
+                  mb-5
+                  bg-gradient-to-br
+                  from-[#32164F]
+                  to-[#7137A5]
+                  text-white
+                  relative
+                  overflow-hidden
+                "
+              >
+
+                {/* Decorative circle */}
+                <div
+                  className="
+                    absolute
+                    -right-10
+                    -top-10
+                    w-32
+                    h-32
+                    rounded-full
+                    border
+                    border-white/10
+                  "
+                />
+
+                <p className="
+                  text-[10px]
+                  uppercase
+                  tracking-[0.2em]
+                  text-[#E0B44C]
+                  font-bold
+                  mb-2
+                ">
+                  LEVIX BIOSCIENCES
                 </p>
-                <div className="flex items-start gap-1.5 text-[11px] text-[#94A3B8] pt-1">
-                  <MapPin className="w-3.5 h-3.5 text-[#00D2FF] shrink-0 mt-0.5" />
-                  <span>Kolathur, Chennai - 600099</span>
+
+                <p className="
+                  font-serif
+                  italic
+                  text-lg
+                ">
+                  Science you trust,
+                  <br />
+                  Health you feel.
+                </p>
+
+                <div className="
+                  flex
+                  items-center
+                  gap-2
+                  mt-4
+                  text-xs
+                  text-white/70
+                ">
+                  <MapPin
+                    size={13}
+                    className="text-[#E0B44C]"
+                  />
+
+                  Kolathur, Chennai - 600099
                 </div>
+
               </div>
 
-              {/* Navigation Links */}
-              <div className="space-y-1.5">
-                <div className="px-2 py-1 text-[10px] uppercase tracking-widest text-[#38BDF8] font-mono font-bold text-left">
-                  Menu
-                </div>
+              {/* MENU TITLE */}
+              <div className="
+                px-2
+                mb-2
+                text-[10px]
+                uppercase
+                tracking-[0.2em]
+                text-[#9A8EA3]
+                font-bold
+              ">
+                Navigation
+              </div>
+
+              {/* MOBILE LINKS */}
+              <div className="space-y-1">
+
                 {navItems.map((item) => {
-                  const isActive = activeSection === item.id;
+
+                  const isActive =
+                    activeSection === item.id;
+
                   return (
                     <button
                       key={item.id}
                       onClick={() => handleNav(item.id)}
-                      className={`w-full text-left px-4 py-3.5 rounded-xl text-sm font-bold transition-all flex items-center justify-between touch-target ${
-                        isActive
-                          ? 'bg-[#0066CC] text-white shadow-md'
-                          : 'text-[#E2E8F0] hover:bg-white/10'
-                      }`}
+                      className={`
+                        w-full
+                        flex
+                        items-center
+                        justify-between
+                        px-4
+                        py-3.5
+                        rounded-xl
+                        text-sm
+                        font-semibold
+                        transition-all
+                        ${
+                          isActive
+                            ? `
+                              bg-[#7137A5]
+                              text-white
+                              shadow-md
+                            `
+                            : `
+                              text-[#514758]
+                              hover:bg-[#F7F1FA]
+                              hover:text-[#7137A5]
+                            `
+                        }
+                      `}
                     >
-                      <span>{item.label}</span>
-                      <ChevronRight className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#64748B]'}`} />
+
+                      <span>
+                        {item.label}
+                      </span>
+
+                      <ChevronRight
+                        size={17}
+                        className={
+                          isActive
+                            ? 'text-[#E0B44C]'
+                            : 'text-[#A89BAF]'
+                        }
+                      />
+
                     </button>
                   );
                 })}
-              </div>
-            </div>
 
-            {/* Mobile Drawer Bottom CTA */}
-            <div className="pt-4 border-t border-white/10 space-y-3 text-center">
+              </div>
+
+              {/* MOBILE CONTACT */}
               <button
                 onClick={() => handleNav('contact')}
-                className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#0066CC] to-[#0A84FF] text-white font-bold text-sm text-center flex items-center justify-center gap-2 shadow-lg touch-target"
+                className="
+                  w-full
+                  mt-5
+                  py-3.5
+                  rounded-xl
+                  bg-[#7137A5]
+                  text-white
+                  font-bold
+                  text-sm
+                  flex
+                  items-center
+                  justify-center
+                  gap-2
+                  shadow-lg
+                  shadow-[#7137A5]/20
+                "
               >
-                <span>Contact Chennai Office</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              <div className="text-[11px] text-[#94A3B8]">
-                © {new Date().getFullYear()} LEVIX bio science pvt ltd • Chennai, India
-              </div>
-            </div>
+                Contact Us
 
+                <ArrowRight size={17} />
+              </button>
+
+              {/* MOBILE PHONE */}
+              <div className="
+                mt-5
+                pt-5
+                border-t
+                border-[#EEE6F4]
+                flex
+                items-center
+                justify-center
+                gap-2
+                text-xs
+                text-[#77717C]
+              ">
+                <Phone
+                  size={13}
+                  className="text-[#7137A5]"
+                />
+
+                <a
+                  href={`tel:${companyInfo.contact.headquarters.phone1}`}
+                  className="font-semibold"
+                >
+                  8907608896
+                </a>
+
+                <span>/</span>
+
+                <a
+                  href={`tel:${companyInfo.contact.headquarters.phone2}`}
+                  className="font-semibold"
+                >
+                  9894344714
+                </a>
+              </div>
+
+              {/* TAGLINE */}
+              <p className="
+                text-center
+                text-[10px]
+                text-[#A89BAF]
+                mt-4
+              ">
+                © {new Date().getFullYear()} LEVIX Biosciences Pvt Ltd
+              </p>
+
+            </div>
           </div>
         )}
+
       </header>
     </>
   );

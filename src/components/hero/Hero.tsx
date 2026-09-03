@@ -525,7 +525,7 @@ export const Hero: React.FC<HeroProps> = ({
 
                   <div>
                     <p className="text-xs font-bold text-[#342B3B]">
-                      Healthcare
+                      Healthcare TEsting
                     </p>
 
                     <p className="text-[10px] text-[#8B808F]">

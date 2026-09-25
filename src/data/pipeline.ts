@@ -143,7 +143,7 @@ export const rAndDTimeline = [
   {
     step: '05',
     title: 'Market Readiness & Medical Affairs',
-    description: 'Finalizing cGMP commercial batch manufacturing, physician monograph publication, and regulatory compliance dossiers for healthcare distribution.',
+    description: 'Finalizing WHO-GMP commercial batch manufacturing, physician monograph publication, and regulatory compliance dossiers for healthcare distribution.',
     duration: 'Months 32 - 36+',
     deliverables: ['Commercial production release', 'Healthcare provider scientific dossiers', 'Post-marketing pharmacovigilance framework']
   }

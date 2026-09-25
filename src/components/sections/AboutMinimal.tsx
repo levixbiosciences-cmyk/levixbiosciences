@@ -472,7 +472,7 @@ export const AboutMinimal: React.FC<AboutMinimalProps> = ({
                   leading-tight
                 "
               >
-                Compliant with cGMP & ISO
+                Compliant with WHO-GMP & ISO
                 <span className="text-[#DAB45E]">
                   {' '}Analytical Standards
                 </span>

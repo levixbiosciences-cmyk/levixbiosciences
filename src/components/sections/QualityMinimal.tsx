@@ -18,10 +18,10 @@ export const QualityMinimal: React.FC = () => {
     },
     {
       icon: <Factory className="w-6 h-6 text-[#7137A5]" />,
-      title: 'cGMP Cleanroom Environments',
+      title: 'WHO-GMP Cleanroom Environments',
       description:
         'Class 10,000 (ISO 7) and Class 1,000 (ISO 6) classified cleanrooms with HEPA multi-stage filtration to eliminate contamination.',
-      badge: 'ISO / cGMP',
+      badge: 'ISO / WHO-GMP',
     },
     {
       icon: <ShieldCheck className="w-6 h-6 text-[#7137A5]" />,

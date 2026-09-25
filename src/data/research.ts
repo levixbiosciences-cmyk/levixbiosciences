@@ -78,7 +78,7 @@ export const clinicalTrialSteps = [
   },
   {
     step: '05',
-    title: 'cGMP Scale-Up & Commercial Registry',
+    title: 'WHO-GMP Scale-Up & Commercial Registry',
     description: 'Validation of cleanroom manufacturing, automated packaging, and active post-market surveillance.',
     deliverable: 'Commercial Drug Master File'
   }

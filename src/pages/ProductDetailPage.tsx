@@ -76,7 +76,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] flex items-center justify-between text-xs text-[#66737F]">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-[#087F8C]" />
-                  <span>HPLC Tested &bull; cGMP Certified</span>
+                  <span>HPLC Tested &bull; WHO-GMP Certified</span>
                 </div>
                 <span className="font-mono text-[#0B1F33] font-semibold">{product.dosageForm}</span>
               </div>
@@ -165,8 +165,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className={`px-5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${activeTab === tab.id
-                  ? 'bg-[#0B1F33] text-white shadow-sm'
-                  : 'text-[#66737F] hover:text-[#0B1F33] hover:bg-[#F8FAFC]'
+                ? 'bg-[#0B1F33] text-white shadow-sm'
+                : 'text-[#66737F] hover:text-[#0B1F33] hover:bg-[#F8FAFC]'
                 }`}
             >
               {tab.label}

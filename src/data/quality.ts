@@ -27,9 +27,9 @@ export const qualityPillars: QualityPillar[] = [
     id: 'pillar-compliance',
     number: '02',
     title: 'Global Regulatory Compliance',
-    description: 'Our manufacturing facilities operate in strict accordance with WHO-GMP, US FDA cGMP (21 CFR Part 111/211), and ISO 22000 / ISO 9001 certified cleanroom environments.',
+    description: 'Our manufacturing facilities operate in strict accordance with WHO-GMP, US FDA WHO-GMP (21 CFR Part 111/211), and ISO 22000 / ISO 9001 certified cleanroom environments.',
     iconName: 'ShieldCheck',
-    metric: '100% cGMP Cleanroom Compliant',
+    metric: '100% WHO-GMP Cleanroom Compliant',
     details: [
       'Grade A & B laminar airflow aseptic processing suites',
       'Class 100,000 cleanroom HVAC positive pressure systems',

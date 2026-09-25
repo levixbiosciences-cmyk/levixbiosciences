@@ -51,7 +51,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
             </div>
             <h3 className="text-xl font-bold text-[#0B1F33] font-['Manrope']">Our Patient Commitment</h3>
             <p className="text-sm text-[#66737F] leading-relaxed">
-              Every formulation is held to pharmaceutical cGMP rigor—ensuring physicians can prescribe with total confidence and patients receive safe, bioactive therapies.
+              Every formulation is held to pharmaceutical WHO-GMP rigor—ensuring physicians can prescribe with total confidence and patients receive safe, bioactive therapies.
             </p>
           </div>
 

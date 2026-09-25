@@ -52,7 +52,7 @@ export const executiveLeadership: LeadershipMember[] = [
     name: 'Rajesh K. Mehta, M.Pharm, MBA',
     role: 'Chief Operating Officer & Head of Quality',
     qualifications: 'M.Pharm (Pharmaceutics, BITS Pilani), Executive MBA (ISB)',
-    bio: 'Rajesh oversees global cGMP manufacturing operations, cleanroom regulatory compliance, and international supply chain distribution across 12 territories.',
+    bio: 'Rajesh oversees global WHO-GMP manufacturing operations, cleanroom regulatory compliance, and international supply chain distribution across 12 territories.',
     image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80',
     specialty: 'Pharmaceutical Quality Systems & Global Supply Integrity'
   },

@@ -182,10 +182,10 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
                   </span>
 
                   <a
-                    href="tel:9894344714"
+                    href="tel:8807608896"
                     className="text-white font-bold hover:text-[#D49B24] transition-colors"
                   >
-                    9894344714
+                    8807608896
                   </a>
 
                 </div>

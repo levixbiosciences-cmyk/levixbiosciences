@@ -218,16 +218,16 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
                     </span>
 
                     <a
-                      href="tel:8907608896"
+                      href="tel:8870889620 "
                       className="text-lg font-bold font-mono text-[#32164F] hover:text-[#7137A5] transition-colors block mt-1"
                     >
-                      8907608896
+                      8870889620
                     </a>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <a
-                      href="tel:8907608896"
+                      href="tel:8870889620 "
                       className="flex-1 py-2.5 px-3 rounded-xl bg-[#7137A5] hover:bg-[#5D278C] text-white text-xs font-bold text-center flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md transition-all touch-target"
                     >
                       <Phone className="w-3.5 h-3.5" />
@@ -235,7 +235,7 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
                     </a>
 
                     <a
-                      href="https://wa.me/918907608896?text=Hello%20LEVIX%20Bio%20Science,%20I%20would%20like%20to%20inquire%20about%20your%20formulations."
+                      href="https://wa.me/918870889620 ?text=Hello%20LEVIX%20Bio%20Science,%20I%20would%20like%20to%20inquire%20about%20your%20formulations."
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-10 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white flex items-center justify-center shadow-sm transition-all touch-target"
@@ -255,15 +255,15 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
                     </span>
 
                     <a
-                      href="tel:9894344714"
+                      href="tel:8807608896"
                       className="text-lg font-bold font-mono text-[#32164F] hover:text-[#7137A5] transition-colors block mt-1"
                     >
-                      9894344714
+                      8807608896
                     </a>
                   </div>
 
                   <a
-                    href="tel:9894344714"
+                    href="tel:8807608896"
                     className="w-full py-2.5 px-3 rounded-xl bg-[#32164F] hover:bg-[#7137A5] text-white text-xs font-bold text-center flex items-center justify-center gap-1.5 shadow-sm transition-all touch-target"
                   >
                     <Phone className="w-3.5 h-3.5 text-[#D49B24]" />
@@ -467,13 +467,13 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
                       <span>Direct assistance also available at</span>
 
                       <strong className="text-[#32164F]">
-                        8907608896
+                        8870889620
                       </strong>
 
                       <span>/</span>
 
                       <strong className="text-[#32164F]">
-                        9894344714
+                        8807608896
                       </strong>
                     </div>
                   </form>
@@ -504,7 +504,7 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
             </div>
 
             <a
-              href="tel:8907608896"
+              href="tel:8870889620 "
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-[#32164F] text-xs font-bold hover:bg-[#F5EFF9] transition-colors"
             >
               <Phone className="w-3.5 h-3.5" />

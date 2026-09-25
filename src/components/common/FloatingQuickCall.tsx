@@ -21,10 +21,10 @@ export const FloatingQuickCall: React.FC = () => {
         <a
           href={`tel:${companyInfo.contact.headquarters.phone2}`}
           className="flex-1 py-2.5 px-2 rounded-xl bg-white/10 active:bg-white/20 text-[#38BDF8] border border-white/15 text-xs font-bold font-mono flex items-center justify-center gap-1.5 touch-target"
-          aria-label="Call 9894344714"
+          aria-label="Call 8807608896"
         >
           <Phone className="w-3.5 h-3.5 text-[#00D2FF]" />
-          <span>9894344714</span>
+          <span>8807608896</span>
         </a>
 
         <a

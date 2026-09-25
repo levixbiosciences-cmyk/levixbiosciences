@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { 
-  X, ShoppingBag, Plus, Minus, Trash2, 
-  ArrowRight, ShieldCheck, MessageSquare, CheckCircle2, User, MapPin, Phone 
+import {
+  X, ShoppingBag, Plus, Minus, Trash2,
+  ArrowRight, ShieldCheck, MessageSquare, CheckCircle2, User, MapPin, Phone
 } from 'lucide-react';
 import { CartItem } from '../../types';
 
@@ -33,7 +33,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const subtotal = cartItems.reduce((acc, item) => acc + (item.product.price || 0) * item.quantity, 0);
   const totalMrp = cartItems.reduce((acc, item) => acc + (item.product.mrp || item.product.price || 0) * item.quantity, 0);
   const savings = totalMrp - subtotal;
-  const targetWhatsAppNumber = "919655053327"; // Provided testing WhatsApp number
+  const targetWhatsAppNumber = "918870889620"; // Provided testing WhatsApp number
 
   const handleWhatsAppCheckout = () => {
     if (cartItems.length === 0) return;
@@ -41,7 +41,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     // Generate formatted WhatsApp message
     let message = `*NEW ORDER - LEVIX BIO SCIENCE PVT LTD*\n`;
     message += `----------------------------------------\n`;
-    
+
     if (customerName.trim()) {
       message += `*Customer:* ${customerName.trim()}\n`;
     }
@@ -57,7 +57,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
     message += `----------------------------------------\n`;
     message += `*ITEMS ORDERED:*\n`;
-    
+
     cartItems.forEach((item, index) => {
       const price = item.product.price || 0;
       const itemTotal = price * item.quantity;
@@ -83,14 +83,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       {/* Backdrop */}
-      <div 
+      <div
         onClick={onClose}
         className="absolute inset-0 bg-[#0B1324]/70 backdrop-blur-sm transition-opacity"
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-6">
         <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col justify-between border-l border-[#CBD5E1] text-left animate-in slide-in-from-right duration-300">
-          
+
           {/* Drawer Header */}
           <div className="p-5 border-b border-[#E2E8F0] flex items-center justify-between bg-[#F8FAFC]">
             <div className="flex items-center gap-2.5">
@@ -140,7 +140,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs font-mono text-[#64748B]">
                     <span>Selected Products</span>
-                    <button 
+                    <button
                       onClick={onClearCart}
                       className="text-red-600 hover:underline font-semibold"
                     >
@@ -294,7 +294,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
               <div className="flex items-center justify-center gap-2 text-[11px] text-[#64748B]">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#0066CC]" />
-                <span>Orders forwarded directly to WhatsApp: 9655053327</span>
+                <span>Orders forwarded directly to WhatsApp: 8870889620</span>
               </div>
             </div>
           )}

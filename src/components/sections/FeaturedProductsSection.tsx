@@ -1,5 +1,5 @@
-import React from 'react';
-import { ArrowRight, Pill, ShieldCheck, Sparkles, CheckCircle2, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowRight, Pill, ShieldCheck, Sparkles, CheckCircle2, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { products } from '../../data/products';
 import { PageRoute } from '../../types';
 
@@ -8,6 +8,15 @@ interface FeaturedProductsSectionProps {
 }
 
 export const FeaturedProductsSection: React.FC<FeaturedProductsSectionProps> = ({ onNavigate }) => {
+  const [expandedProductIds, setExpandedProductIds] = useState<{ [key: string]: boolean }>({});
+
+  const toggleExpand = (productId: string) => {
+    setExpandedProductIds(prev => ({
+      ...prev,
+      [productId]: !prev[productId]
+    }));
+  };
+
   const featuredList = products.slice(0, 4);
 
   return (
@@ -86,9 +95,34 @@ export const FeaturedProductsSection: React.FC<FeaturedProductsSectionProps> = (
                     {product.tagline}
                   </p>
 
-                  <p className="text-xs text-[#66737F] leading-relaxed line-clamp-3">
-                    {product.description}
-                  </p>
+                  <div>
+                    <p
+                      className={`text-xs text-[#66737F] leading-relaxed transition-all ${
+                        expandedProductIds[product.id] ? 'line-clamp-none' : 'line-clamp-3'
+                      }`}
+                    >
+                      {product.description}
+                    </p>
+
+                    {product.description && product.description.length > 90 && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleExpand(product.id);
+                        }}
+                        className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-[#087F8C] hover:text-[#065A63] hover:underline cursor-pointer transition-colors"
+                        aria-expanded={!!expandedProductIds[product.id]}
+                      >
+                        <span>{expandedProductIds[product.id] ? 'Show less' : 'Read more'}</span>
+                        {expandedProductIds[product.id] ? (
+                          <ChevronUp className="w-3.5 h-3.5" />
+                        ) : (
+                          <ChevronDown className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 {/* Key Actives preview */}

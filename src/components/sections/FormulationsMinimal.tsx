@@ -8,6 +8,8 @@ import {
   ArrowRight,
   ShieldCheck,
   Zap,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
 import { products } from '../../data/products';
@@ -33,14 +35,20 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
   const [justAddedId, setJustAddedId] =
     useState<string | null>(null);
 
+  const [expandedProductIds, setExpandedProductIds] =
+    useState<{ [key: string]: boolean }>({});
+
+  const toggleExpand = (productId: string) => {
+    setExpandedProductIds((prev) => ({
+      ...prev,
+      [productId]: !prev[productId],
+    }));
+  };
+
   const categories = [
     'All',
-    'Advanced Neuro Support',
-    'Cardio-Metabolic Support',
-    'Metabolic & Glycemic Care',
-    'Renal & Cellular Protection',
-    "Endocrine & Women's Health",
-    'Pediatric Development',
+    'Brain Health & Nutritional Support',
+    'Nerve Health & Neuroprotection Support',
   ];
 
   /* =========================================================
@@ -90,7 +98,7 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
   ========================================================= */
 
   const handleSingleItemWhatsApp = (product: Product) => {
-    const targetWhatsAppNumber = '919655053327';
+    const targetWhatsAppNumber = '918870889620';
 
     const price = product.price || 0;
 
@@ -447,15 +455,14 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                   font-semibold
                   whitespace-nowrap
                   transition-all
-                  ${
-                    isActive
-                      ? `
+                  ${isActive
+                    ? `
                         bg-[#7137A5]
                         text-white
                         shadow-md
                         shadow-[#7137A5]/20
                       `
-                      : `
+                    : `
                         bg-white
                         text-[#665A6D]
                         border
@@ -766,23 +773,60 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                           font-bold
                           text-[#7137A5]
                           mt-2
-                          line-clamp-1
                         "
                       >
                         {product.tagline}
                       </p>
 
-                      <p
-                        className="
-                          text-xs
-                          text-[#786D7D]
-                          leading-6
-                          mt-2
-                          line-clamp-2
-                        "
-                      >
-                        {product.description}
-                      </p>
+                      <div className="mt-2">
+                        <p
+                          className={`
+                            text-xs
+                            text-[#786D7D]
+                            leading-relaxed
+                            transition-all
+                            ${expandedProductIds[product.id]
+                              ? 'line-clamp-none'
+                              : 'line-clamp-2'
+                            }
+                          `}
+                        >
+                          {product.description}
+                        </p>
+
+                        {product.description && product.description.length > 90 && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleExpand(product.id);
+                            }}
+                            className="
+                              mt-1.5
+                              inline-flex
+                              items-center
+                              gap-1
+                              text-[11px]
+                              font-bold
+                              text-[#7137A5]
+                              hover:text-[#521E7E]
+                              hover:underline
+                              cursor-pointer
+                              transition-colors
+                            "
+                            aria-expanded={!!expandedProductIds[product.id]}
+                          >
+                            <span>
+                              {expandedProductIds[product.id] ? 'Show less' : 'Read more'}
+                            </span>
+                            {expandedProductIds[product.id] ? (
+                              <ChevronUp className="w-3.5 h-3.5" />
+                            ) : (
+                              <ChevronDown className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        )}
+                      </div>
 
                     </div>
 
@@ -902,13 +946,12 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                           items-center
                           justify-center
                           gap-1.5
-                          ${
-                            isJustAdded
-                              ? `
+                          ${isJustAdded
+                            ? `
                                 bg-[#23834E]
                                 text-white
                               `
-                              : countInCart > 0
+                            : countInCart > 0
                               ? `
                                 bg-[#7137A5]
                                 text-white

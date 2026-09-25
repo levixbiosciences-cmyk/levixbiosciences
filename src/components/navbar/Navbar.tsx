@@ -13,7 +13,7 @@ import {
   Instagram,
   Youtube,
 } from 'lucide-react';
-import  LevixLogo  from '../common/Levix.jpeg';
+import LevixLogo from '../common/Levix.jpeg';
 import { companyInfo } from '../../data/company';
 
 interface NavbarProps {
@@ -153,7 +153,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 />
 
                 <span>
-                  8907608896
+                  8870889620
                 </span>
               </a>
 
@@ -169,7 +169,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   transition-colors
                 "
               >
-                9894344714
+                8807608896
               </a>
             </div>
 
@@ -298,9 +298,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           z-50
           transition-all
           duration-300
-          ${
-            scrolled
-              ? `
+          ${scrolled
+            ? `
                 bg-white/95
                 backdrop-blur-xl
                 shadow-[0_8px_30px_rgba(55,25,75,0.08)]
@@ -308,7 +307,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 border-[#EEE6F4]
                 py-2
               `
-              : `
+            : `
                 bg-white
                 border-b
                 border-[#F0EBF4]
@@ -326,22 +325,22 @@ export const Navbar: React.FC<NavbarProps> = ({
                 LOGO
             ================================================= */}
             <button
-  onClick={() => handleNav('home')}
-  className="
+              onClick={() => handleNav('home')}
+              className="
     flex items-center shrink-0
     rounded-xl
     focus:outline-none
     focus-visible:ring-2
     focus-visible:ring-[#7137A5]
   "
-  aria-label="LEVIX Biosciences Home"
->
-<img
-  src={LevixLogo}
-  alt="LEVIX Biosciences"
-  className="h-12 sm:h-14 w-auto object-contain"
-/>
-</button>
+              aria-label="LEVIX Biosciences Home"
+            >
+              <img
+                src={LevixLogo}
+                alt="LEVIX Biosciences"
+                className="h-12 sm:h-14 w-auto object-contain"
+              />
+            </button>
 
             {/* =================================================
                 DESKTOP NAVIGATION
@@ -380,15 +379,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                       font-semibold
                       transition-all
                       duration-200
-                      ${
-                        isActive
-                          ? `
+                      ${isActive
+                        ? `
                             bg-[#7137A5]
                             text-white
                             shadow-md
                             shadow-[#7137A5]/20
                           `
-                          : `
+                        : `
                             text-[#514758]
                             hover:text-[#7137A5]
                             hover:bg-white
@@ -675,14 +673,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                         text-sm
                         font-semibold
                         transition-all
-                        ${
-                          isActive
-                            ? `
+                        ${isActive
+                          ? `
                               bg-[#7137A5]
                               text-white
                               shadow-md
                             `
-                            : `
+                          : `
                               text-[#514758]
                               hover:bg-[#F7F1FA]
                               hover:text-[#7137A5]
@@ -757,7 +754,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   href={`tel:${companyInfo.contact.headquarters.phone1}`}
                   className="font-semibold"
                 >
-                  8907608896
+                  8870889620
                 </a>
 
                 <span>/</span>
@@ -766,7 +763,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   href={`tel:${companyInfo.contact.headquarters.phone2}`}
                   className="font-semibold"
                 >
-                  9894344714
+                  8807608896
                 </a>
               </div>
 

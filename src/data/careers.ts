@@ -91,9 +91,9 @@ export const jobOpenings: JobOpening[] = [
     id: 'job-04',
     title: 'Manager — Quality Assurance & Regulatory Compliance',
     department: 'Regulatory & QA',
-    location: 'Navi Mumbai cGMP Facility, India',
+    location: 'Navi Mumbai WHO-GMP Facility, India',
     employmentType: 'On-Site',
-    experienceLevel: '6-10 Years in Pharma QA / cGMP Cleanroom Operations',
+    experienceLevel: '6-10 Years in Pharma QA / WHO-GMP Cleanroom Operations',
     summary: 'Lead site quality systems, audit readiness, electronic batch record reviews, and regulatory submissions for domestic (CDSCO) and international export territories.',
     responsibilities: [
       'Maintain site Quality Management System (QMS) covering deviations, CAPA, change controls, and OOS investigations.',
@@ -106,7 +106,7 @@ export const jobOpenings: JobOpening[] = [
       'Extensive hands-on knowledge of 21 CFR Part 210/211, WHO-GMP, and ISO 9001/22000 standards.',
       'Strong leadership with experience managing cross-functional QC/QA analytical teams.'
     ],
-    skills: ['cGMP Cleanroom QA', 'QMS & CAPA', 'Regulatory Submissions', 'Audit Defense', 'Batch Release']
+    skills: ['WHO-GMP Cleanroom QA', 'QMS & CAPA', 'Regulatory Submissions', 'Audit Defense', 'Batch Release']
   },
   {
     id: 'job-05',

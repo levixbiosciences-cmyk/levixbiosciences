@@ -232,7 +232,7 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
             </span>
 
             <span className="text-[#D49B24] font-semibold">
-              cGMP Compliant
+              WHO-GMP Compliant
             </span>
 
           </div>

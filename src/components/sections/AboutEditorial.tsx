@@ -82,7 +82,7 @@ export const AboutEditorial: React.FC<AboutEditorialProps> = ({ onNavigate }) =>
               {/* Bottom Overlay Label */}
               <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-[#0B1F33]/90 backdrop-blur-md border border-white/15 text-white flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-mono text-[#B9D8D6] uppercase tracking-wider">cGMP Formulation Facility</p>
+                  <p className="text-xs font-mono text-[#B9D8D6] uppercase tracking-wider">WHO-GMP Formulation Facility</p>
                   <p className="text-sm sm:text-base font-bold font-['Manrope']">Class 100,000 Cleanroom Certified</p>
                 </div>
                 <Award className="w-6 h-6 text-[#087F8C]" />

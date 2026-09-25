@@ -4,7 +4,7 @@ import { companyInfo } from '../../data/company';
 
 export const FloatingQuickCall: React.FC = () => {
   return (
-    <aside 
+    <aside
       aria-label="Quick contact actions"
       className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#0B1324]/95 backdrop-blur-md border-t border-white/15 p-2 px-3 shadow-2xl"
     >
@@ -12,10 +12,10 @@ export const FloatingQuickCall: React.FC = () => {
         <a
           href={`tel:${companyInfo.contact.headquarters.phone1}`}
           className="flex-1 py-2.5 px-2 rounded-xl bg-[#0066CC] active:bg-[#0052CC] text-white text-xs font-bold font-mono flex items-center justify-center gap-1.5 shadow touch-target"
-          aria-label="Call 8907608896"
+          aria-label="Call 8807608896"
         >
           <Phone className="w-3.5 h-3.5" />
-          <span>8907608896</span>
+          <span>8807608896</span>
         </a>
 
         <a
@@ -28,7 +28,7 @@ export const FloatingQuickCall: React.FC = () => {
         </a>
 
         <a
-          href="https://wa.me/918907608896?text=Hello%20LEVIX%20Bio%20Science,%20I%20would%20like%20to%20inquire%20about%20your%20formulations."
+          href="https://wa.me/918807608896?text=Hello%20LEVIX%20Bio%20Science,%20I%20would%20like%20to%20inquire%20about%20your%20formulations."
           target="_blank"
           rel="noopener noreferrer"
           className="p-2.5 rounded-xl bg-[#25D366] text-white flex items-center justify-center shadow touch-target"

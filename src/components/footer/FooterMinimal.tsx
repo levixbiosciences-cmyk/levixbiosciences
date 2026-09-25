@@ -171,10 +171,10 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
                 <div className="flex items-center gap-2 font-mono">
 
                   <a
-                    href="tel:8907608896"
+                    href="tel:8807608896"
                     className="text-white font-bold hover:text-[#D49B24] transition-colors"
                   >
-                    8907608896
+                    8807608896
                   </a>
 
                   <span className="text-white/20">

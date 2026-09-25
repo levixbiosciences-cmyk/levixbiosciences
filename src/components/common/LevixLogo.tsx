@@ -1,5 +1,5 @@
 import React from 'react';
-import levixLogoSrc from './LEvix-loGo.jpeg';
+import levixLogoSrc from './LEvix-LoGO.jpeg';
 
 interface LevixLogoProps {
   variant?: 'full' | 'symbol' | 'horizontal';

@@ -826,6 +826,53 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                             )}
                           </button>
                         )}
+
+                        {expandedProductIds[product.id] && (
+                          <div className="mt-3 pt-3 border-t border-[#EEE6F2] space-y-3 animate-fadeIn text-left">
+                            {product.indicationFocus && (
+                              <div className="p-2.5 rounded-xl bg-[#FAF8FC] border border-[#EEE6F2] text-xs">
+                                <span className="text-[10px] font-mono uppercase text-[#7137A5] font-bold block mb-0.5">
+                                  Indication Focus
+                                </span>
+                                <p className="text-[#2D1B36] font-semibold text-[11px] leading-relaxed">
+                                  {product.indicationFocus}
+                                </p>
+                              </div>
+                            )}
+
+                            {product.benefitSections && product.benefitSections.length > 0 && (
+                              <div className="space-y-2.5">
+                                {product.benefitSections.map((sec, sIdx) => (
+                                  <div key={sIdx} className="p-2.5 rounded-xl bg-white border border-[#EEE6F2] space-y-2 shadow-xs">
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-[#7137A5]" />
+                                      <h5 className="text-[11px] font-bold text-[#2D1B36] font-['Manrope']">
+                                        {sec.category}
+                                      </h5>
+                                    </div>
+                                    <div className="space-y-2">
+                                      {sec.items.map((item, iIdx) => (
+                                        <div key={iIdx} className="p-2 rounded-lg bg-[#FAF8FC] border border-[#F3EDF7] space-y-1">
+                                          <p className="text-[11px] font-bold text-[#7137A5]">
+                                            {item.title}
+                                          </p>
+                                          <ul className="space-y-0.5">
+                                            {item.points.map((pt, pIdx) => (
+                                              <li key={pIdx} className="text-[10px] text-[#5A4D61] leading-relaxed flex items-start gap-1">
+                                                <span className="text-[#7137A5] shrink-0 mt-0.5">•</span>
+                                                <span>{pt}</span>
+                                              </li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
 
                     </div>

@@ -122,6 +122,53 @@ export const FeaturedProductsSection: React.FC<FeaturedProductsSectionProps> = (
                         )}
                       </button>
                     )}
+
+                    {expandedProductIds[product.id] && (
+                      <div className="mt-3 pt-3 border-t border-[#E2E8F0] space-y-3 animate-fadeIn text-left">
+                        {product.indicationFocus && (
+                          <div className="p-2.5 rounded-xl bg-[#EAF5F7] border border-[#B9D8D6] text-xs">
+                            <span className="text-[10px] font-mono uppercase text-[#087F8C] font-bold block mb-0.5">
+                              Indication Focus
+                            </span>
+                            <p className="text-[#0B1F33] font-semibold text-[11px] leading-relaxed">
+                              {product.indicationFocus}
+                            </p>
+                          </div>
+                        )}
+
+                        {product.benefitSections && product.benefitSections.length > 0 && (
+                          <div className="space-y-2.5">
+                            {product.benefitSections.map((sec, sIdx) => (
+                              <div key={sIdx} className="p-2.5 rounded-xl bg-white border border-[#B9D8D6]/60 shadow-xs space-y-1.5">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-[#087F8C]" />
+                                  <h5 className="text-[11px] font-bold text-[#0B1F33] font-['Manrope']">
+                                    {sec.category}
+                                  </h5>
+                                </div>
+                                <div className="space-y-1.5">
+                                  {sec.items.map((item, iIdx) => (
+                                    <div key={iIdx} className="p-2 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] space-y-1">
+                                      <p className="text-[11px] font-bold text-[#087F8C]">
+                                        {item.title}
+                                      </p>
+                                      <ul className="space-y-0.5">
+                                        {item.points.map((pt, pIdx) => (
+                                          <li key={pIdx} className="text-[10px] text-[#66737F] leading-snug flex items-start gap-1">
+                                            <span className="text-[#087F8C] shrink-0 mt-0.5">•</span>
+                                            <span>{pt}</span>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
 

@@ -25,7 +25,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
               </span>
             </h1>
             <p className="text-base sm:text-lg text-[#B9D8D6]/85 leading-relaxed">
-              NovaThera Life Sciences was founded on a singular conviction: that chronic disease management requires addressing fundamental cellular bioenergetics and microvascular integrity rather than superficial symptom mitigation.
+              LEVIX Biosciences Pvt Ltd, a subsidiary of parent company Levix Pharma (established in 2022), is a dedicated healthcare and specialized formulations company based in Kolathur, Chennai. We blend pharmaceutical rigor with modern bioactive delivery platforms to deliver measurable clinical results.
             </p>
           </div>
         </div>
@@ -49,9 +49,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
             <div className="w-12 h-12 rounded-2xl bg-[#EAF5F7] text-[#0E9AA6] flex items-center justify-center">
               <HeartPulse className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-bold text-[#0B1F33] font-['Manrope']">Our Patient Commitment</h3>
+            <h3 className="text-xl font-bold text-[#0B1F33] font-['Manrope']">Our Healthcare Commitment</h3>
             <p className="text-sm text-[#66737F] leading-relaxed">
-              Every formulation is held to pharmaceutical WHO-GMP rigor—ensuring physicians can prescribe with total confidence and patients receive safe, bioactive therapies.
+              Levix Biosciences is committed to developing innovative technologies and providing the highest quality products and services to medical fraternities across the country, improving patients' quality of life.
             </p>
           </div>
 
@@ -59,9 +59,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
             <div className="w-12 h-12 rounded-2xl bg-[#EAF5F7] text-[#087F8C] flex items-center justify-center">
               <Globe className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-bold text-[#0B1F33] font-['Manrope']">Our Global Horizon</h3>
+            <h3 className="text-xl font-bold text-[#0B1F33] font-['Manrope']">Our National Reach</h3>
             <p className="text-sm text-[#66737F] leading-relaxed">
-              Headquartered in Mumbai, India, with clinical collaboration across Europe, Asia-Pacific, and North America, supporting over 12 international medical markets.
+              Headquartered in Kolathur, Chennai, Tamil Nadu, serving healthcare professionals and patients across India with WHO-GMP compliant, high-efficacy formulations.
             </p>
           </div>
 

@@ -188,23 +188,109 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({
                         {product.description}
                       </p>
 
-                      {product.description && product.description.length > 100 && (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleExpand(product.id);
-                          }}
-                          className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-semibold text-[#087F8C] hover:text-[#065A63] hover:underline cursor-pointer transition-colors"
-                          aria-expanded={!!expandedProductIds[product.id]}
-                        >
-                          <span>{expandedProductIds[product.id] ? 'Show less' : 'Read more'}</span>
-                          {expandedProductIds[product.id] ? (
-                            <ChevronUp className="w-3.5 h-3.5" />
-                          ) : (
-                            <ChevronDown className="w-3.5 h-3.5" />
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleExpand(product.id);
+                        }}
+                        className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-[#087F8C] hover:text-[#065A63] hover:underline cursor-pointer transition-colors"
+                        aria-expanded={!!expandedProductIds[product.id]}
+                      >
+                        <span>{expandedProductIds[product.id] ? 'Show less' : 'Read full details & benefits'}</span>
+                        {expandedProductIds[product.id] ? (
+                          <ChevronUp className="w-3.5 h-3.5" />
+                        ) : (
+                          <ChevronDown className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+
+                      {expandedProductIds[product.id] && (
+                        <div className="mt-4 pt-4 border-t border-[#E2E8F0] space-y-4 animate-fadeIn">
+                          {/* Indication Focus */}
+                          {product.indicationFocus && (
+                            <div className="p-3 rounded-2xl bg-[#EAF5F7] border border-[#B9D8D6] text-xs">
+                              <span className="text-[10px] font-mono uppercase text-[#087F8C] font-bold block mb-1">
+                                Indication Focus
+                              </span>
+                              <p className="text-[#0B1F33] font-semibold leading-relaxed">
+                                {product.indicationFocus}
+                              </p>
+                            </div>
                           )}
-                        </button>
+
+                          {/* Key Active Composition Full List */}
+                          <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-2.5">
+                            <span className="text-[10px] font-mono uppercase text-[#66737F] font-bold block">
+                              Key Active Composition
+                            </span>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                              {product.keyIngredients.map((ing) => (
+                                <div key={ing.name} className="p-2.5 rounded-xl bg-white border border-[#E2E8F0] flex flex-col justify-between">
+                                  <span className="text-xs font-bold text-[#0B1F33]">{ing.name}</span>
+                                  <span className="text-xs font-mono font-bold text-[#087F8C] mt-1">{ing.potency}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Benefit Sections */}
+                          {product.benefitSections && product.benefitSections.length > 0 && (
+                            <div className="space-y-3.5">
+                              {product.benefitSections.map((sec, sIdx) => (
+                                <div key={sIdx} className="p-3.5 rounded-2xl bg-white border border-[#B9D8D6]/60 shadow-xs space-y-2.5">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-2 h-2 rounded-full bg-[#087F8C]" />
+                                    <h4 className="text-xs font-bold text-[#0B1F33] font-['Manrope']">
+                                      {sec.category}
+                                    </h4>
+                                  </div>
+                                  <div className="space-y-2.5">
+                                    {sec.items.map((item, iIdx) => (
+                                      <div key={iIdx} className="p-2.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-1.5">
+                                        <p className="text-xs font-bold text-[#087F8C] font-['Manrope']">
+                                          {item.title}
+                                        </p>
+                                        <ul className="space-y-1">
+                                          {item.points.map((pt, pIdx) => (
+                                            <li key={pIdx} className="text-xs text-[#17212B] leading-relaxed flex items-start gap-1.5">
+                                              <span className="text-[#087F8C] shrink-0 mt-0.5">•</span>
+                                              <span>{pt}</span>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Pack Summary */}
+                          <div className="p-3 rounded-2xl bg-[#0B1F33] text-white flex items-center justify-between text-xs">
+                            <div>
+                              <span className="text-[10px] font-mono text-[#087F8C] uppercase block">Pack Summary</span>
+                              <span className="font-semibold text-[#B9D8D6]">{product.packSize}</span>
+                            </div>
+                            <span className="font-mono text-xs bg-white/10 px-2.5 py-1 rounded-lg">
+                              {product.dosageForm}
+                            </span>
+                          </div>
+
+                          {/* Secondary Show Less button for long cards */}
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleExpand(product.id);
+                            }}
+                            className="w-full py-2 rounded-xl bg-[#F1F5F9] hover:bg-[#E2E8F0] text-xs font-semibold text-[#66737F] flex items-center justify-center gap-1 transition-colors"
+                          >
+                            <span>Show less</span>
+                            <ChevronUp className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       )}
                     </div>
                   </div>

@@ -194,7 +194,7 @@ export const AboutMinimal: React.FC<AboutMinimalProps> = ({
           </div>
 
           {/* Description */}
-          <p
+          <div
             className="
               text-sm
               sm:text-base
@@ -203,17 +203,19 @@ export const AboutMinimal: React.FC<AboutMinimalProps> = ({
               mt-6
               leading-8
               max-w-3xl
+              space-y-4
             "
           >
-            <strong className="text-[#34283B]">
-              LEVIX bio science pvt ltd
-            </strong>{' '}
-            is a dedicated healthcare and specialized formulations company
-            based in Kolathur, Chennai. We blend pharmaceutical rigor with
-            modern bioactive delivery platforms to provide healthcare
-            professionals and patients with formulations that deliver
-            measurable clinical results.
-          </p>
+            <p>
+              <strong className="text-[#34283B]">
+                LEVIX Biosciences Pvt Ltd
+              </strong>
+              , a subsidiary of parent company Levix Pharma (established in 2022), is a dedicated healthcare and specialized formulations company based in Kolathur, Chennai. We blend pharmaceutical rigor with modern bioactive delivery platforms to provide healthcare professionals and patients with formulations that deliver measurable clinical results.
+            </p>
+            <p>
+              Levix Biosciences Pvt. Ltd. is one of the best and a reliable pharma company in India and a trusted healthcare partner. We are not only committed to developing innovative technologies, but also committed to providing the best services to medical fraternities across the country — thereby improving the quality of a patient&apos;s life and helping them live a normal, happy &amp; active life.
+            </p>
+          </div>
 
         </div>
 

@@ -37,17 +37,26 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
 
       {/* Hero Header */}
       <section className="bg-[#0B1F33] text-white py-16 sm:py-24 relative overflow-hidden -mt-28 mb-16 subtle-grid-pattern">
+        {/* Animated DNA Background */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-80 sm:w-96 lg:w-[480px] h-full pointer-events-none opacity-25 lg:opacity-35 mix-blend-screen flex items-center justify-center select-none z-0">
+          <img
+            src="/dna.gif"
+            alt="DNA Helix Animation"
+            className="h-full w-auto object-contain filter contrast-125 brightness-110"
+          />
+        </div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-12">
           <div className="max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#087F8C]/20 border border-[#087F8C]/40 text-[#B9D8D6] text-xs font-mono uppercase">
               <span>GET IN TOUCH</span>
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight font-['Manrope']">
-              Contact NovaThera <br />
-              <span className="text-[#B9D8D6]">Life Sciences.</span>
+              Contact LEVIX <br />
+              <span className="text-[#B9D8D6]">Biosciences Pvt. Ltd.</span>
             </h1>
             <p className="text-base sm:text-lg text-[#B9D8D6]/85 leading-relaxed">
-              Connect with our corporate headquarters, medical affairs desk, institutional distribution division, or pharmacovigilance team.
+              Connect with our corporate headquarters in Kolathur, Chennai, our medical affairs desk, institutional distribution division, or pharmacovigilance team.
             </p>
           </div>
         </div>

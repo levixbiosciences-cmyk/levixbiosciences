@@ -47,6 +47,16 @@ export interface ClinicalTrialEvidence {
   citation: string;
 }
 
+export interface BenefitSectionItem {
+  title: string;
+  points: string[];
+}
+
+export interface BenefitSection {
+  category: string;
+  items: BenefitSectionItem[];
+}
+
 export interface Product {
   id: string;
   slug: string;
@@ -57,6 +67,7 @@ export interface Product {
   tagline: string;
   description: string;
   overview: string;
+  indicationFocus?: string;
   dosageForm: string;
   packSize: string;
   deliveryTechnology: string;
@@ -69,6 +80,7 @@ export interface Product {
   targetPathways: string[];
   keyIngredients: Ingredient[];
   benefits: string[];
+  benefitSections?: BenefitSection[];
   usageInstructions: {
     recommendedDose: string;
     timing: string;

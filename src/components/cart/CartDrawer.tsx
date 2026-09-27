@@ -31,8 +31,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   const totalItemsCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   const subtotal = cartItems.reduce((acc, item) => acc + (item.product.price || 0) * item.quantity, 0);
-  const totalMrp = cartItems.reduce((acc, item) => acc + (item.product.mrp || item.product.price || 0) * item.quantity, 0);
-  const savings = totalMrp - subtotal;
   const targetWhatsAppNumber = "918870889620"; // Provided testing WhatsApp number
 
   const handleWhatsAppCheckout = () => {
@@ -67,9 +65,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
     message += `----------------------------------------\n`;
     message += `*TOTAL AMOUNT: ₹${subtotal.toLocaleString('en-IN')}*\n`;
-    if (savings > 0) {
-      message += `*Total Savings:* ₹${savings.toLocaleString('en-IN')}\n`;
-    }
     message += `----------------------------------------\n`;
     message += `Please confirm my order and share payment/delivery schedule. Thank you!`;
 
@@ -175,11 +170,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                             <span className="text-xs font-bold font-mono text-[#0066CC]">
                               ₹{price.toLocaleString('en-IN')}
                             </span>
-                            {item.product.mrp && item.product.mrp > price && (
-                              <span className="text-[10px] text-[#94A3B8] line-through font-mono">
-                                ₹{item.product.mrp.toLocaleString('en-IN')}
-                              </span>
-                            )}
                           </div>
                         </div>
 
@@ -260,12 +250,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <span>Items Total ({totalItemsCount} items)</span>
                     <span className="font-mono text-[#0B1324] font-bold">₹{subtotal.toLocaleString('en-IN')}</span>
                   </div>
-                  {savings > 0 && (
-                    <div className="flex justify-between text-emerald-600 font-semibold">
-                      <span>Discount / MRP Savings</span>
-                      <span className="font-mono">-₹{savings.toLocaleString('en-IN')}</span>
-                    </div>
-                  )}
                   <div className="flex justify-between text-[#64748B]">
                     <span>Delivery</span>
                     <span className="text-emerald-600 font-bold">Free Shipping</span>

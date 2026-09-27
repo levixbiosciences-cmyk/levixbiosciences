@@ -13,6 +13,7 @@ import {
   Building2,
 } from 'lucide-react';
 import { companyInfo } from '../../data/company';
+import { NeuralSignalNetwork } from '../common/NeuralSignalNetwork';
 
 interface ContactMinimalProps {
   prefilledProduct?: string;
@@ -34,7 +35,8 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
   });
 
   const fullAddress =
-    'NO.12B/7 KAMARAJAR STREET, VINAYAGAPURAM, KOLATHUR, CHENNAI PINCODE: 600099';
+    'NO.1471/1B KAMARAJAR STREET, VINAYAGAPURAM, KOLATHUR, CHENNAI, (T.N.)-600099';
+  const targetEmail = 'levixbiosciences@gmail.com';
 
   const handleCopyAddress = () => {
     navigator.clipboard.writeText(fullAddress);
@@ -42,10 +44,41 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
     setTimeout(() => setCopied(false), 2500);
   };
 
+  const generateMailLinks = () => {
+    const subject = encodeURIComponent(
+      `Direct Inquiry: ${formData.name || 'New Client'} (${formData.phone || 'No phone'}) - LEVIX Biosciences`
+    );
+    const body = encodeURIComponent(
+      `Dear LEVIX Biosciences Team,\n\nI am contacting you via the website direct message desk regarding product formulations and pricing quotes.\n\n• Full Name: ${formData.name}\n• Phone Number: ${formData.phone}\n• Email Address: ${formData.email || 'Not specified'}\n\n• Formulation Requirement / Inquiry Details:\n${formData.message || 'General inquiry regarding formulations and institutional quotes.'}\n\n---\nTransmitted to: ${targetEmail}\nLEVIX Biosciences Pvt. Ltd. (Chennai Desk)`
+    );
+
+    const mailto = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
+    const gmailWeb = `https://mail.google.com/mail/?view=cm&fs=1&to=${targetEmail}&su=${subject}&body=${body}`;
+    const whatsapp = `https://api.whatsapp.com/send/?phone=918870889620&text=${encodeURIComponent(
+      `Hello LEVIX Biosciences, I am submitting an inquiry:\n• Name: ${formData.name}\n• Phone: ${formData.phone}\n• Email: ${formData.email || 'N/A'}\n• Requirement: ${formData.message || 'Formulation quotes and inquiry'}`
+    )}`;
+
+    return { mailto, gmailWeb, whatsapp };
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.name || !formData.phone) return;
+
+    const { mailto, gmailWeb } = generateMailLinks();
+    
+    // Automatically open Gmail compose in a new tab (works reliably on laptops)
+    window.open(gmailWeb, '_blank', 'noopener,noreferrer');
+
+    // Also attempt system mail client as fallback
+    setTimeout(() => {
+      try {
+        window.location.href = mailto;
+      } catch (err) {
+        console.error('Mail trigger error:', err);
+      }
+    }, 400);
 
     setFormSubmitted(true);
   };
@@ -59,16 +92,8 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
       <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-[#7137A5]/5 blur-3xl pointer-events-none" />
       <div className="absolute -bottom-40 -left-32 w-[28rem] h-[28rem] rounded-full bg-[#D49B24]/5 blur-3xl pointer-events-none" />
 
-      {/* DNA Helix Background Animation */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-end select-none z-0">
-        <div className="relative w-full sm:w-2/3 lg:w-1/2 h-full flex items-center justify-center lg:justify-end pr-0 lg:pr-12 opacity-15 lg:opacity-25 mix-blend-multiply">
-          <img
-            src="/dna.gif"
-            alt="DNA Helix Animation"
-            className="max-h-[620px] w-auto object-contain filter hue-rotate-[240deg] contrast-125"
-          />
-        </div>
-      </div>
+      {/* Subtle Animated Neural Network & Nerve Signal Impulses */}
+      <NeuralSignalNetwork opacity={0.22} />
 
       {/* Subtle pattern */}
       <div
@@ -179,7 +204,7 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
 
                 <div className="pt-4 mt-4 flex flex-wrap items-center gap-3 border-t border-[#EEE6F2] text-[11px]">
                   <a
-                    href="https://maps.google.com/?q=Kamarajar+Street+Vinayagapuram+Kolathur+Chennai+600099"
+                    href="https://maps.google.com/?q=NO.1471/1B+Kamarajar+Street+Vinayagapuram+Kolathur+Chennai+600099"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#7137A5] font-bold hover:text-[#32164F] transition-colors flex items-center gap-1.5"
@@ -213,73 +238,111 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
                   </h3>
 
                   <p className="text-[11px] text-[#756B7B]">
-                    Instant click-to-call for immediate inquiry
+                    Instant WhatsApp &amp; voice support for product inquiries &amp; pricing quotes
                   </p>
                 </div>
               </div>
 
+              {/* Quotation highlight banner */}
+              <div className="mt-4 p-3 rounded-xl bg-[#FAF8FC] border border-[#EEE6F2] flex items-center gap-2.5 text-xs text-[#7137A5]">
+                <MessageSquare className="w-4 h-4 text-[#25D366] shrink-0" />
+                <span className="italic font-medium leading-relaxed">
+                  &ldquo;Science You Trust, Health You Feel.&rdquo; &mdash; Instant formulation inquiries, doctor samples &amp; institutional quotes via WhatsApp.
+                </span>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-5">
 
-                {/* Primary Line */}
+                {/* Primary Line - +91 8870889620 */}
                 <div className="p-4 rounded-2xl bg-[#F5EFF9] border border-[#E9DDF0] flex flex-col justify-between gap-4">
 
                   <div>
-                    <span className="text-[9px] uppercase tracking-[0.15em] text-[#7137A5] font-bold block">
-                      Primary Line
-                    </span>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] uppercase tracking-[0.15em] text-[#7137A5] font-bold block">
+                        Primary Line &amp; WhatsApp
+                      </span>
+                      <span className="text-[9px] font-bold text-[#25D366] bg-[#25D366]/15 px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse" />
+                        Inquiry &amp; Quotes
+                      </span>
+                    </div>
 
                     <a
-                      href="tel:8870889620 "
-                      className="text-lg font-bold font-mono text-[#32164F] hover:text-[#7137A5] transition-colors block mt-1"
-                    >
-                      8870889620
-                    </a>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <a
-                      href="tel:8870889620 "
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-[#7137A5] hover:bg-[#5D278C] text-white text-xs font-bold text-center flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md transition-all touch-target"
-                    >
-                      <Phone className="w-3.5 h-3.5" />
-                      <span>Call Now</span>
-                    </a>
-
-                    <a
-                      href="https://wa.me/918870889620 ?text=Hello%20LEVIX%20Bio%20Science,%20I%20would%20like%20to%20inquire%20about%20your%20formulations."
+                      href="https://api.whatsapp.com/send?phone=918870889620&text=Hello%20LEVIX%20Biosciences,%20I%20would%20like%20to%20make%20an%20inquiry%20and%20request%20pricing%20quotes%20for%20your%20formulations."
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white flex items-center justify-center shadow-sm transition-all touch-target"
-                      title="Chat on WhatsApp"
+                      className="text-lg font-bold font-mono text-[#32164F] hover:text-[#25D366] transition-colors block mt-1"
+                      title="Click to chat on WhatsApp for inquiries & quotes"
                     >
-                      <MessageSquare className="w-3.5 h-3.5" />
+                      +91 8870889620
+                    </a>
+                    <p className="text-[10px] text-[#756B7B] mt-0.5">
+                      Tap number or button to chat on WhatsApp
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <a
+                      href="https://api.whatsapp.com/send?phone=918870889620&text=Hello%20LEVIX%20Biosciences,%20I%20would%20like%20to%20make%20an%20inquiry%20and%20request%20pricing%20quotes%20for%20your%20formulations."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-2.5 px-3 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold text-center flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md transition-all touch-target"
+                    >
+                      <MessageSquare className="w-4 h-4 fill-white" />
+                      <span>WhatsApp Inquiry &amp; Quotes</span>
+                    </a>
+
+                    <a
+                      href="tel:+918870889620"
+                      className="w-full py-2 px-3 rounded-xl bg-white hover:bg-[#F5EFF9] text-[#7137A5] border border-[#E9DDF0] text-[11px] font-bold text-center flex items-center justify-center gap-1.5 transition-all"
+                    >
+                      <Phone className="w-3 h-3" />
+                      <span>Call +91 8870889620</span>
                     </a>
                   </div>
                 </div>
 
-                {/* Support Desk */}
+                {/* Support Desk - +91 8807608896 (Kept as dummy, redirects to email inquiry) */}
                 <div className="p-4 rounded-2xl bg-[#FAF8FC] border border-[#EEE6F2] flex flex-col justify-between gap-4">
 
                   <div>
-                    <span className="text-[9px] uppercase tracking-[0.15em] text-[#756B7B] font-bold block">
-                      Support Desk
-                    </span>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] uppercase tracking-[0.15em] text-[#756B7B] font-bold block">
+                        Support Desk
+                      </span>
+                      <span className="text-[9px] font-bold text-[#7137A5] bg-[#7137A5]/10 px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <Mail className="w-2.5 h-2.5" />
+                        Email Inquiry
+                      </span>
+                    </div>
 
-                    <a
-                      href="tel:8807608896"
-                      className="text-lg font-bold font-mono text-[#32164F] hover:text-[#7137A5] transition-colors block mt-1"
-                    >
-                      8807608896
-                    </a>
+                    <div className="text-lg font-bold font-mono text-[#32164F] block mt-1 select-all cursor-default">
+                      +91 8807608896
+                    </div>
+                    <p className="text-[10px] text-[#756B7B] mt-0.5">
+                      For all inquiries, please email our Chennai desk
+                    </p>
                   </div>
 
-                  <a
-                    href="tel:8807608896"
-                    className="w-full py-2.5 px-3 rounded-xl bg-[#32164F] hover:bg-[#7137A5] text-white text-xs font-bold text-center flex items-center justify-center gap-1.5 shadow-sm transition-all touch-target"
-                  >
-                    <Phone className="w-3.5 h-3.5 text-[#D49B24]" />
-                    <span>Call Support</span>
-                  </a>
+                  <div className="space-y-2">
+                    <a
+                      href="https://mail.google.com/mail/?view=cm&fs=1&to=levixbiosciences@gmail.com&su=Formulation%20Inquiry%20%26%20Quotes%20-%20LEVIX%20Biosciences&body=Dear%20LEVIX%20Biosciences%20Team,%0A%0AI%20am%20reaching%20out%20to%20inquire%20about%20your%20formulations,%20product%20details,%20and%20institutional%20pricing%20quotes.%0A%0A•%20Name:%20%0A•%20Phone:%20%0A•%20Requirement:%20%0A%0AThank%20you."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-2.5 px-3 rounded-xl bg-[#32164F] hover:bg-[#7137A5] text-white text-xs font-bold text-center flex items-center justify-center gap-1.5 shadow-sm transition-all touch-target"
+                    >
+                      <Mail className="w-4 h-4 text-[#D49B24]" />
+                      <span>Email for Inquiry</span>
+                    </a>
+
+                    <a
+                      href="mailto:levixbiosciences@gmail.com?subject=Formulation%20Inquiry%20%26%20Quotes%20-%20LEVIX%20Biosciences&body=Dear%20LEVIX%20Biosciences%20Team,%0A%0AI%20am%20reaching%20out%20to%20inquire%20about%20your%20formulations,%20product%20details,%20and%20institutional%20pricing%20quotes.%0A%0A•%20Name:%20%0A•%20Phone:%20%0A•%20Requirement:%20%0A%0AThank%20you."
+                      className="w-full py-2 px-3 rounded-xl bg-white hover:bg-[#F5EFF9] text-[#7137A5] border border-[#EEE6F2] text-[11px] font-bold text-center flex items-center justify-center gap-1.5 transition-all"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      <span>Open Default Mail Client</span>
+                    </a>
+                  </div>
                 </div>
               </div>
 
@@ -308,16 +371,22 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
                 {/* Form Header */}
                 <div className="flex items-start gap-4">
                   <div className="w-11 h-11 shrink-0 rounded-2xl bg-[#32164F] flex items-center justify-center">
-                    <Send className="w-5 h-5 text-[#D49B24]" />
+                    <Mail className="w-5 h-5 text-[#D49B24]" />
                   </div>
 
                   <div>
-                    <h3 className="text-xl font-bold text-[#32164F] font-['Manrope']">
-                      Send Direct Message
-                    </h3>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-xl font-bold text-[#32164F] font-['Manrope']">
+                        Send Direct Message
+                      </h3>
+                      <span className="text-[10px] font-bold text-[#7137A5] bg-[#7137A5]/10 border border-[#7137A5]/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <Mail className="w-2.5 h-2.5" />
+                        <span>Direct Email</span>
+                      </span>
+                    </div>
 
                     <p className="text-xs text-[#756B7B] mt-1">
-                      Submit your details and our team will get back to you promptly.
+                      Directly routed to <strong className="text-[#7137A5]">levixbiosciences@gmail.com</strong> &amp; Chennai desk.
                     </p>
                   </div>
                 </div>
@@ -325,33 +394,55 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
                 {formSubmitted ? (
 
                   /* =====================================================
-                     SUCCESS STATE
+                     SUCCESS STATE (EMAIL LAUNCH & CONFIRMATION)
                   ====================================================== */
                   <div className="p-7 rounded-2xl bg-[#F5EFF9] border border-[#E9DDF0] text-center space-y-4 animate-in fade-in duration-300">
 
                     <div className="relative w-14 h-14 rounded-full bg-[#7137A5] text-white mx-auto flex items-center justify-center shadow-lg">
                       <CheckCircle2 className="w-7 h-7" />
-
                       <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-[#D49B24]" />
                     </div>
 
                     <div>
                       <h4 className="text-base font-bold text-[#32164F] font-['Manrope']">
-                        Inquiry Received Successfully
+                        Inquiry Ready for levixbiosciences@gmail.com
                       </h4>
 
-                      <p className="text-xs text-[#756B7B] leading-relaxed mt-2">
-                        Thank you,{' '}
-                        <strong className="text-[#32164F]">
-                          {formData.name}
-                        </strong>
-                        . Our Chennai medical desk has received your request
-                        and will call you at{' '}
-                        <strong className="text-[#32164F]">
-                          {formData.phone}
-                        </strong>{' '}
-                        shortly.
+                      <p className="text-xs text-[#756B7B] leading-relaxed mt-2 max-w-md mx-auto">
+                        Thank you, <strong className="text-[#32164F]">{formData.name}</strong>. Your mail client was opened to transmit your inquiry to <strong className="text-[#7137A5]">levixbiosciences@gmail.com</strong>. You can also send directly via Gmail Web or WhatsApp below:
                       </p>
+                    </div>
+
+                    {/* Direct dispatch links */}
+                    <div className="space-y-2 max-w-sm mx-auto pt-2">
+                      <a
+                        href={generateMailLinks().gmailWeb}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full py-2.5 px-4 rounded-xl bg-[#EA4335] hover:bg-[#D93025] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all touch-target"
+                      >
+                        <Mail className="w-4 h-4" />
+                        <span>Open &amp; Send in Gmail Web</span>
+                        <ExternalLink className="w-3.5 h-3.5 opacity-80" />
+                      </a>
+
+                      <a
+                        href={generateMailLinks().mailto}
+                        className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-[#FAF8FC] text-[#32164F] border border-[#E5DCE9] text-xs font-bold flex items-center justify-center gap-2 transition-all touch-target"
+                      >
+                        <Mail className="w-4 h-4 text-[#7137A5]" />
+                        <span>Re-launch Default Email Client</span>
+                      </a>
+
+                      <a
+                        href={generateMailLinks().whatsapp}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full py-2.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all touch-target"
+                      >
+                        <MessageSquare className="w-4 h-4 fill-white" />
+                        <span>Also Send via WhatsApp (+91 8870889620)</span>
+                      </a>
                     </div>
 
                     <button
@@ -364,7 +455,7 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
                           message: '',
                         });
                       }}
-                      className="mt-2 text-xs text-[#7137A5] font-bold hover:text-[#32164F] hover:underline"
+                      className="mt-3 text-xs text-[#7137A5] font-bold hover:text-[#32164F] hover:underline"
                     >
                       Send another inquiry
                     </button>
@@ -461,31 +552,43 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
                       />
                     </div>
 
-                    {/* Submit */}
+                    {/* Submit Button */}
                     <button
                       type="submit"
                       className="group w-full py-3.5 px-6 rounded-xl bg-[#7137A5] hover:bg-[#5D278C] text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 touch-target"
                     >
-                      <Send className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      <Mail className="w-4 h-4 text-[#D49B24] group-hover:scale-110 transition-transform" />
 
                       <span>
-                        Submit Inquiry to Chennai Desk
+                        Submit Message to levixbiosciences@gmail.com
                       </span>
                     </button>
 
                     {/* Direct assistance */}
-                    <div className="flex items-center justify-center gap-2 text-[11px] text-[#756B7B]">
-                      <span>Direct assistance also available at</span>
+                    <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] text-[#756B7B]">
+                      <span>WhatsApp inquiries &amp; quotes:</span>
 
-                      <strong className="text-[#32164F]">
-                        8870889620
-                      </strong>
+                      <a
+                        href="https://api.whatsapp.com/send/?phone=918870889620&text=Hello%20LEVIX%20Biosciences,%20I%20would%20like%20to%20make%20an%20inquiry%20and%20request%20pricing%20quotes%20for%20your%20formulations."
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-bold text-[#25D366] hover:underline flex items-center gap-1 font-mono"
+                      >
+                        <MessageSquare className="w-3 h-3 fill-current" />
+                        +91 8870889620
+                      </a>
 
-                      <span>/</span>
+                      <span>•</span>
 
-                      <strong className="text-[#32164F]">
-                        8807608896
-                      </strong>
+                      <span>Email:</span>
+                      <a
+                        href="mailto:levixbiosciences@gmail.com?subject=Formulation%20Inquiry%20-%20LEVIX%20Biosciences"
+                        className="font-bold text-[#7137A5] hover:underline flex items-center gap-1"
+                        title="Email levixbiosciences@gmail.com"
+                      >
+                        <Mail className="w-3 h-3" />
+                        levixbiosciences@gmail.com
+                      </a>
                     </div>
                   </form>
                 )}
@@ -505,22 +608,34 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
 
               <div>
                 <p className="text-sm font-bold text-white">
-                  Need assistance with a formulation?
+                  Need assistance or immediate pricing quotes?
                 </p>
 
                 <p className="text-[11px] text-white/55 mt-0.5">
-                  Our team is available for product and institutional inquiries.
+                  &ldquo;Science You Trust, Health You Feel.&rdquo; &bull; Inquire directly on WhatsApp or call our Chennai desk.
                 </p>
               </div>
             </div>
 
-            <a
-              href="tel:8870889620 "
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-[#32164F] text-xs font-bold hover:bg-[#F5EFF9] transition-colors"
-            >
-              <Phone className="w-3.5 h-3.5" />
-              Talk to Our Team
-            </a>
+            <div className="flex flex-wrap items-center gap-2.5">
+              <a
+                href="https://api.whatsapp.com/send?phone=918870889620&text=Hello%20LEVIX%20Biosciences,%20I%20would%20like%20to%20make%20an%20inquiry%20and%20request%20pricing%20quotes%20for%20your%20formulations."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold transition-all shadow-sm"
+              >
+                <MessageSquare className="w-3.5 h-3.5 fill-white" />
+                <span>Get Quotes via WhatsApp</span>
+              </a>
+
+              <a
+                href="tel:+918870889620"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-[#32164F] text-xs font-bold hover:bg-[#F5EFF9] transition-colors"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                <span>Call +91 8870889620</span>
+              </a>
+            </div>
 
           </div>
         </div>

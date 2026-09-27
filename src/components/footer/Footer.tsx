@@ -143,10 +143,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </svg>
               </a>
               <a
-                href="#mail"
-                onClick={e => { e.preventDefault(); onNavigate('contact'); }}
-                aria-label="Email Medical Desk"
+                href="mailto:levixbiosciences@gmail.com"
+                aria-label="Email Medical Desk (levixbiosciences@gmail.com)"
                 className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#0E9AA6] text-white cursor-pointer transition-colors"
+                title="Email levixbiosciences@gmail.com"
               >
                 <Mail className="w-3.5 h-3.5" />
               </a>

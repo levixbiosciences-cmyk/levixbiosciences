@@ -5,7 +5,12 @@ import {
   Microscope,
   CheckCircle2,
   Factory,
+  Activity,
+  FileCheck2,
+  Sparkles,
+  Dna,
 } from 'lucide-react';
+import { NeuralSignalNetwork } from '../common/NeuralSignalNetwork';
 
 export const QualityMinimal: React.FC = () => {
   const qualityCards = [
@@ -47,6 +52,9 @@ export const QualityMinimal: React.FC = () => {
       {/* Background decoration */}
       <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-[#7137A5]/5 blur-3xl pointer-events-none" />
       <div className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-[#D49B24]/5 blur-3xl pointer-events-none" />
+
+      {/* Ambient Animated Neural Network & Signal Impulses */}
+      <NeuralSignalNetwork variant="light" opacity={0.22} />
 
       {/* Subtle dot pattern */}
       <div
@@ -128,12 +136,12 @@ export const QualityMinimal: React.FC = () => {
                       bg-[#F5EFF9]
                       border border-[#E9DDF0]
                       flex items-center justify-center
-                      group-hover:bg-[#7137A5]
-                      group-hover:border-[#7137A5]
+                      group-hover:border-[#7137A5]/40
+                      group-hover:shadow-md
                       transition-all duration-300
                     "
                   >
-                    <div className="text-[#7137A5] group-hover:text-white transition-colors duration-300">
+                    <div className="text-[#7137A5]">
                       {card.icon}
                     </div>
 
@@ -202,6 +210,115 @@ export const QualityMinimal: React.FC = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* =====================================================
+            HPLC ANALYTICAL TESTING & CHROMATOGRAPHY FEATURE PANEL
+        ===================================================== */}
+
+        <div className="mt-12 sm:mt-16 overflow-hidden rounded-[32px] bg-white border border-[#EEE6F2] shadow-[0_15px_45px_rgba(50,22,79,0.06)] p-6 sm:p-8 lg:p-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            
+            {/* Visual HPLC Testing Lab Screen */}
+            <div className="lg:col-span-6 relative group">
+              <div className="relative h-64 sm:h-80 md:h-96 w-full rounded-2xl overflow-hidden shadow-lg border border-[#E9DCF2] bg-[#10071C]">
+                <img
+                  src="/quality_analytical_testing.jpg"
+                  alt="HPLC Spectrometry and Analytical Quality Testing"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+
+                {/* Ambient Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#140624]/90 via-[#140624]/20 to-transparent" />
+
+                {/* Floating Top Badge */}
+                <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#1A0A2E]/80 backdrop-blur-md border border-white/20 text-white text-[11px] font-semibold">
+                  <span className="w-2 h-2 rounded-full bg-[#10B981] animate-ping" />
+                  <span className="w-2 h-2 rounded-full bg-[#10B981] -ml-3" />
+                  <span>Chromatographic Assay: 99.8%</span>
+                </div>
+
+                {/* Bottom Overlay Label */}
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-[#D49B24] font-bold">
+                    <FileCheck2 className="w-3.5 h-3.5" />
+                    <span>Validated Analytical Release</span>
+                  </div>
+                  <h4 className="text-base sm:text-lg font-bold text-white font-serif mt-1">
+                    Precision Spectrometry &amp; Dissolution Profiling
+                  </h4>
+                  <p className="text-xs text-white/70 line-clamp-1 mt-0.5">
+                    Zero chemical impurities and complete potency validation across all active pharmaceutical ingredients.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Analytical Rigor Checklist */}
+            <div className="lg:col-span-6 space-y-6">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7137A5]/10 text-[#7137A5] text-[10px] font-bold uppercase tracking-wider mb-2.5">
+                  <Microscope className="w-3.5 h-3.5 text-[#7137A5]" />
+                  <span>Compendial Release Protocols</span>
+                </div>
+
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-[#32164F] tracking-tight font-['Manrope']">
+                  Scientific Assurance in Every Dosage Unit
+                </h3>
+
+                <p className="text-xs sm:text-sm text-[#756B7B] mt-2.5 leading-relaxed">
+                  Before any batch leaves our Chennai packaging hub, it is subjected to four levels of analytical testing to ensure complete clinical safety and therapeutic bioequivalence.
+                </p>
+              </div>
+
+              {/* 4-Step Analytical Pillars */}
+              <div className="space-y-3">
+                <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-[#FAF8FC] border border-[#F0EAF3] hover:border-[#7137A5]/30 transition-colors">
+                  <div className="w-8 h-8 shrink-0 rounded-xl bg-[#7137A5]/10 flex items-center justify-center text-[#7137A5] mt-0.5">
+                    <Activity className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h5 className="text-xs sm:text-sm font-bold text-[#32164F]">
+                      HPLC &amp; GC-MS Assay Purity (≥ 99.0%)
+                    </h5>
+                    <p className="text-[11px] text-[#7E6F87] leading-relaxed mt-0.5">
+                      Verifies exact milligram potencies of 3NBP, CoQ10, PEA, CMP, and UMP without degradation peaks.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-[#FAF8FC] border border-[#F0EAF3] hover:border-[#7137A5]/30 transition-colors">
+                  <div className="w-8 h-8 shrink-0 rounded-xl bg-[#D49B24]/10 flex items-center justify-center text-[#B47B13] mt-0.5">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h5 className="text-xs sm:text-sm font-bold text-[#32164F]">
+                      Heavy Metal &amp; Microbial Bio-Burden Clearance
+                    </h5>
+                    <p className="text-[11px] text-[#7E6F87] leading-relaxed mt-0.5">
+                      Strict ICP-MS analysis ensuring lead, cadmium, mercury, and microbial parameters are below USP limits.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-[#FAF8FC] border border-[#F0EAF3] hover:border-[#7137A5]/30 transition-colors">
+                  <div className="w-8 h-8 shrink-0 rounded-xl bg-[#7137A5]/10 flex items-center justify-center text-[#7137A5] mt-0.5">
+                    <CheckCircle2 className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h5 className="text-xs sm:text-sm font-bold text-[#32164F]">
+                      Batch Certificate of Analysis (CoA) Traceability
+                    </h5>
+                    <p className="text-[11px] text-[#7E6F87] leading-relaxed mt-0.5">
+                      Every blister pack is stamped with traceable batch numbers backed by validated documentation.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
         </div>
 
         {/* Bottom Quality Statement */}

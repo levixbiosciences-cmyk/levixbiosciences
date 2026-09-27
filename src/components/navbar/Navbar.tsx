@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Menu,
   X,
@@ -11,7 +11,7 @@ import {
   Linkedin,
   Facebook,
   Instagram,
-  Youtube,
+  Clock,
 } from 'lucide-react';
 import LevixLogo from '../common/Levix.jpeg';
 import { companyInfo } from '../../data/company';
@@ -31,6 +31,29 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [socialNotice, setSocialNotice] = useState<{ platform: string; message: string } | null>(null);
+  const noticeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleComingSoon = (platform: string) => {
+    if (noticeTimeoutRef.current) {
+      clearTimeout(noticeTimeoutRef.current);
+    }
+    setSocialNotice({
+      platform,
+      message: 'Coming Soon — Our social media page is currently being updated. Please check back soon.',
+    });
+    noticeTimeoutRef.current = setTimeout(() => {
+      setSocialNotice(null);
+    }, 4500);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (noticeTimeoutRef.current) {
+        clearTimeout(noticeTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -153,7 +176,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 />
 
                 <span>
-                  8870889620
+                  +91 8870889620
                 </span>
               </a>
 
@@ -169,7 +192,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   transition-colors
                 "
               >
-                8807608896
+                +91 8807608896
               </a>
             </div>
 
@@ -177,7 +200,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="flex items-center gap-3">
 
               <a
-                href="mailto:info@levixbiosciences.com"
+                href="mailto:levixbiosciences@gmail.com"
                 className="
                   hidden
                   md:flex
@@ -193,7 +216,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="text-[#E0B44C]"
                 />
 
-                info@levixbiosciences.com
+                levixbiosciences@gmail.com
               </a>
 
               <span className="hidden md:block text-white/20">
@@ -203,9 +226,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* SOCIAL ICONS */}
               <div className="flex items-center gap-2">
 
+                {/* Facebook (Direct Link) */}
                 <a
-                  href="#"
-                  aria-label="LinkedIn"
+                  href="https://www.facebook.com/profile.php?id=61594677755313&rdid=U33oyTRcd7zH1q6S&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1K7oBs2FK5%2F#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook Profile"
+                  title="Follow LEVIX on Facebook"
                   className="
                     w-6
                     h-6
@@ -217,33 +244,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                     hover:bg-[#E0B44C]
                     hover:text-[#32164F]
                     transition-all
-                  "
-                >
-                  <Linkedin size={12} />
-                </a>
-
-                <a
-                  href="#"
-                  aria-label="Facebook"
-                  className="
-                    w-6
-                    h-6
-                    rounded-full
-                    bg-white/10
-                    flex
-                    items-center
-                    justify-center
-                    hover:bg-[#E0B44C]
-                    hover:text-[#32164F]
-                    transition-all
+                    cursor-pointer
+                    text-white
                   "
                 >
                   <Facebook size={12} />
                 </a>
 
-                <a
-                  href="#"
+                {/* Instagram (Coming Soon) */}
+                <button
+                  type="button"
+                  onClick={() => handleComingSoon('Instagram')}
                   aria-label="Instagram"
+                  title="Instagram — Coming Soon"
                   className="
                     w-6
                     h-6
@@ -255,14 +268,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                     hover:bg-[#E0B44C]
                     hover:text-[#32164F]
                     transition-all
+                    cursor-pointer
+                    text-white
                   "
                 >
                   <Instagram size={12} />
-                </a>
+                </button>
 
-                <a
-                  href="#"
-                  aria-label="YouTube"
+                {/* LinkedIn (Coming Soon) */}
+                <button
+                  type="button"
+                  onClick={() => handleComingSoon('LinkedIn')}
+                  aria-label="LinkedIn"
+                  title="LinkedIn — Coming Soon"
                   className="
                     w-6
                     h-6
@@ -274,10 +292,38 @@ export const Navbar: React.FC<NavbarProps> = ({
                     hover:bg-[#E0B44C]
                     hover:text-[#32164F]
                     transition-all
+                    cursor-pointer
+                    text-white
                   "
                 >
-                  <Youtube size={12} />
-                </a>
+                  <Linkedin size={12} />
+                </button>
+
+                {/* Twitter / X (Coming Soon) */}
+                <button
+                  type="button"
+                  onClick={() => handleComingSoon('Twitter / X')}
+                  aria-label="Twitter / X"
+                  title="Twitter / X — Coming Soon"
+                  className="
+                    w-6
+                    h-6
+                    rounded-full
+                    bg-white/10
+                    flex
+                    items-center
+                    justify-center
+                    hover:bg-[#E0B44C]
+                    hover:text-[#32164F]
+                    transition-all
+                    cursor-pointer
+                    text-white
+                  "
+                >
+                  <svg className="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                </button>
 
               </div>
             </div>
@@ -754,7 +800,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   href={`tel:${companyInfo.contact.headquarters.phone1}`}
                   className="font-semibold"
                 >
-                  8870889620
+                  +91 8870889620
                 </a>
 
                 <span>/</span>
@@ -763,8 +809,50 @@ export const Navbar: React.FC<NavbarProps> = ({
                   href={`tel:${companyInfo.contact.headquarters.phone2}`}
                   className="font-semibold"
                 >
-                  8807608896
+                  +91 8807608896
                 </a>
+              </div>
+
+              {/* MOBILE SOCIAL ICONS */}
+              <div className="mt-4 pt-3 border-t border-[#EEE6F4] flex items-center justify-center gap-3">
+                <a
+                  href="https://www.facebook.com/profile.php?id=61594677755313&rdid=U33oyTRcd7zH1q6S&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1K7oBs2FK5%2F#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook Profile"
+                  className="w-8 h-8 rounded-full bg-[#FAF6FC] border border-[#E9DCF2] flex items-center justify-center text-[#7137A5] hover:bg-[#7137A5] hover:text-white transition-all shadow-sm"
+                >
+                  <Facebook size={14} />
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => handleComingSoon('Instagram')}
+                  aria-label="Instagram"
+                  className="w-8 h-8 rounded-full bg-[#FAF6FC] border border-[#E9DCF2] flex items-center justify-center text-[#7137A5] hover:bg-[#7137A5] hover:text-white transition-all shadow-sm cursor-pointer"
+                >
+                  <Instagram size={14} />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleComingSoon('LinkedIn')}
+                  aria-label="LinkedIn"
+                  className="w-8 h-8 rounded-full bg-[#FAF6FC] border border-[#E9DCF2] flex items-center justify-center text-[#7137A5] hover:bg-[#7137A5] hover:text-white transition-all shadow-sm cursor-pointer"
+                >
+                  <Linkedin size={14} />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleComingSoon('Twitter / X')}
+                  aria-label="Twitter / X"
+                  className="w-8 h-8 rounded-full bg-[#FAF6FC] border border-[#E9DCF2] flex items-center justify-center text-[#7137A5] hover:bg-[#7137A5] hover:text-white transition-all shadow-sm cursor-pointer"
+                >
+                  <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                </button>
               </div>
 
               {/* TAGLINE */}
@@ -777,6 +865,35 @@ export const Navbar: React.FC<NavbarProps> = ({
                 © {new Date().getFullYear()} LEVIX Biosciences Pvt Ltd
               </p>
 
+            </div>
+          </div>
+        )}
+
+        {/* =======================================================
+            COMING SOON TOAST NOTIFICATION
+        ======================================================= */}
+        {socialNotice && (
+          <div className="fixed top-14 sm:top-16 right-4 sm:right-8 z-50 max-w-sm w-[92vw] sm:w-[380px] bg-[#2E124B]/95 backdrop-blur-xl border border-[#E0B44C]/60 text-white shadow-[0_20px_60px_rgba(0,0,0,0.4)] rounded-2xl p-4 animate-in fade-in slide-in-from-top-3 duration-300">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 shrink-0 rounded-xl bg-[#E0B44C]/20 border border-[#E0B44C]/40 flex items-center justify-center text-[#E0B44C] mt-0.5">
+                <Clock size={16} />
+              </div>
+              <div className="flex-1 pr-1">
+                <p className="text-[11px] font-bold text-[#E0B44C] uppercase tracking-wider">
+                  {socialNotice.platform}
+                </p>
+                <p className="text-xs text-white/90 mt-0.5 leading-relaxed font-medium">
+                  {socialNotice.message}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSocialNotice(null)}
+                className="text-white/60 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+                aria-label="Dismiss message"
+              >
+                <X size={15} />
+              </button>
             </div>
           </div>
         )}

@@ -69,7 +69,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     message += `Please confirm my order and share payment/delivery schedule. Thank you!`;
 
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${targetWhatsAppNumber}?text=${encodedMessage}`;
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${targetWhatsAppNumber}&text=${encodedMessage}`;
 
     // Open WhatsApp in new tab / app
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
@@ -278,7 +278,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
               <div className="flex items-center justify-center gap-2 text-[11px] text-[#64748B]">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#0066CC]" />
-                <span>Orders forwarded directly to WhatsApp: 8870889620</span>
+                <span>Orders forwarded directly to WhatsApp: +91 8870889620</span>
               </div>
             </div>
           )}

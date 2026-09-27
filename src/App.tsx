@@ -4,6 +4,7 @@ import { Hero } from './components/hero/Hero';
 import { AboutMinimal } from './components/sections/AboutMinimal';
 import { FormulationsMinimal } from './components/sections/FormulationsMinimal';
 import { QualityMinimal } from './components/sections/QualityMinimal';
+import { ServicesMinimal } from './components/sections/ServicesMinimal';
 import { ContactMinimal } from './components/sections/ContactMinimal';
 import { FooterMinimal } from './components/footer/FooterMinimal';
 import { FloatingQuickCall } from './components/common/FloatingQuickCall';
@@ -18,7 +19,7 @@ export function App() {
 
   // IntersectionObserver to sync active section with Navbar on scroll
   useEffect(() => {
-    const sections = ['home', 'about', 'formulations', 'quality', 'contact'];
+    const sections = ['home', 'about', 'formulations', 'quality', 'services', 'contact'];
     const handleScroll = () => {
       const scrollPosition = window.scrollY + 200;
       for (const sectionId of sections) {
@@ -124,7 +125,13 @@ export function App() {
         {/* 4. Quality Standards */}
         <QualityMinimal />
 
-        {/* 5. Contact Section (Chennai Headquarters) */}
+        {/* 5. Pharma Capabilities & Services */}
+        <ServicesMinimal 
+          onContactClick={() => handleSectionClick('contact')} 
+          onExploreFormulations={() => handleSectionClick('formulations')} 
+        />
+
+        {/* 6. Contact Section (Chennai Headquarters) */}
         <ContactMinimal />
       </main>
 

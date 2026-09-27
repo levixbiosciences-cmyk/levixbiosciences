@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { companyInfo } from '../data/company';
 import { PageRoute } from '../types';
+import { NeuralSignalNetwork } from '../components/common/NeuralSignalNetwork';
 
 interface ContactPageProps {
   onNavigate: (route: PageRoute) => void;
@@ -23,13 +24,44 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const targetEmail = 'levixbiosciences@gmail.com';
+
+  const getMailLinks = () => {
+    const subject = encodeURIComponent(`[${formData.category}] ${formData.subject} - ${formData.name}`);
+    const body = encodeURIComponent(
+      `Dear LEVIX Biosciences Team,\n\nI am submitting an inquiry via the official contact page:\n\n• Name: ${formData.name}\n• Phone: ${formData.phone}\n• Email: ${formData.email}\n• Category: ${formData.category}\n• Subject: ${formData.subject}\n\n• Inquiry Details:\n${formData.message}\n\n---\nTransmitted to: ${targetEmail}\nLEVIX Biosciences Pvt. Ltd.`
+    );
+    const mailto = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
+    const gmailWeb = `https://mail.google.com/mail/?view=cm&fs=1&to=${targetEmail}&su=${subject}&body=${body}`;
+    const whatsapp = `https://api.whatsapp.com/send/?phone=918870889620&text=${encodeURIComponent(
+      `Hello LEVIX Biosciences,\n• Name: ${formData.name}\n• Phone: ${formData.phone}\n• Inquiry: [${formData.category}] ${formData.subject}\n• Details: ${formData.message}`
+    )}`;
+
+    return { mailto, gmailWeb, whatsapp };
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
+    const { mailto, gmailWeb } = getMailLinks();
+
+    // Open Gmail compose in new tab for laptop/desktop users
+    window.open(gmailWeb, '_blank', 'noopener,noreferrer');
+
+    // Also attempt mail client
+    setTimeout(() => {
+      try {
+        window.location.href = mailto;
+      } catch (err) {
+        console.error('Mail open error:', err);
+      }
+    }, 400);
+
     setTimeout(() => {
       setLoading(false);
       setSubmitted(true);
-    }, 600);
+    }, 400);
   };
 
   return (
@@ -37,14 +69,8 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
 
       {/* Hero Header */}
       <section className="bg-[#0B1F33] text-white py-16 sm:py-24 relative overflow-hidden -mt-28 mb-16 subtle-grid-pattern">
-        {/* Animated DNA Background */}
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-80 sm:w-96 lg:w-[480px] h-full pointer-events-none opacity-25 lg:opacity-35 mix-blend-screen flex items-center justify-center select-none z-0">
-          <img
-            src="/dna.gif"
-            alt="DNA Helix Animation"
-            className="h-full w-auto object-contain filter contrast-125 brightness-110"
-          />
-        </div>
+        {/* Animated Neural Signal Network */}
+        <NeuralSignalNetwork variant="dark" opacity={0.35} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-12">
           <div className="max-w-3xl space-y-4">
@@ -69,29 +95,62 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
           {/* Left Contact Form (7 cols) */}
           <div className="lg:col-span-7 rounded-3xl bg-white border border-[#E2E8F0] shadow-sm p-6 sm:p-10">
             <h2 className="text-2xl font-bold text-[#0B1F33] font-['Manrope'] mb-2">
-              Send a Verified Ingestion Inquiry
+              Send Direct Message
             </h2>
             <p className="text-xs sm:text-sm text-[#66737F] mb-6">
-              Our medical affairs and customer support teams respond within 24 business hours.
+              Inquiries are routed directly to <strong className="text-[#087F8C]">levixbiosciences@gmail.com</strong> and our Chennai desk.
             </p>
 
             {submitted ? (
-              <div className="py-12 text-center space-y-4">
+              <div className="py-10 text-center space-y-4 animate-in fade-in duration-300">
                 <div className="w-16 h-16 rounded-full bg-[#087F8C]/20 border border-[#087F8C] text-[#087F8C] flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-[#0B1F33] font-['Manrope']">
-                  Message Dispatched Successfully
+                  Inquiry Dispatched for levixbiosciences@gmail.com
                 </h3>
                 <p className="text-sm text-[#66737F] max-w-md mx-auto leading-relaxed">
-                  Thank you, <span className="text-[#0B1F33] font-semibold">{formData.name}</span>. Your inquiry regarding <span className="text-[#087F8C] font-semibold">{formData.subject}</span> has been logged under Ticket #NT-{Math.floor(100000 + Math.random() * 900000)}.
+                  Thank you, <span className="text-[#0B1F33] font-semibold">{formData.name}</span>. Your mail client was launched to send your inquiry to <strong className="text-[#087F8C]">levixbiosciences@gmail.com</strong>.
                 </p>
-                <button
-                  onClick={() => setSubmitted(false)}
-                  className="px-6 py-2.5 rounded-xl bg-[#087F8C] text-white text-xs font-semibold hover:bg-[#0E9AA6] transition-colors"
-                >
-                  Send Another Message
-                </button>
+
+                <div className="space-y-2 max-w-sm mx-auto pt-3">
+                  <a
+                    href={getMailLinks().gmailWeb}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2.5 px-4 rounded-xl bg-[#EA4335] hover:bg-[#D93025] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all"
+                  >
+                    <Mail className="w-4 h-4" />
+                    <span>Send via Gmail Web</span>
+                  </a>
+
+                  <a
+                    href={getMailLinks().mailto}
+                    className="w-full py-2.5 px-4 rounded-xl bg-[#F8FAFC] hover:bg-[#EEF2F6] text-[#0B1F33] border border-[#E2E8F0] text-xs font-bold flex items-center justify-center gap-2 transition-all"
+                  >
+                    <Mail className="w-4 h-4 text-[#087F8C]" />
+                    <span>Re-launch Mail Client</span>
+                  </a>
+
+                  <a
+                    href={getMailLinks().whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all"
+                  >
+                    <MessageSquare className="w-4 h-4 fill-white" />
+                    <span>Also Send via WhatsApp (+91 8870889620)</span>
+                  </a>
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    onClick={() => setSubmitted(false)}
+                    className="text-xs text-[#087F8C] font-bold hover:underline"
+                  >
+                    Send Another Message
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -192,11 +251,11 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                   className="w-full py-3.5 px-4 rounded-xl bg-[#087F8C] hover:bg-[#0E9AA6] text-white font-semibold text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#087F8C]/20 disabled:opacity-50"
                 >
                   {loading ? (
-                    <span>Routing to Medical Desk...</span>
+                    <span>Routing to Email Desk...</span>
                   ) : (
                     <>
-                      <Send className="w-4 h-4" />
-                      <span>Transmit Official Inquiry</span>
+                      <Mail className="w-4 h-4" />
+                      <span>Submit Message to levixbiosciences@gmail.com</span>
                     </>
                   )}
                 </button>
@@ -231,6 +290,19 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                   <p>{companyInfo.contact.headquarters.hours}</p>
                 </div>
               </div>
+
+              {/* WhatsApp Inquiry & Quotes Button */}
+              <div className="pt-2">
+                <a
+                  href="https://api.whatsapp.com/send/?phone=918870889620&text=Hello%20LEVIX%20Biosciences,%20I%20would%20like%20to%20make%20an%20inquiry%20and%20request%20pricing%20quotes%20for%20your%20formulations."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-2.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold text-center flex items-center justify-center gap-2 shadow-sm transition-all"
+                >
+                  <MessageSquare className="w-4 h-4 fill-white" />
+                  <span>WhatsApp Inquiry &amp; Quotes (+91 8870889620)</span>
+                </a>
+              </div>
             </div>
 
             {/* Medical Affairs Desk */}
@@ -245,7 +317,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 Dedicated desk for clinicians, investigators, and academic research queries.
               </p>
               <div className="pt-2 text-xs font-mono text-[#0E9AA6]">
-                medical.affairs@novathera-lifesciences.com
+                contact@levixbiosciences.com
               </div>
             </div>
 
@@ -256,10 +328,10 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 <span>Adverse Event Reporting (PV)</span>
               </div>
               <p className="text-xs text-red-900 leading-relaxed">
-                If you are reporting an adverse event or product safety concern, please contact our 24/7 Pharmacovigilance desk immediately at:
+                If you are reporting an adverse event or product safety concern, please contact our Pharmacovigilance desk immediately at:
               </p>
               <p className="text-xs font-mono font-bold text-red-700">
-                pv.safety@novathera-lifesciences.com | +91 22 8900 1199
+                pv.safety@levixbiosciences.com | +91 8807608896
               </p>
             </div>
 

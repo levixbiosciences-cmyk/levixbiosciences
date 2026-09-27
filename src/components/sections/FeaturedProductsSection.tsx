@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import { ArrowRight, Pill, ShieldCheck, Sparkles, CheckCircle2, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowRight, Pill, ShieldCheck, Sparkles, CheckCircle2, ChevronRight, ChevronDown, ChevronUp, Eye } from 'lucide-react';
 import { products } from '../../data/products';
-import { PageRoute } from '../../types';
+import { PageRoute, Product } from '../../types';
+import { ProductQuickViewModal } from '../modals/ProductQuickViewModal';
 
 interface FeaturedProductsSectionProps {
   onNavigate: (route: PageRoute, params?: { productId?: string }) => void;
+  onAddToCart?: (product: Product) => void;
 }
 
-export const FeaturedProductsSection: React.FC<FeaturedProductsSectionProps> = ({ onNavigate }) => {
+export const FeaturedProductsSection: React.FC<FeaturedProductsSectionProps> = ({ onNavigate, onAddToCart }) => {
   const [expandedProductIds, setExpandedProductIds] = useState<{ [key: string]: boolean }>({});
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
 
   const toggleExpand = (productId: string) => {
     setExpandedProductIds(prev => ({
@@ -56,7 +60,14 @@ export const FeaturedProductsSection: React.FC<FeaturedProductsSectionProps> = (
               className="group rounded-3xl bg-white border border-[#E2E8F0] hover:border-[#087F8C]/50 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden"
             >
               {/* Product Visual Container */}
-              <div className="relative h-56 bg-gradient-to-b from-[#EAF5F7] to-white p-6 flex items-center justify-center overflow-hidden">
+              <div
+                onClick={() => {
+                  setQuickViewProduct(product);
+                  setIsQuickViewOpen(true);
+                }}
+                className="relative h-56 bg-gradient-to-b from-[#EAF5F7] to-white p-6 flex items-center justify-center overflow-hidden cursor-pointer group/img"
+                title={`Click to view full details for ${product.name}`}
+              >
                 <img
                   src={product.image}
                   alt={product.name}
@@ -64,15 +75,23 @@ export const FeaturedProductsSection: React.FC<FeaturedProductsSectionProps> = (
                   loading="lazy"
                 />
 
+                {/* Click for details hover overlay */}
+                <div className="absolute inset-0 bg-[#0B1F33]/5 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center pointer-events-none z-20">
+                  <span className="px-3 py-1.5 rounded-full bg-white/95 text-[#0B1F33] text-[11px] font-bold shadow-md flex items-center gap-1.5 backdrop-blur-sm border border-[#B9D8D6]">
+                    <Eye className="w-3.5 h-3.5 text-[#087F8C]" />
+                    <span>View Full Details</span>
+                  </span>
+                </div>
+
                 {/* Category Pill Tag */}
-                <div className="absolute top-4 left-4">
+                <div className="absolute top-4 left-4 z-10">
                   <span className="text-[11px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-sm text-[#087F8C] border border-[#B9D8D6] shadow-xs">
                     {product.category}
                   </span>
                 </div>
 
                 {/* Delivery Tech Pill */}
-                <div className="absolute bottom-3 right-3">
+                <div className="absolute bottom-3 right-3 z-10">
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#0B1F33]/80 text-[#B9D8D6] backdrop-blur-xs">
                     {product.dosageForm.split(' ')[0]}
                   </span>
@@ -203,6 +222,17 @@ export const FeaturedProductsSection: React.FC<FeaturedProductsSectionProps> = (
         </div>
 
       </div>
+
+      {/* Product Quick View Modal */}
+      <ProductQuickViewModal
+        isOpen={isQuickViewOpen}
+        onClose={() => setIsQuickViewOpen(false)}
+        product={quickViewProduct}
+        onAddToCart={(p) => {
+          if (onAddToCart) onAddToCart(p);
+        }}
+        onSelectProduct={(p) => setQuickViewProduct(p)}
+      />
     </section>
   );
 };

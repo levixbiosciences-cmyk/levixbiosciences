@@ -10,10 +10,13 @@ import {
   Zap,
   ChevronDown,
   ChevronUp,
+  Eye,
 } from 'lucide-react';
 
 import { products } from '../../data/products';
 import { Product } from '../../types';
+import { ProductQuickViewModal } from '../modals/ProductQuickViewModal';
+import { NeuralSignalNetwork } from '../common/NeuralSignalNetwork';
 
 interface FormulationsMinimalProps {
   onAddToCart: (product: Product) => void;
@@ -38,6 +41,16 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
   const [expandedProductIds, setExpandedProductIds] =
     useState<{ [key: string]: boolean }>({});
 
+  const [quickViewProduct, setQuickViewProduct] =
+    useState<Product | null>(null);
+  const [isQuickViewOpen, setIsQuickViewOpen] =
+    useState<boolean>(false);
+
+  const handleOpenQuickView = (product: Product) => {
+    setQuickViewProduct(product);
+    setIsQuickViewOpen(true);
+  };
+
   const toggleExpand = (productId: string) => {
     setExpandedProductIds((prev) => ({
       ...prev,
@@ -56,25 +69,32 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
   ========================================================= */
 
   const filteredProducts = products.filter((p) => {
-    const matchesCategory =
-      selectedCategory === 'All' ||
-      p.category
-        .toLowerCase()
-        .includes(selectedCategory.toLowerCase()) ||
-      selectedCategory
-        .toLowerCase()
-        .includes(p.category.toLowerCase());
+    const normSelected = selectedCategory.trim().toLowerCase();
+    const normCategory = (p.category || '').toLowerCase();
+    const normSlug = (p.slug || '').toLowerCase();
 
+    let matchesCategory = false;
+    if (selectedCategory === 'All') {
+      matchesCategory = true;
+    } else if (normSelected.includes('brain')) {
+      matchesCategory = normSlug.includes('brain') || (normCategory.includes('brain') && !normCategory.includes('nerve'));
+    } else if (normSelected.includes('nerve')) {
+      matchesCategory = normSlug.includes('synovia') || normSlug.includes('nerve') || (normCategory.includes('nerve') && !normCategory.includes('brain'));
+    } else {
+      matchesCategory =
+        normCategory === normSelected ||
+        normCategory.includes(normSelected) ||
+        normSelected.includes(normCategory);
+    }
+
+    const trimmedQuery = searchQuery.trim().toLowerCase();
     const matchesSearch =
-      p.name
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      p.tagline
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      p.description
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
+      !trimmedQuery ||
+      p.name.toLowerCase().includes(trimmedQuery) ||
+      p.tagline.toLowerCase().includes(trimmedQuery) ||
+      p.description.toLowerCase().includes(trimmedQuery) ||
+      (p.category && p.category.toLowerCase().includes(trimmedQuery)) ||
+      (p.keyIngredients && p.keyIngredients.some(ing => ing.name.toLowerCase().includes(trimmedQuery)));
 
     return matchesCategory && matchesSearch;
   });
@@ -183,6 +203,9 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
           pointer-events-none
         "
       />
+
+      {/* Ambient Animated Neural Network & Signal Impulses */}
+      <NeuralSignalNetwork variant="light" opacity={0.22} />
 
       <div
         className="
@@ -584,6 +607,7 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                   ================================================= */}
 
                   <div
+                    onClick={() => handleOpenQuickView(product)}
                     className="
                       relative
                       h-56
@@ -598,7 +622,10 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                       overflow-hidden
                       border-b
                       border-[#F0E9F3]
+                      cursor-pointer
+                      group/img
                     "
+                    title={`Click to view full details for ${product.name}`}
                   >
 
                     {/* Decorative circle */}
@@ -643,6 +670,14 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                       "
                       loading="lazy"
                     />
+
+                    {/* Interactive Zoom / Details Overlay on Hover */}
+                    <div className="absolute inset-0 bg-[#32164F]/5 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center pointer-events-none z-30">
+                      <span className="px-3.5 py-1.5 rounded-full bg-white/95 text-[#32164F] text-xs font-bold shadow-lg flex items-center gap-1.5 backdrop-blur-sm transform translate-y-2 group-hover/img:translate-y-0 transition-transform border border-[#EEE6F2]">
+                        <Eye className="w-3.5 h-3.5 text-[#7137A5]" />
+                        <span>View Full Details</span>
+                      </span>
+                    </div>
 
                     {/* Category */}
 
@@ -736,6 +771,7 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                       >
 
                         <h3
+                          onClick={() => handleOpenQuickView(product)}
                           className="
                             text-lg
                             sm:text-xl
@@ -745,7 +781,9 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                             leading-tight
                             group-hover:text-[#7137A5]
                             transition-colors
+                            cursor-pointer
                           "
+                          title={`Click to view full details for ${product.name}`}
                         >
                           {product.name}
                         </h3>
@@ -1237,6 +1275,17 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
         </div>
 
       </div>
+
+      {/* =========================================================
+          COMPREHENSIVE PRODUCT POPUP MODAL
+      ========================================================== */}
+      <ProductQuickViewModal
+        isOpen={isQuickViewOpen}
+        onClose={() => setIsQuickViewOpen(false)}
+        product={quickViewProduct}
+        onAddToCart={handleAdd}
+        onSelectProduct={(p) => setQuickViewProduct(p)}
+      />
 
     </section>
   );

@@ -94,24 +94,26 @@ export const scientificAdvisoryBoard: LeadershipMember[] = [
 ];
 
 export const companyInfo = {
-  name: 'NovaThera Life Sciences',
-  tagline: 'Science-Driven Solutions for Better Health',
-  founded: '2011',
-  legalStatus: 'Specialty Pharmaceutical & Healthcare Corporate',
+  name: 'LEVIX Biosciences Pvt. Ltd.',
+  tagline: 'Science You Trust, Health You Feel.',
+  founded: '2022',
+  legalStatus: 'Specialized Healthcare & Formulations Corporate',
   contact: {
     headquarters: {
-      address: 'Tower 4, Mindspace Commercial Complex, Airoli, Navi Mumbai, MH 400708, India',
-      phone: '+91 22 6800 4500',
-      email: 'contact@novathera-lifesciences.com',
-      hours: 'Mon - Fri: 09:00 - 18:00 IST'
+      address: 'NO.1471/1B Kamarajar Street, Vinayagapuram, Kolathur, Chennai - 600099, (T.N.), India',
+      phone: '+91 8870889620',
+      phone1: '+91 8870889620',
+      phone2: '+91 8807608896',
+      email: 'levixbiosciences@gmail.com',
+      hours: 'Mon - Sat: 09:00 - 18:30 IST'
     },
     medicalAffairs: {
-      email: 'medical.affairs@novathera-lifesciences.com',
-      phone: '+91 22 6800 4550'
+      email: 'levixbiosciences@gmail.com',
+      phone: '+91 8870889620'
     },
     pharmacovigilance: {
-      email: 'pv.safety@novathera-lifesciences.com',
-      phone: '+91 22 8900 1199 (24/7 Toll-Free)'
+      email: 'pv.safety@levixbiosciences.com',
+      phone: '+91 8807608896'
     }
   }
 };

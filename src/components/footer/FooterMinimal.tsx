@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { LevixLogo } from '../common/LevixLogo';
 import { companyInfo } from '../../data/company';
+import { NeuralSignalNetwork } from '../common/NeuralSignalNetwork';
 
 interface FooterMinimalProps {
   onSectionClick?: (sectionId: string) => void;
@@ -39,6 +40,9 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
       <div className="absolute -top-32 right-1/4 w-96 h-96 rounded-full bg-[#7137A5]/25 blur-[110px] pointer-events-none" />
 
       <div className="absolute -bottom-40 -left-32 w-96 h-96 rounded-full bg-[#D49B24]/10 blur-[120px] pointer-events-none" />
+
+      {/* Subtle Animated Neural Network & Nerve Signal Impulses */}
+      <NeuralSignalNetwork opacity={0.38} />
 
       {/* Subtle dot pattern */}
       <div
@@ -155,9 +159,9 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
                 </div>
 
                 <span className="leading-relaxed pt-1">
-                  NO.12B/7 KAMARAJAR STREET,
+                  NO.1471/1B KAMARAJAR STREET,
                   VINAYAGAPURAM, KOLATHUR,
-                  CHENNAI PINCODE: 600099
+                  CHENNAI, (T.N.)-600099
                 </span>
               </div>
 
@@ -171,22 +175,19 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
                 <div className="flex items-center gap-2 font-mono">
 
                   <a
-                    href="tel:8807608896"
+                    href="tel:+918870889620"
                     className="text-white font-bold hover:text-[#D49B24] transition-colors"
                   >
-                    8807608896
+                    +91 8870889620
                   </a>
 
                   <span className="text-white/20">
                     /
                   </span>
 
-                  <a
-                    href="tel:8807608896"
-                    className="text-white font-bold hover:text-[#D49B24] transition-colors"
-                  >
-                    8807608896
-                  </a>
+                  <span className="text-white/80 font-bold">
+                    +91 8807608896
+                  </span>
 
                 </div>
               </div>

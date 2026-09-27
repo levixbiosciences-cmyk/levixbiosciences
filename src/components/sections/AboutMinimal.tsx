@@ -6,7 +6,11 @@ import {
   Award,
   ArrowRight,
   CheckCircle2,
+  Factory,
+  Activity,
+  Zap,
 } from 'lucide-react';
+import { NeuralSignalNetwork } from '../common/NeuralSignalNetwork';
 
 interface AboutMinimalProps {
   onContactClick?: () => void;
@@ -82,6 +86,9 @@ export const AboutMinimal: React.FC<AboutMinimalProps> = ({
           pointer-events-none
         "
       />
+
+      {/* Ambient Animated Neural Network & Signal Impulses */}
+      <NeuralSignalNetwork variant="light" opacity={0.22} />
 
       {/* Subtle dot pattern */}
       <div
@@ -303,16 +310,14 @@ export const AboutMinimal: React.FC<AboutMinimalProps> = ({
                   items-center
                   justify-center
                   mb-6
-                  group-hover:bg-[#7137A5]
-                  group-hover:border-[#7137A5]
-                  group-hover:scale-105
+                  group-hover:border-[#7137A5]/50
+                  group-hover:shadow-md
                   transition-all
                   duration-300
                 "
               >
                 {React.cloneElement(pillar.icon, {
-                  className:
-                    'w-6 h-6 text-[#7137A5] group-hover:text-white transition-colors',
+                  className: 'w-6 h-6 text-[#7137A5] transition-colors',
                 })}
               </div>
 
@@ -369,6 +374,121 @@ export const AboutMinimal: React.FC<AboutMinimalProps> = ({
             </div>
           ))}
 
+        </div>
+
+        {/* =====================================================
+            CLEANROOM INFRASTRUCTURE & R&D FACILITY SHOWCASE
+        ===================================================== */}
+
+        <div className="mb-14 overflow-hidden rounded-[32px] bg-gradient-to-br from-white via-[#FCFAFE] to-[#F7EFFC] border border-[#E9DCF2] shadow-[0_15px_45px_rgba(61,30,80,0.07)] p-6 sm:p-8 lg:p-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            
+            {/* Visual Cleanroom Side */}
+            <div className="lg:col-span-7 relative group">
+              <div className="relative h-64 sm:h-80 md:h-96 w-full rounded-2xl overflow-hidden shadow-lg border border-[#E2D2EB] bg-[#180A26]">
+                <img
+                  src="/pharma_cleanroom_facility.jpg"
+                  alt="LEVIX WHO-GMP Cleanroom Facility and Automated Robotic Packaging"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                
+                {/* Visual Gradient Accents */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1F0A33]/90 via-[#1F0A33]/20 to-transparent" />
+                
+                {/* Floating Top Badge */}
+                <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#180829]/80 backdrop-blur-md border border-white/20 text-white text-[11px] font-semibold">
+                  <Factory className="w-3.5 h-3.5 text-[#D49B24]" />
+                  <span>WHO-GMP Cleanroom Manufacturing</span>
+                </div>
+
+                {/* Bottom Overlay Info */}
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-[#E9C76E] font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-ping" />
+                    <span>State-of-the-Art Formulation Facility</span>
+                  </div>
+                  <h4 className="text-base sm:text-lg font-bold text-white font-serif mt-1">
+                    Continuous Bio-Matrix &amp; Blister Packaging Lines
+                  </h4>
+                  <p className="text-xs text-white/70 line-clamp-1 mt-0.5">
+                    HEPA-filtered Class 10,000 cleanrooms preventing contamination and ensuring bioequivalence.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Metrics & Capabilities Side */}
+            <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7137A5]/10 text-[#7137A5] text-[10px] font-bold uppercase tracking-wider mb-3">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Analytical Rigor</span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#2A163E] leading-tight">
+                  Engineered with Clinical Precision
+                </h3>
+                <p className="text-xs sm:text-sm text-[#6C5E73] mt-2.5 leading-relaxed">
+                  Every batch manufactured under the LEVIX banner undergoes multi-stage chromatographic verification, ensuring therapeutic bioavailability from synthesis to patient administration.
+                </p>
+              </div>
+
+              {/* Grid Metrics with Live Pulsing Indicators */}
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <div className="p-4 rounded-2xl bg-white border border-[#EEE6F2] shadow-sm hover:border-[#7137A5]/40 transition-colors">
+                  <div className="flex items-center justify-between text-xs text-[#8A7993] mb-1">
+                    <span>Assay Purity</span>
+                    <span className="w-2 h-2 rounded-full bg-[#10B981]" />
+                  </div>
+                  <p className="text-2xl sm:text-3xl font-black text-[#7137A5] font-serif">
+                    ≥ 99.0%
+                  </p>
+                  <p className="text-[10px] text-[#7E6F87] mt-0.5">
+                    HPLC Verified Actives
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white border border-[#EEE6F2] shadow-sm hover:border-[#7137A5]/40 transition-colors">
+                  <div className="flex items-center justify-between text-xs text-[#8A7993] mb-1">
+                    <span>Compendial</span>
+                    <span className="w-2 h-2 rounded-full bg-[#D49B24]" />
+                  </div>
+                  <p className="text-2xl sm:text-3xl font-black text-[#32164F] font-serif">
+                    100%
+                  </p>
+                  <p className="text-[10px] text-[#7E6F87] mt-0.5">
+                    IP &amp; USP Monograph
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white border border-[#EEE6F2] shadow-sm hover:border-[#7137A5]/40 transition-colors">
+                  <div className="flex items-center justify-between text-xs text-[#8A7993] mb-1">
+                    <span>Target Pathways</span>
+                    <Activity className="w-3.5 h-3.5 text-[#7137A5]" />
+                  </div>
+                  <p className="text-2xl sm:text-3xl font-black text-[#7137A5] font-serif">
+                    15+
+                  </p>
+                  <p className="text-[10px] text-[#7E6F87] mt-0.5">
+                    Neuro-Cellular Circuits
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-white border border-[#EEE6F2] shadow-sm hover:border-[#7137A5]/40 transition-colors">
+                  <div className="flex items-center justify-between text-xs text-[#8A7993] mb-1">
+                    <span>Dispatch Ready</span>
+                    <Zap className="w-3.5 h-3.5 text-[#D49B24]" />
+                  </div>
+                  <p className="text-2xl sm:text-3xl font-black text-[#32164F] font-serif">
+                    24h
+                  </p>
+                  <p className="text-[10px] text-[#7E6F87] mt-0.5">
+                    Direct Chennai Logistics
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
 
         {/* =====================================================

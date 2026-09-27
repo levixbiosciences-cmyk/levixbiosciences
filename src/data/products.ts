@@ -5,7 +5,7 @@ export const products: Product[] = [
     id: 'prod-brainvive',
     slug: 'brainvive',
     name: 'Brainvive™',
-    category: 'Neuroprotection & Cerebrovascular Health',
+    category: 'Brain Health & Nutritional Support',
     therapeuticAreaId: 'neurology',
     therapeuticAreaName: 'Neurology & Brain Health',
     tagline: 'Comprehensive Neuroprotective Formulation — For Cerebral Ischemia, Mitochondrial Recovery & Neuronal Repair',

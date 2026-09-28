@@ -331,7 +331,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 If you are reporting an adverse event or product safety concern, please contact our Pharmacovigilance desk immediately at:
               </p>
               <p className="text-xs font-mono font-bold text-red-700">
-                pv.safety@levixbiosciences.com | +91 8807608896
+                pv.safety@levixbiosciences.com | +91 8870889620
               </p>
             </div>
 

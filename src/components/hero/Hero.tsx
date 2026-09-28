@@ -85,7 +85,7 @@ export const Hero: React.FC<HeroProps> = ({
       imageTitle: 'UBML-QMS-2809026005 • Universal Benchmarking Ltd',
       highlights: [
         'ISO-9001-2015 Certified',
-        'Subsidiary of Levix Pharma (Est. 2022)',
+        'GST: 33AAHCL0903B1Z9',
         'Kolathur, Chennai HQ',
         'Measurable Clinical Results',
       ],

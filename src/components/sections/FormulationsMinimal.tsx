@@ -657,6 +657,14 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                     <img
                       src={product.image}
                       alt={product.name}
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (product.id === 'prod-brainvive' && !target.src.includes('BrainVIve')) {
+                          target.src = '/BrainVIve_1.jpeg';
+                        } else if (product.id === 'prod-synovia-plus' && !target.src.includes('Synovia')) {
+                          target.src = '/Synovia-Plus.jpeg';
+                        }
+                      }}
                       className="
                         relative
                         z-10
@@ -668,7 +676,6 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                         duration-500
                         drop-shadow-md
                       "
-                      loading="lazy"
                     />
 
                     {/* Interactive Zoom / Details Overlay on Hover */}

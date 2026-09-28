@@ -160,6 +160,14 @@ export const ProductQuickViewModal: React.FC<ProductQuickViewModalProps> = ({
                 <img
                   src={currentProduct.image}
                   alt={currentProduct.name}
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (currentProduct.id === 'prod-brainvive' && !target.src.includes('BrainVIve')) {
+                      target.src = '/BrainVIve_1.jpeg';
+                    } else if (currentProduct.id === 'prod-synovia-plus' && !target.src.includes('Synovia')) {
+                      target.src = '/Synovia-Plus.jpeg';
+                    }
+                  }}
                   className="relative z-10 max-h-48 sm:max-h-56 max-w-[85%] object-contain drop-shadow-xl transition-transform duration-500 group-hover:scale-105"
                 />
 

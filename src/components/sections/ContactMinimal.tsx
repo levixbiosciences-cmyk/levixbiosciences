@@ -202,22 +202,29 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
                   </p>
                 </div>
 
-                <div className="pt-4 mt-4 flex flex-wrap items-center gap-3 border-t border-[#EEE6F2] text-[11px]">
-                  <a
-                    href="https://maps.google.com/?q=NO.1471/1B+Kamarajar+Street+Vinayagapuram+Kolathur+Chennai+600099"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#7137A5] font-bold hover:text-[#32164F] transition-colors flex items-center gap-1.5"
-                  >
-                    <span>Open in Google Maps</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
+                <div className="pt-4 mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[#EEE6F2] text-[11px]">
+                  <div className="flex items-center gap-2">
+                    <a
+                      href="https://maps.google.com/?q=NO.1471/1B+Kamarajar+Street+Vinayagapuram+Kolathur+Chennai+600099"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#7137A5] font-bold hover:text-[#32164F] transition-colors flex items-center gap-1.5"
+                    >
+                      <span>Open in Google Maps</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
 
-                  <span className="text-[#D8CDD9]">•</span>
+                    <span className="text-[#D8CDD9]">•</span>
 
-                  <span className="text-[#756B7B]">
-                    Tamil Nadu, India
-                  </span>
+                    <span className="text-[#756B7B]">
+                      Tamil Nadu, India
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 font-mono text-[11px] text-[#32164F] bg-[#FAF5FD] px-2.5 py-1 rounded-lg border border-[#E9DCF2]">
+                    <span className="font-bold text-[#D49B24]">GSTIN:</span>
+                    <span className="font-semibold select-all">33AAHCL0903B1Z9</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -302,13 +309,13 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
                   </div>
                 </div>
 
-                {/* Support Desk - +91 8807608896 (Kept as dummy, redirects to email inquiry) */}
+                {/* Corporate Email Desk */}
                 <div className="p-4 rounded-2xl bg-[#FAF8FC] border border-[#EEE6F2] flex flex-col justify-between gap-4">
 
                   <div>
                     <div className="flex items-center justify-between">
                       <span className="text-[9px] uppercase tracking-[0.15em] text-[#756B7B] font-bold block">
-                        Support Desk
+                        Corporate Email Desk
                       </span>
                       <span className="text-[9px] font-bold text-[#7137A5] bg-[#7137A5]/10 px-2 py-0.5 rounded-full flex items-center gap-1">
                         <Mail className="w-2.5 h-2.5" />
@@ -316,11 +323,14 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
                       </span>
                     </div>
 
-                    <div className="text-lg font-bold font-mono text-[#32164F] block mt-1 select-all cursor-default">
-                      +91 8807608896
+                    <div className="mt-3 p-3 rounded-xl bg-white border border-[#EEDBFA]/80 shadow-xs">
+                      <p className="text-xs sm:text-[13px] text-[#4F3E5A] italic leading-relaxed font-medium">
+                        &ldquo;Direct email desk for formulations, institutional orders &amp; quotes.&rdquo;
+                      </p>
                     </div>
-                    <p className="text-[10px] text-[#756B7B] mt-0.5">
-                      For all inquiries, please email our Chennai desk
+
+                    <p className="text-[10px] text-[#756B7B] mt-2">
+                      Reach our Chennai corporate desk for product catalogs &amp; institutional supply.
                     </p>
                   </div>
 
@@ -332,7 +342,7 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
                       className="w-full py-2.5 px-3 rounded-xl bg-[#32164F] hover:bg-[#7137A5] text-white text-xs font-bold text-center flex items-center justify-center gap-1.5 shadow-sm transition-all touch-target"
                     >
                       <Mail className="w-4 h-4 text-[#D49B24]" />
-                      <span>Email for Inquiry</span>
+                      <span>Email for Inquiry &amp; Quotes</span>
                     </a>
 
                     <a

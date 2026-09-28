@@ -180,20 +180,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </span>
               </a>
 
-              <span className="text-white/30">
-                /
+              <span className="hidden xl:block text-white/20">
+                |
               </span>
 
-              <a
-                href={`tel:${companyInfo.contact.headquarters.phone2}`}
-                className="
-                  text-white/90
-                  hover:text-[#E8C76A]
-                  transition-colors
-                "
-              >
-                +91 8807608896
-              </a>
+              <div className="hidden xl:flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/10 text-white/90 font-mono text-[10px]">
+                <span className="text-[#E0B44C] font-bold">GST:</span>
+                <span>33AAHCL0903B1Z9</span>
+              </div>
             </div>
 
             {/* RIGHT */}
@@ -803,14 +797,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   +91 8870889620
                 </a>
 
-                <span>/</span>
+                <span className="text-[#B9A8C4]">•</span>
 
-                <a
-                  href={`tel:${companyInfo.contact.headquarters.phone2}`}
-                  className="font-semibold"
-                >
-                  +91 8807608896
-                </a>
+                <div className="font-mono text-[11px] text-[#7137A5] font-semibold">
+                  <span className="text-[#D49B24] font-bold">GST:</span> 33AAHCL0903B1Z9
+                </div>
               </div>
 
               {/* MOBILE SOCIAL ICONS */}

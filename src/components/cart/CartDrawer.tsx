@@ -276,9 +276,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <div className="flex items-center justify-center gap-2 text-[11px] text-[#64748B]">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#0066CC]" />
-                <span>Orders forwarded directly to WhatsApp: +91 8870889620</span>
+              <div className="flex flex-col items-center justify-center gap-1 text-[11px] text-[#64748B]">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#0066CC]" />
+                  <span>Orders forwarded directly to WhatsApp: +91 8870889620</span>
+                </div>
+                <div className="text-[10px] text-[#94A3B8] font-mono">
+                  LEVIX Biosciences Pvt Ltd • GSTIN: 33AAHCL0903B1Z9
+                </div>
               </div>
             </div>
           )}

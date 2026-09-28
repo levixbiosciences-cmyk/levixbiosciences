@@ -1,4 +1,6 @@
 import { Product } from '../types';
+import brainviveImg from '../assets/BrainVIve_1.jpeg';
+import synoviaPlusImg from '../assets/Synovia-Plus.jpeg';
 
 export const products: Product[] = [
   {
@@ -14,7 +16,7 @@ export const products: Product[] = [
     dosageForm: 'Softgel Capsules',
     packSize: '1 × 10 Softgel Capsules (Alu-Alu Blister)',
     deliveryTechnology: 'Advanced Lipid-BioActive Matrix Delivery',
-    image: '/BrainVIve_1.jpeg',
+    image: brainviveImg,
     featured: true,
     price: 999,
     mrp: 1250,
@@ -199,7 +201,7 @@ export const products: Product[] = [
     dosageForm: 'Film-Coated Tablets',
     packSize: '1 × 10 Film-Coated Tablets (Alu-Alu Strip)',
     deliveryTechnology: 'Dual Neuro-Targeted Bio-Matrix System',
-    image: '/Synovia-Plus.jpeg',
+    image: synoviaPlusImg,
     featured: true,
     price: 399,
     mrp: 499,

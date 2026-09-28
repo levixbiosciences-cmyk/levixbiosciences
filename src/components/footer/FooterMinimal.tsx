@@ -173,22 +173,12 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
                 </div>
 
                 <div className="flex items-center gap-2 font-mono">
-
                   <a
                     href="tel:+918870889620"
                     className="text-white font-bold hover:text-[#D49B24] transition-colors"
                   >
                     +91 8870889620
                   </a>
-
-                  <span className="text-white/20">
-                    /
-                  </span>
-
-                  <span className="text-white/80 font-bold">
-                    +91 8807608896
-                  </span>
-
                 </div>
               </div>
 
@@ -202,6 +192,20 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
                 <span className="text-[11px] text-white/50">
                   Mon - Sat: 9:00 AM - 6:30 PM IST
                 </span>
+
+              </div>
+
+              {/* GSTIN Registration */}
+              <div className="flex items-center gap-3 pt-1">
+
+                <div className="w-8 h-8 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                  <span className="text-[9px] font-bold text-[#D49B24]">GST</span>
+                </div>
+
+                <div className="text-[11px] text-white/70 font-mono">
+                  <span className="text-[#D49B24] font-bold">GSTIN: </span>
+                  <span className="text-white font-medium select-all">33AAHCL0903B1Z9</span>
+                </div>
 
               </div>
 
@@ -220,7 +224,7 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
             All rights reserved.
           </p>
 
-          <div className="flex items-center gap-2 text-[10px] sm:text-[11px]">
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2 text-[10px] sm:text-[11px]">
 
             <ShieldCheck className="w-3.5 h-3.5 text-[#D49B24]" />
 
@@ -232,8 +236,16 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
               •
             </span>
 
+            <span className="text-white/70 font-mono">
+              GST: <strong className="text-white">33AAHCL0903B1Z9</strong>
+            </span>
+
+            <span className="text-white/20">
+              •
+            </span>
+
             <span className="text-[#D49B24] font-semibold">
-              WHO-GMP Compliant
+              ISO 9001:2015 Certified
             </span>
 
           </div>

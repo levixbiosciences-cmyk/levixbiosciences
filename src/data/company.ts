@@ -98,12 +98,14 @@ export const companyInfo = {
   tagline: 'Science You Trust, Health You Feel.',
   founded: '2022',
   legalStatus: 'Specialized Healthcare & Formulations Corporate',
+  gst: '33AAHCL0903B1Z9',
+  gstin: '33AAHCL0903B1Z9',
+  iso: 'ISO 9001:2015 (UBML-QMS-2809026005)',
   contact: {
     headquarters: {
       address: 'NO.1471/1B Kamarajar Street, Vinayagapuram, Kolathur, Chennai - 600099, (T.N.), India',
       phone: '+91 8870889620',
       phone1: '+91 8870889620',
-      phone2: '+91 8807608896',
       email: 'levixbiosciences@gmail.com',
       hours: 'Mon - Sat: 09:00 - 18:30 IST'
     },
@@ -113,7 +115,7 @@ export const companyInfo = {
     },
     pharmacovigilance: {
       email: 'pv.safety@levixbiosciences.com',
-      phone: '+91 8807608896'
+      phone: '+91 8870889620'
     }
   }
 };

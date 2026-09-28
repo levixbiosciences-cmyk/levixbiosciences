@@ -245,12 +245,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <Facebook size={12} />
                 </a>
 
-                {/* Instagram (Coming Soon) */}
-                <button
-                  type="button"
-                  onClick={() => handleComingSoon('Instagram')}
-                  aria-label="Instagram"
-                  title="Instagram — Coming Soon"
+                {/* Instagram (Direct Link) */}
+                <a
+                  href="https://www.instagram.com/levixbiosciences?utm_source=qr&stkn=MXhuMGhmZGc3cnIxZA%3D%3D"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram Profile"
+                  title="Follow LEVIX on Instagram"
                   className="
                     w-6
                     h-6
@@ -259,15 +260,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                     flex
                     items-center
                     justify-center
-                    hover:bg-[#E0B44C]
-                    hover:text-[#32164F]
+                    hover:bg-[#E1306C]
+                    hover:text-white
                     transition-all
                     cursor-pointer
                     text-white
                   "
                 >
                   <Instagram size={12} />
-                </button>
+                </a>
 
                 {/* LinkedIn (Coming Soon) */}
                 <button
@@ -816,14 +817,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <Facebook size={14} />
                 </a>
 
-                <button
-                  type="button"
-                  onClick={() => handleComingSoon('Instagram')}
-                  aria-label="Instagram"
-                  className="w-8 h-8 rounded-full bg-[#FAF6FC] border border-[#E9DCF2] flex items-center justify-center text-[#7137A5] hover:bg-[#7137A5] hover:text-white transition-all shadow-sm cursor-pointer"
+                <a
+                  href="https://www.instagram.com/levixbiosciences?utm_source=qr&stkn=MXhuMGhmZGc3cnIxZA%3D%3D"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram Profile"
+                  title="Follow LEVIX on Instagram"
+                  className="w-8 h-8 rounded-full bg-[#FAF6FC] border border-[#E9DCF2] flex items-center justify-center text-[#7137A5] hover:bg-[#E1306C] hover:text-white hover:border-[#E1306C] transition-all shadow-sm cursor-pointer"
                 >
                   <Instagram size={14} />
-                </button>
+                </a>
 
                 <button
                   type="button"

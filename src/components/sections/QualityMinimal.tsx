@@ -10,7 +10,6 @@ import {
   Sparkles,
   Dna,
 } from 'lucide-react';
-import { NeuralSignalNetwork } from '../common/NeuralSignalNetwork';
 
 export const QualityMinimal: React.FC = () => {
   const qualityCards = [
@@ -47,25 +46,8 @@ export const QualityMinimal: React.FC = () => {
   return (
     <section
       id="quality"
-      className="relative overflow-hidden bg-[#FAF8FC] py-16 sm:py-24 text-[#17121F]"
+      className="relative overflow-hidden bg-transparent py-16 sm:py-24 text-[#17121F] border-b border-[#EEE6F2]/60"
     >
-      {/* Background decoration */}
-      <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-[#7137A5]/5 blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-[#D49B24]/5 blur-3xl pointer-events-none" />
-
-      {/* Ambient Animated Neural Network & Signal Impulses */}
-      <NeuralSignalNetwork variant="light" opacity={0.22} />
-
-      {/* Subtle dot pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.35] pointer-events-none"
-        style={{
-          backgroundImage:
-            'radial-gradient(#7137A5 0.7px, transparent 0.7px)',
-          backgroundSize: '24px 24px',
-        }}
-      />
-
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}

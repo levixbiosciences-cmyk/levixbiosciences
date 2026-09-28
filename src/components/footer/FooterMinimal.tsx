@@ -4,6 +4,8 @@ import {
   MapPin,
   ChevronRight,
   ShieldCheck,
+  Instagram,
+  Facebook,
 } from 'lucide-react';
 import { LevixLogo } from '../common/LevixLogo';
 import { companyInfo } from '../../data/company';
@@ -37,22 +39,8 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
           BACKGROUND DECORATION
       ========================================================== */}
 
-      <div className="absolute -top-32 right-1/4 w-96 h-96 rounded-full bg-[#7137A5]/25 blur-[110px] pointer-events-none" />
-
-      <div className="absolute -bottom-40 -left-32 w-96 h-96 rounded-full bg-[#D49B24]/10 blur-[120px] pointer-events-none" />
-
-      {/* Subtle Animated Neural Network & Nerve Signal Impulses */}
-      <NeuralSignalNetwork opacity={0.38} />
-
-      {/* Subtle dot pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.08] pointer-events-none"
-        style={{
-          backgroundImage:
-            'radial-gradient(#FFFFFF 0.7px, transparent 0.7px)',
-          backgroundSize: '26px 26px',
-        }}
-      />
+      {/* Animated Neural Network Impulses on Dark */}
+      <NeuralSignalNetwork variant="dark" opacity={0.32} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
@@ -92,13 +80,39 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
               engineered with high cellular bioavailability.
             </p>
 
-            {/* Small trust badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10">
-              <ShieldCheck className="w-4 h-4 text-[#D49B24]" />
+            {/* Small trust badge & Social Icons */}
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10">
+                <ShieldCheck className="w-4 h-4 text-[#D49B24]" />
+                <span className="text-[10px] uppercase tracking-[0.14em] font-bold text-white/70">
+                  Quality • Precision • Trust
+                </span>
+              </div>
 
-              <span className="text-[10px] uppercase tracking-[0.14em] font-bold text-white/70">
-                Quality • Precision • Trust
-              </span>
+              {/* Social Channels */}
+              <div className="flex items-center gap-2">
+                <a
+                  href="https://www.instagram.com/levixbiosciences?utm_source=qr&stkn=MXhuMGhmZGc3cnIxZA%3D%3D"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LEVIX Instagram Profile"
+                  title="Follow LEVIX on Instagram"
+                  className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-[#E1306C] hover:border-[#E1306C] transition-all duration-300 shadow-sm"
+                >
+                  <Instagram className="w-4 h-4" />
+                </a>
+
+                <a
+                  href="https://www.facebook.com/profile.php?id=61594677755313&rdid=U33oyTRcd7zH1q6S&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1K7oBs2FK5%2F#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LEVIX Facebook Profile"
+                  title="Follow LEVIX on Facebook"
+                  className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-[#1877F2] hover:border-[#1877F2] transition-all duration-300 shadow-sm"
+                >
+                  <Facebook className="w-4 h-4" />
+                </a>
+              </div>
             </div>
           </div>
 

@@ -117,5 +117,9 @@ export const companyInfo = {
       email: 'pv.safety@levixbiosciences.com',
       phone: '+91 8870889620'
     }
+  },
+  social: {
+    instagram: 'https://www.instagram.com/levixbiosciences?utm_source=qr&stkn=MXhuMGhmZGc3cnIxZA%3D%3D',
+    facebook: 'https://www.facebook.com/profile.php?id=61594677755313&rdid=U33oyTRcd7zH1q6S&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1K7oBs2FK5%2F#'
   }
 };

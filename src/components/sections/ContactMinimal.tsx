@@ -13,7 +13,6 @@ import {
   Building2,
 } from 'lucide-react';
 import { companyInfo } from '../../data/company';
-import { NeuralSignalNetwork } from '../common/NeuralSignalNetwork';
 
 interface ContactMinimalProps {
   prefilledProduct?: string;
@@ -86,25 +85,8 @@ export const ContactMinimal: React.FC<ContactMinimalProps> = ({
   return (
     <section
       id="contact"
-      className="relative overflow-hidden bg-[#FAF8FC] py-16 sm:py-24 text-[#17121F]"
+      className="relative overflow-hidden bg-transparent py-16 sm:py-24 text-[#17121F]"
     >
-      {/* Background decoration */}
-      <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-[#7137A5]/5 blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-40 -left-32 w-[28rem] h-[28rem] rounded-full bg-[#D49B24]/5 blur-3xl pointer-events-none" />
-
-      {/* Subtle Animated Neural Network & Nerve Signal Impulses */}
-      <NeuralSignalNetwork opacity={0.22} />
-
-      {/* Subtle pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.3] pointer-events-none z-0"
-        style={{
-          backgroundImage:
-            'radial-gradient(#7137A5 0.7px, transparent 0.7px)',
-          backgroundSize: '24px 24px',
-        }}
-      />
-
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}

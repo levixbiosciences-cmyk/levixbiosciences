@@ -17,8 +17,6 @@ import {
   HeartPulse,
 } from 'lucide-react';
 
-import { NeuralSignalNetwork } from '../common/NeuralSignalNetwork';
-
 interface HeroProps {
   onExploreClick?: () => void;
   onContactClick?: () => void;
@@ -269,33 +267,7 @@ export const Hero: React.FC<HeroProps> = ({
         lg:py-24
       "
     >
-      {/* =========================================================
-          BACKGROUND AMBIENCE & ADAPTIVE NEURAL SIGNAL NETWORK
-      ========================================================== */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#FFFFFF] via-[#FCFAFE] to-[#F5ECFB]" />
-
-      {/* Luminous Glow Orbs */}
-      <div className="absolute -top-40 -right-40 w-[550px] h-[550px] rounded-full bg-[#7137A5]/10 blur-[110px] pointer-events-none" />
-      <div className="absolute bottom-0 -left-40 w-[500px] h-[500px] rounded-full bg-[#D49B24]/8 blur-[110px] pointer-events-none" />
-
-      {/* Subtle Grid Lattice */}
-      <div
-        className="
-          absolute
-          inset-0
-          opacity-[0.025]
-          pointer-events-none
-          bg-[linear-gradient(to_right,#7137A5_1px,transparent_1px),linear-gradient(to_bottom,#7137A5_1px,transparent_1px)]
-          bg-[size:44px_44px]
-        "
-      />
-
-      {/* Real-time Biological Neural Signal Network */}
-      <NeuralSignalNetwork variant="light" opacity={0.25} />
-
-      {/* =========================================================
-          MAIN SLIDER CONTAINER
-      ========================================================== */}
+      {/* Hero Content Container */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
         {/* SLIDE CARD: SLOPED / DIAGONAL SPLIT ARCHITECTURE */}

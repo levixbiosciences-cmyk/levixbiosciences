@@ -11,6 +11,7 @@ import { FloatingQuickCall } from './components/common/FloatingQuickCall';
 import { CartDrawer } from './components/cart/CartDrawer';
 import { CartItem, Product } from './types';
 import { ShoppingBag } from 'lucide-react';
+import { NeuralSignalNetwork } from './components/common/NeuralSignalNetwork';
 
 export function App() {
   const [activeSection, setActiveSection] = useState<string>('home');
@@ -92,8 +93,11 @@ export function App() {
   }, {} as { [key: string]: number });
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-[#0F172A] font-['DM_Sans'] antialiased selection:bg-[#0066CC] selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#FAF8FC] text-[#0F172A] font-['DM_Sans'] antialiased selection:bg-[#7137A5] selection:text-white relative">
       
+      {/* Global Biological Brain Nerve Process Background */}
+      <NeuralSignalNetwork fixed variant="light" opacity={0.42} />
+
       {/* Clean Minimal Responsive Navbar with Cart Button */}
       <Navbar 
         activeSection={activeSection} 
@@ -103,7 +107,7 @@ export function App() {
       />
 
       {/* Main Single-Page Cohesive Flow */}
-      <main className="flex-1 w-full overflow-x-hidden">
+      <main className="flex-1 w-full overflow-x-hidden relative z-10">
         {/* 1. Hero Section */}
         <Hero 
           onExploreClick={() => handleSectionClick('formulations')} 

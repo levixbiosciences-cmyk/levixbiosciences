@@ -3,6 +3,11 @@
   publish = "dist"
 
 [[redirects]]
+  from = "/api/upload-prescription"
+  to = "/.netlify/functions/upload-prescription"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

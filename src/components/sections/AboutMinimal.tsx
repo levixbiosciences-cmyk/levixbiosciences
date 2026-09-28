@@ -10,7 +10,6 @@ import {
   Activity,
   Zap,
 } from 'lucide-react';
-import { NeuralSignalNetwork } from '../common/NeuralSignalNetwork';
 
 interface AboutMinimalProps {
   onContactClick?: () => void;
@@ -46,65 +45,15 @@ export const AboutMinimal: React.FC<AboutMinimalProps> = ({
       className="
         relative
         overflow-hidden
-        bg-white
+        bg-transparent
         text-[#17121F]
         py-20
         sm:py-24
         lg:py-28
         border-b
-        border-[#EEE6F2]
+        border-[#EEE6F2]/60
       "
     >
-      {/* =====================================================
-          BACKGROUND DECORATION
-      ===================================================== */}
-
-      <div
-        className="
-          absolute
-          -top-40
-          -right-40
-          w-[500px]
-          h-[500px]
-          rounded-full
-          bg-[#7137A5]/5
-          blur-[100px]
-          pointer-events-none
-        "
-      />
-
-      <div
-        className="
-          absolute
-          -bottom-40
-          -left-40
-          w-[450px]
-          h-[450px]
-          rounded-full
-          bg-[#D49B24]/5
-          blur-[100px]
-          pointer-events-none
-        "
-      />
-
-      {/* Ambient Animated Neural Network & Signal Impulses */}
-      <NeuralSignalNetwork variant="light" opacity={0.22} />
-
-      {/* Subtle dot pattern */}
-      <div
-        className="
-          absolute
-          top-20
-          left-8
-          w-32
-          h-32
-          opacity-30
-          pointer-events-none
-          bg-[radial-gradient(#7137A5_1.5px,transparent_1.5px)]
-          [background-size:14px_14px]
-        "
-      />
-
       <div
         className="
           max-w-7xl

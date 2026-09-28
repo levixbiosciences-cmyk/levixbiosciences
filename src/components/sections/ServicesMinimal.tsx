@@ -9,7 +9,6 @@ import {
   ShieldCheck,
   Zap,
 } from 'lucide-react';
-import { NeuralSignalNetwork } from '../common/NeuralSignalNetwork';
 
 interface ServicesMinimalProps {
   onContactClick?: () => void;
@@ -82,17 +81,8 @@ export const ServicesMinimal: React.FC<ServicesMinimalProps> = ({
   return (
     <section
       id="services"
-      className="relative overflow-hidden bg-white py-20 sm:py-24 lg:py-28 text-[#17121F] border-b border-[#EEE6F2]"
+      className="relative overflow-hidden bg-transparent py-20 sm:py-24 lg:py-28 text-[#17121F] border-b border-[#EEE6F2]/60"
     >
-      {/* =========================================================
-          ANIMATED NEURAL SIGNAL NETWORK
-      ========================================================== */}
-      <NeuralSignalNetwork variant="light" opacity={0.24} />
-
-      {/* Background radial glows */}
-      <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-[#7137A5]/5 blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-[#D49B24]/5 blur-3xl pointer-events-none" />
-
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* =======================================================

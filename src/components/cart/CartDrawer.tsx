@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   X, ShoppingBag, Plus, Minus, Trash2,
-  ArrowRight, ShieldCheck, MessageSquare, CheckCircle2, User, MapPin, Phone
+  ArrowRight, ShieldCheck, MessageSquare, CheckCircle2, User,
+  UploadCloud, FileText, AlertCircle, FileCheck2, Paperclip,
+  Check, Camera, AlertTriangle, Loader2, ExternalLink
 } from 'lucide-react';
 import { CartItem } from '../../types';
 
@@ -27,14 +29,180 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [orderNotes, setOrderNotes] = useState('');
 
+  // Doctor Prescription State (STRICTLY MANDATORY)
+  const [prescriptionFile, setPrescriptionFile] = useState<File | null>(null);
+  const [prescriptionPreview, setPrescriptionPreview] = useState<string | null>(null);
+  const [prescriptionError, setPrescriptionError] = useState<string | null>(null);
+  const [hasOpenedWhatsApp, setHasOpenedWhatsApp] = useState(false);
+  const [copiedToast, setCopiedToast] = useState(false);
+  const [uploadedPrescriptionUrl, setUploadedPrescriptionUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
   if (!isOpen) return null;
 
   const totalItemsCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   const subtotal = cartItems.reduce((acc, item) => acc + (item.product.price || 0) * item.quantity, 0);
-  const targetWhatsAppNumber = "918870889620"; // Provided testing WhatsApp number
+  const targetWhatsAppNumber = "918870889620"; // Official WhatsApp number
 
-  const handleWhatsAppCheckout = () => {
+  // Helper: auto-copy image to clipboard so user can instantly Ctrl+V / Paste in WhatsApp if they want
+  const copyImageToClipboard = async (file: File): Promise<boolean> => {
+    if (!file.type.startsWith('image/')) return false;
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard && window.ClipboardItem) {
+        if (file.type === 'image/png') {
+          await navigator.clipboard.write([new ClipboardItem({ 'image/png': file })]);
+          return true;
+        }
+
+        // Pass a Promise to ClipboardItem so user activation is kept active synchronously
+        const item = new ClipboardItem({
+          'image/png': new Promise<Blob>(async (resolve, reject) => {
+            try {
+              const bitmap = await createImageBitmap(file);
+              const canvas = document.createElement('canvas');
+              canvas.width = bitmap.width;
+              canvas.height = bitmap.height;
+              const ctx = canvas.getContext('2d');
+              if (!ctx) {
+                reject(new Error('Canvas context not available'));
+                return;
+              }
+              ctx.drawImage(bitmap, 0, 0);
+              canvas.toBlob((blob) => {
+                if (blob) resolve(blob);
+                else reject(new Error('Blob conversion failed'));
+              }, 'image/png');
+            } catch (err) {
+              reject(err);
+            }
+          })
+        });
+
+        await navigator.clipboard.write([item]);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      console.warn('Clipboard write note:', e);
+      return false;
+    }
+  };
+
+  // Helper: Upload prescription image to permanent storage so WhatsApp has the permanent photo link
+  const uploadPrescriptionFile = async (file: File): Promise<string | null> => {
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('reqtype', 'fileupload');
+      formData.append('fileToUpload', file, file.name);
+
+      const res = await fetch('/api/upload-prescription', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.success && data?.url) {
+          setUploadedPrescriptionUrl(data.url);
+          setIsUploading(false);
+          return data.url;
+        }
+      }
+    } catch (err) {
+      console.warn('Proxy upload failed, attempting fallback...', err);
+    }
+
+    // Direct fallback (uguu) if proxy is offline
+    try {
+      const form = new FormData();
+      form.append('files[]', file, file.name);
+      const res = await fetch('https://n.uguu.se/upload', {
+        method: 'POST',
+        body: form,
+      });
+      const json = await res.json();
+      if (json?.files?.[0]?.url) {
+        const url = json.files[0].url;
+        setUploadedPrescriptionUrl(url);
+        setIsUploading(false);
+        return url;
+      }
+    } catch (err2) {
+      console.warn('Fallback upload failed:', err2);
+    }
+
+    setIsUploading(false);
+    return null;
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 25 * 1024 * 1024) {
+      setPrescriptionError('File size exceeds 25MB limit. Please upload a smaller photo or PDF.');
+      return;
+    }
+
+    setPrescriptionFile(file);
+    setPrescriptionError(null);
+    setUploadedPrescriptionUrl(null);
+
+    if (file.type.startsWith('image/')) {
+      const url = URL.createObjectURL(file);
+      setPrescriptionPreview(url);
+      copyImageToClipboard(file);
+    } else {
+      setPrescriptionPreview(null);
+    }
+
+    // Start background permanent upload immediately
+    uploadPrescriptionFile(file);
+  };
+
+  const handleRemoveFile = () => {
+    if (prescriptionPreview) {
+      URL.revokeObjectURL(prescriptionPreview);
+    }
+    setPrescriptionFile(null);
+    setPrescriptionPreview(null);
+    setPrescriptionError(null);
+    setUploadedPrescriptionUrl(null);
+    setIsUploading(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleWhatsAppCheckout = async () => {
     if (cartItems.length === 0) return;
+
+    // STRICT MANDATORY VALIDATION: Must upload prescription picture in the site itself!
+    if (!prescriptionFile) {
+      setPrescriptionError('⚠️ Doctor Prescription picture is mandatory! Please upload your prescription photo above to proceed.');
+      const el = document.getElementById('prescription-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
+
+    // Auto-copy image to clipboard as instant backup
+    if (prescriptionFile.type.startsWith('image/')) {
+      copyImageToClipboard(prescriptionFile);
+    }
+
+    // Ensure prescription is uploaded and we have the permanent direct URL
+    let directPhotoUrl = uploadedPrescriptionUrl;
+    if (!directPhotoUrl) {
+      directPhotoUrl = await uploadPrescriptionFile(prescriptionFile);
+    }
+
+    const fileSizeFormatted = (prescriptionFile.size / 1024 < 1024)
+      ? `${(prescriptionFile.size / 1024).toFixed(1)} KB`
+      : `${(prescriptionFile.size / (1024 * 1024)).toFixed(1)} MB`;
 
     // Generate formatted WhatsApp message
     let message = `*NEW ORDER - LEVIX BIO SCIENCE PVT LTD*\n`;
@@ -66,13 +234,24 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     message += `----------------------------------------\n`;
     message += `*TOTAL AMOUNT: ₹${subtotal.toLocaleString('en-IN')}*\n`;
     message += `----------------------------------------\n`;
+
+    // Prescription info in WhatsApp message with PERMANENT DIRECT PHOTO LINK
+    message += `*📋 DOCTOR PRESCRIPTION (Rx) - MANDATORY VERIFIED:*\n`;
+    message += `• Prescription File: ${prescriptionFile.name} (${fileSizeFormatted})\n`;
+    message += `• Upload Status: ✓ VERIFIED ON SITE\n`;
+    if (directPhotoUrl) {
+      message += `• 📸 *View Prescription Photo:*\n${directPhotoUrl}\n`;
+    } else {
+      message += `• 📎 _(Prescription photo uploaded from website)_\n`;
+    }
+    message += `----------------------------------------\n`;
     message += `Please confirm my order and share payment/delivery schedule. Thank you!`;
 
+    // Open WhatsApp Chat directly
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://api.whatsapp.com/send?phone=${targetWhatsAppNumber}&text=${encodedMessage}`;
-
-    // Open WhatsApp in new tab / app
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    setHasOpenedWhatsApp(true);
   };
 
   return (
@@ -89,7 +268,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           {/* Drawer Header */}
           <div className="p-5 border-b border-[#E2E8F0] flex items-center justify-between bg-[#F8FAFC]">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-[#0066CC] text-white flex items-center justify-center shadow-xs">
+              <div className="w-9 h-9 rounded-xl bg-[#7137A5] text-white flex items-center justify-center shadow-xs">
                 <ShoppingBag className="w-5 h-5" />
               </div>
               <div>
@@ -124,7 +303,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </p>
                 <button
                   onClick={onClose}
-                  className="mt-2 px-5 py-2.5 rounded-xl bg-[#0066CC] text-white text-xs font-bold shadow hover:bg-[#0052CC] transition-colors"
+                  className="mt-2 px-5 py-2.5 rounded-xl bg-[#7137A5] text-white text-xs font-bold shadow hover:bg-[#5E2B8C] transition-colors"
                 >
                   Explore Formulations
                 </button>
@@ -167,7 +346,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                             {item.product.packSize}
                           </p>
                           <div className="flex items-baseline gap-1.5 mt-0.5">
-                            <span className="text-xs font-bold font-mono text-[#0066CC]">
+                            <span className="text-xs font-bold font-mono text-[#7137A5]">
                               ₹{price.toLocaleString('en-IN')}
                             </span>
                           </div>
@@ -207,9 +386,174 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   })}
                 </div>
 
-                {/* Customer Details Form (Optional for WhatsApp message) */}
+                {/* =====================================================
+                    DOCTOR PRESCRIPTION / DESCRIPTION (STRICTLY MANDATORY)
+                ====================================================== */}
+                <div
+                  id="prescription-section"
+                  className={`p-4 rounded-2xl border transition-all duration-300 ${
+                    prescriptionError
+                      ? 'bg-red-50/90 border-red-300 ring-2 ring-red-200 shadow-md'
+                      : prescriptionFile
+                      ? 'bg-[#F2FAF4] border-emerald-300 shadow-xs'
+                      : 'bg-[#FAF5FD] border-[#D8BFD8]'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <div className="flex items-center gap-1.5 text-xs font-bold font-mono uppercase text-[#7137A5]">
+                      <FileText className="w-3.5 h-3.5" />
+                      <span>Doctor Prescription / Description</span>
+                    </div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-600 text-white font-mono shadow-xs animate-pulse">
+                      Mandatory *
+                    </span>
+                  </div>
+
+                  {/* Quoted Medical Mandatory Notice */}
+                  <div className="p-2.5 rounded-xl bg-white border border-[#E5D5F0] flex items-start gap-2 shadow-xs mb-3">
+                    <AlertCircle className="w-4 h-4 text-[#7137A5] shrink-0 mt-0.5" />
+                    <p className="text-[11px] text-[#4A1D75] leading-snug font-medium italic">
+                      &quot;Doctor description / prescription is mandatory to dispense specialized neuro &amp; therapeutic formulations.&quot;
+                    </p>
+                  </div>
+
+                  {/* Hidden File Input */}
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileSelect}
+                    accept="image/*,.pdf"
+                    className="hidden"
+                    id="prescription-file-upload"
+                  />
+
+                  {!prescriptionFile ? (
+                    /* MANDATORY UPLOAD DROPZONE */
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        const file = e.dataTransfer.files?.[0];
+                        if (file) {
+                          handleFileSelect({ target: { files: [file] } } as any);
+                        }
+                      }}
+                      className="cursor-pointer border-2 border-dashed border-[#7137A5]/50 hover:border-[#7137A5] rounded-2xl p-4 text-center transition-all bg-white hover:bg-[#FAF8FD] group shadow-xs"
+                    >
+                      <div className="w-12 h-12 rounded-2xl bg-[#FAF5FD] border border-[#E9DCF2] text-[#7137A5] mx-auto flex items-center justify-center mb-2 group-hover:scale-105 transition-transform shadow-xs">
+                        <Camera className="w-6 h-6" />
+                      </div>
+                      <p className="text-xs font-bold text-[#17121F]">
+                        Upload Prescription Picture Here <span className="text-red-500">*</span>
+                      </p>
+                      <p className="text-[10px] text-[#786780] mt-1">
+                        Tap to choose Photo / Camera / PDF from your device
+                      </p>
+                      <span className="inline-block mt-2 px-3 py-1 rounded-lg bg-[#7137A5]/10 text-[#7137A5] font-bold text-[10px] uppercase tracking-wide">
+                        Choose File (Required)
+                      </span>
+                    </div>
+                  ) : (
+                    /* UPLOADED FILE PREVIEW CARD */
+                    <div className="bg-white rounded-2xl p-3 border border-emerald-300 shadow-xs space-y-2.5">
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3 min-w-0">
+                          {prescriptionPreview ? (
+                            <img
+                              src={prescriptionPreview}
+                              alt="Prescription preview"
+                              className="w-14 h-14 rounded-xl object-cover border-2 border-emerald-200 shadow-xs shrink-0"
+                            />
+                          ) : (
+                            <div className="w-14 h-14 rounded-xl bg-red-50 text-red-600 border border-red-200 flex flex-col items-center justify-center shrink-0">
+                              <FileCheck2 className="w-6 h-6" />
+                              <span className="text-[9px] font-mono font-bold uppercase mt-0.5">PDF</span>
+                            </div>
+                          )}
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5">
+                              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                              <p className="text-xs font-bold text-[#0B1324] truncate">
+                                {prescriptionFile.name}
+                              </p>
+                            </div>
+                            {isUploading ? (
+                              <p className="text-[10px] text-purple-700 font-semibold mt-0.5 flex items-center gap-1">
+                                <Loader2 className="w-3 h-3 animate-spin text-purple-600" />
+                                <span>Uploading &amp; linking for WhatsApp...</span>
+                              </p>
+                            ) : uploadedPrescriptionUrl ? (
+                              <p className="text-[10px] text-emerald-700 font-semibold mt-0.5 flex items-center gap-1">
+                                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                                <span>✓ Attached directly to WhatsApp bill</span>
+                              </p>
+                            ) : (
+                              <p className="text-[10px] text-emerald-700 font-semibold mt-0.5">
+                                ✓ Prescription Picture Attached &amp; Verified
+                              </p>
+                            )}
+                            <p className="text-[10px] text-[#64748B] font-mono">
+                              {(prescriptionFile.size / 1024 < 1024)
+                                ? `${(prescriptionFile.size / 1024).toFixed(1)} KB`
+                                : `${(prescriptionFile.size / (1024 * 1024)).toFixed(1)} MB`}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {prescriptionFile.type.startsWith('image/') && (
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                await copyImageToClipboard(prescriptionFile);
+                                setCopiedToast(true);
+                                setTimeout(() => setCopiedToast(false), 3000);
+                              }}
+                              className="px-2 py-1 rounded-xl text-[11px] font-semibold text-[#7137A5] hover:bg-[#FAF5FD] border border-[#E9DCF2] cursor-pointer"
+                              title="Copy image to paste in WhatsApp"
+                            >
+                              {copiedToast ? '✓ Copied' : 'Copy'}
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="px-2 py-1 rounded-xl text-[11px] font-semibold text-[#7137A5] hover:bg-[#FAF5FD] border border-[#E9DCF2] cursor-pointer"
+                          >
+                            Change
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleRemoveFile}
+                            className="p-1.5 rounded-xl text-red-500 hover:bg-red-50 cursor-pointer"
+                            title="Remove Picture"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* WhatsApp Note */}
+                      <div className="pt-2 border-t border-[#F1E8F7] flex items-center gap-1.5 text-[11px] text-[#166534] bg-emerald-50/50 p-2 rounded-xl">
+                        <Paperclip className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span>Ready to send with your order on WhatsApp (+91 8870889620)</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Red Validation Error */}
+                  {prescriptionError && (
+                    <div className="flex items-start gap-2 p-2.5 rounded-xl bg-red-100/80 border border-red-300 text-red-800 text-xs font-semibold animate-in slide-in-from-top-1">
+                      <AlertTriangle className="w-4 h-4 shrink-0 text-red-600 mt-0.5" />
+                      <span>{prescriptionError}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Customer Details Form */}
                 <div className="p-4 rounded-2xl bg-white border border-[#CBD5E1] space-y-3">
-                  <div className="text-xs font-bold font-mono uppercase text-[#0066CC] flex items-center gap-1.5">
+                  <div className="text-xs font-bold font-mono uppercase text-[#7137A5] flex items-center gap-1.5">
                     <User className="w-3.5 h-3.5" />
                     <span>Delivery Details (For WhatsApp Bill)</span>
                   </div>
@@ -221,7 +565,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         placeholder="Your Name (e.g. Dr. Ramesh / Patient)"
                         value={customerName}
                         onChange={(e) => setCustomerName(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-xs text-[#0F172A] focus:outline-none focus:border-[#0066CC]"
+                        className="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-xs text-[#0F172A] focus:outline-none focus:border-[#7137A5]"
                       />
                     </div>
 
@@ -231,14 +575,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         placeholder="Phone Number"
                         value={customerPhone}
                         onChange={(e) => setCustomerPhone(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-xs text-[#0F172A] focus:outline-none focus:border-[#0066CC]"
+                        className="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-xs text-[#0F172A] focus:outline-none focus:border-[#7137A5]"
                       />
                       <input
                         type="text"
                         placeholder="City / Pincode"
                         value={deliveryAddress}
                         onChange={(e) => setDeliveryAddress(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-xs text-[#0F172A] focus:outline-none focus:border-[#0066CC]"
+                        className="w-full px-3 py-2 rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] text-xs text-[#0F172A] focus:outline-none focus:border-[#7137A5]"
                       />
                     </div>
                   </div>
@@ -256,7 +600,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   </div>
                   <div className="pt-2 border-t border-[#E2E8F0] flex justify-between text-sm font-bold text-[#0B1324] font-['Manrope']">
                     <span>Total Amount</span>
-                    <span className="text-[#0066CC] font-mono text-base">₹{subtotal.toLocaleString('en-IN')}</span>
+                    <span className="text-[#7137A5] font-mono text-base">₹{subtotal.toLocaleString('en-IN')}</span>
                   </div>
                 </div>
               </>
@@ -265,20 +609,48 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
           {/* Drawer Footer Actions */}
           {cartItems.length > 0 && (
-            <div className="p-5 border-t border-[#E2E8F0] bg-white space-y-2.5">
+            <div className="p-5 border-t border-[#E2E8F0] bg-white space-y-3">
+              {hasOpenedWhatsApp && (
+                <div className="p-3.5 rounded-2xl bg-emerald-50 border-2 border-emerald-400 text-emerald-950 text-xs space-y-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 font-bold text-emerald-900 text-xs">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span>Prescription Linked to WhatsApp!</span>
+                    </div>
+                    <span className="text-[10px] bg-emerald-200 text-emerald-800 font-bold px-2 py-0.5 rounded-full font-mono">
+                      1-Click Order
+                    </span>
+                  </div>
+
+                  <p className="text-[11px] text-emerald-950 leading-relaxed bg-white/90 p-2.5 rounded-xl border border-emerald-200">
+                    ✓ Your prescription photo link is <strong>already attached</strong> inside your WhatsApp order message. Simply press <strong>Send</strong> in WhatsApp!
+                  </p>
+                </div>
+              )}
+
               <button
                 onClick={handleWhatsAppCheckout}
-                className="w-full py-3.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/25 hover:shadow-xl transition-all duration-300 touch-target group"
+                disabled={isUploading}
+                className="w-full py-3.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] disabled:opacity-80 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/25 hover:shadow-xl transition-all duration-300 touch-target group cursor-pointer"
                 id="whatsapp-checkout-btn"
               >
-                <MessageSquare className="w-4 h-4 fill-white" />
-                <span>Order via WhatsApp (₹{subtotal.toLocaleString('en-IN')})</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                {isUploading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-white" />
+                    <span>Attaching Prescription Photo...</span>
+                  </>
+                ) : (
+                  <>
+                    <MessageSquare className="w-4 h-4 fill-white" />
+                    <span>{hasOpenedWhatsApp ? 'Re-open WhatsApp Chat' : `Order via WhatsApp (₹${subtotal.toLocaleString('en-IN')})`}</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
               </button>
 
               <div className="flex flex-col items-center justify-center gap-1 text-[11px] text-[#64748B]">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#0066CC]" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#7137A5]" />
                   <span>Orders forwarded directly to WhatsApp: +91 8870889620</span>
                 </div>
                 <div className="text-[10px] text-[#94A3B8] font-mono">

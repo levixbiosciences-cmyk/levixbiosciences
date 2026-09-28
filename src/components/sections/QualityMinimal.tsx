@@ -321,8 +321,49 @@ export const QualityMinimal: React.FC = () => {
           </div>
         </div>
 
+        {/* ISO 9001:2015 Official Certification Banner */}
+        <div className="mt-8 p-6 sm:p-8 rounded-3xl bg-white border border-[#E9DCF2] shadow-[0_15px_40px_rgba(61,25,85,0.06)] flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-5">
+            <a
+              href="/iso_9001_certificate.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Click to view full ISO 9001:2015 Certificate PDF"
+              className="relative shrink-0 w-20 h-28 sm:w-24 sm:h-32 rounded-xl overflow-hidden shadow-md border-2 border-[#D49B24]/60 bg-white hover:scale-105 transition-transform"
+            >
+              <img
+                src="/iso_9001_certificate.jpg"
+                alt="ISO 9001:2015 Certificate"
+                className="w-full h-full object-contain"
+              />
+            </a>
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D49B24]/10 text-[#B47B13] text-xs font-bold uppercase tracking-wider mb-2">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>ISO 9001:2015 Certified Management System</span>
+              </div>
+              <h4 className="text-lg sm:text-xl font-serif font-bold text-[#17121F]">
+                LEVIX Biosciences Private Limited
+              </h4>
+              <p className="text-xs sm:text-sm text-[#625A68] mt-1 max-w-xl">
+                Certified by Universal Benchmarking Limited (UK) • Certificate No:{' '}
+                <strong className="text-[#7137A5]">UBML-QMS-2809026005</strong>. Scope includes marketing, trading, relabelling, distribution, and supply of pharmaceutical and healthcare formulations.
+              </p>
+            </div>
+          </div>
+          <a
+            href="/iso_9001_certificate.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#7137A5] hover:bg-[#5D278C] text-white text-xs sm:text-sm font-bold shadow-lg shadow-[#7137A5]/25 transition-all"
+          >
+            <Award className="w-4 h-4 text-[#D49B24]" />
+            <span>Download Official Certificate</span>
+          </a>
+        </div>
+
         {/* Bottom Quality Statement */}
-        <div className="mt-10 sm:mt-14">
+        <div className="mt-8 sm:mt-10">
           <div className="relative overflow-hidden rounded-3xl bg-[#32164F] px-6 py-7 sm:px-8 sm:py-8">
 
             {/* Decorative glow */}

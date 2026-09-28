@@ -13,6 +13,8 @@ import {
   Brain,
   Pill,
   Factory,
+  Quote,
+  HeartPulse,
 } from 'lucide-react';
 
 import { NeuralSignalNetwork } from '../common/NeuralSignalNetwork';
@@ -31,12 +33,14 @@ interface SlideData {
   titleAccent: string;
   subtitle: string;
   description: string;
+  quote?: string;
   primaryBtnText: string;
-  primaryAction: 'formulations' | 'quality' | 'contact';
+  primaryAction: 'formulations' | 'quality' | 'contact' | 'certificate';
   secondaryBtnText: string;
-  secondaryAction: 'contact' | 'formulations';
+  secondaryAction: 'contact' | 'formulations' | 'certificate';
   image: string;
   imageAlt: string;
+  imageFit?: 'cover' | 'contain';
   imageCategory: string;
   imageTitle: string;
   highlights: string[];
@@ -60,32 +64,68 @@ export const Hero: React.FC<HeroProps> = ({
   const slides: SlideData[] = [
     {
       id: 'slide-corporate',
-      badgeIcon: <Sparkles className="w-3.5 h-3.5 text-[#D49B24]" />,
-      badgeText: 'Welcome to Levix Biosciences',
+      badgeIcon: <Award className="w-3.5 h-3.5 text-[#D49B24]" />,
+      badgeText: 'ISO-9001-2015 Certified Company • Levix Pharma Subsidiary',
       badgeTheme: 'gold',
-      titleLead: 'Science you trust,',
-      titleAccent: 'Health you feel.',
-      subtitle: 'LEVIX Biosciences Pvt Ltd',
+      titleLead: 'Science You Trust,',
+      titleAccent: 'Health You Feel.',
+      subtitle: 'LEVIX Biosciences Pvt Ltd • Subsidiary of Levix Pharma (Est. 2022)',
       description:
-        'We are committed to delivering quality pharmaceutical formulations through scientific innovation, rigorous quality standards, and a strong focus on better health.',
+        "LEVIX Biosciences Pvt Ltd An ISO-9001-2015 Certified Company, And It's a Subsidiary of parent company Levix Pharma (established in 2022), is a dedicated healthcare and specialized formulations company based in Kolathur, Chennai. We blend pharmaceutical rigor with modern bioactive delivery platforms to provide healthcare professionals and patients with formulations that deliver measurable clinical results.",
+      quote:
+        "Levix Biosciences Pvt.Ltd one of the best and a reliable pharma company in India and a healthcare partner. We are not only committed to developing innovative technologies, but also we Committed to provide the best services to medical fraternities across the Country ..Thereby improving the quality of a patient's life; helping them live a normal, happy & active life.",
       primaryBtnText: 'Explore Formulations',
       primaryAction: 'formulations',
-      secondaryBtnText: 'Get in Touch',
-      secondaryAction: 'contact',
-      image: '/hero_medical_innovation.jpg',
-      imageAlt: 'LEVIX Biotechnology Molecular Research Lab',
-      imageCategory: 'Translational R&D Lab',
-      imageTitle: 'Advanced Neurovascular & Bio-Matrix Systems',
+      secondaryBtnText: 'View Certificate PDF',
+      secondaryAction: 'certificate',
+      image: '/iso_9001_certificate.jpg',
+      imageAlt: 'LEVIX Biosciences ISO 9001:2015 Official Certificate UBML-QMS-2809026005',
+      imageFit: 'contain',
+      imageCategory: 'ISO 9001:2015 Certified',
+      imageTitle: 'UBML-QMS-2809026005 • Universal Benchmarking Ltd',
       highlights: [
-        'Quality Assured Formulations',
-        'Translational Research Driven',
-        'Standards Excellence',
-        'Healthcare Focused Rigor',
+        'ISO-9001-2015 Certified',
+        'Subsidiary of Levix Pharma (Est. 2022)',
+        'Kolathur, Chennai HQ',
+        'Measurable Clinical Results',
       ],
       floatingBadge: {
         icon: <ShieldCheck className="w-4 h-4 text-[#7137A5]" />,
-        title: 'WHO-GMP & ISO 22000',
-        subtitle: '100% Monograph Validated',
+        title: 'ISO 9001:2015 Certified',
+        subtitle: 'UBML-QMS-2809026005',
+      },
+    },
+    {
+      id: 'slide-healthcare-partner',
+      badgeIcon: <HeartPulse className="w-3.5 h-3.5 text-[#7137A5]" />,
+      badgeText: 'Reliable Healthcare Partner Across India',
+      badgeTheme: 'purple',
+      titleLead: 'Committed to Medical Fraternities,',
+      titleAccent: 'Transforming Patient Lives.',
+      subtitle: 'Levix Biosciences Pvt. Ltd • Healthcare Partner in India',
+      description:
+        "Levix Biosciences Pvt.Ltd one of the best and a reliable pharma company in India and a healthcare partner. We are not only committed to developing innovative technologies, but also we Committed to provide the best services to medical fraternities across the Country ..Thereby improving the quality of a patient's life; helping them live a normal, happy & active life.",
+      quote:
+        '“Science You Trust, Health You Feel.” — Blending pharmaceutical rigor with modern bioactive delivery platforms to deliver clinical excellence nationwide.',
+      primaryBtnText: 'Our Formulations',
+      primaryAction: 'formulations',
+      secondaryBtnText: 'Partner With Us',
+      secondaryAction: 'contact',
+      image: '/hero_medical_innovation.jpg',
+      imageAlt: 'Healthcare partner serving medical fraternities across India',
+      imageFit: 'cover',
+      imageCategory: 'Pan-India Medical Network',
+      imageTitle: 'Dedicated Services to Medical Fraternities & Patients',
+      highlights: [
+        'Best & Reliable Pharma Partner',
+        'Services to Medical Fraternities',
+        'Innovative Technologies',
+        'Improving Patient Quality of Life',
+      ],
+      floatingBadge: {
+        icon: <Award className="w-4 h-4 text-[#D49B24]" />,
+        title: 'Healthcare Partner India',
+        subtitle: 'Serving Medical Fraternities',
       },
     },
     {
@@ -180,11 +220,11 @@ export const Hero: React.FC<HeroProps> = ({
     },
   ];
 
-  // Auto-play timer: advances automatically every 4.5 seconds
+  // Auto-play timer: advances automatically every 6 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 4500);
+    }, 6000);
 
     return () => clearInterval(timer);
   }, [currentSlide, slides.length]);
@@ -197,11 +237,13 @@ export const Hero: React.FC<HeroProps> = ({
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
-  const handleBtnAction = (action: 'formulations' | 'quality' | 'contact') => {
+  const handleBtnAction = (action: 'formulations' | 'quality' | 'contact' | 'certificate') => {
     if (action === 'formulations') {
       onExploreClick();
     } else if (action === 'quality') {
       document.getElementById('quality')?.scrollIntoView({ behavior: 'smooth' });
+    } else if (action === 'certificate') {
+      window.open('/iso_9001_certificate.pdf', '_blank');
     } else {
       onContactClick();
     }
@@ -295,35 +337,47 @@ export const Hero: React.FC<HeroProps> = ({
                 <div key={active.id + '-heading'} className="space-y-3 animate-in fade-in slide-in-from-left-4 duration-500">
                   <h1
                     className="
-                      text-3xl
-                      sm:text-5xl
-                      lg:text-5xl
-                      xl:text-6xl
+                      text-2xl
+                      sm:text-4xl
+                      lg:text-4xl
+                      xl:text-5xl
                       font-serif
                       font-bold
                       tracking-tight
-                      leading-[1.08]
+                      leading-[1.12]
                       text-[#17121F]
                     "
                   >
                     {active.titleLead}
-                    <span className="block text-[#7137A5] mt-1.5">
+                    <span className="block text-[#7137A5] mt-1">
                       {active.titleAccent}
                     </span>
                   </h1>
 
                   {/* Brand Subhead Divider */}
-                  <div className="flex items-center gap-3 pt-1">
+                  <div className="flex items-center gap-3 pt-0.5">
                     <span className="w-8 h-[2px] bg-[#D49B24]" />
-                    <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.16em] text-[#786780]">
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#786780]">
                       {active.subtitle}
                     </p>
                   </div>
 
                   {/* Scientific Description */}
-                  <p className="pt-2 text-sm sm:text-base lg:text-lg text-[#625A68] max-w-xl leading-relaxed">
+                  <p className="pt-1.5 text-xs sm:text-sm lg:text-base text-[#524858] max-w-xl leading-relaxed">
                     {active.description}
                   </p>
+
+                  {/* Optional Quote Card */}
+                  {active.quote && (
+                    <div className="mt-3.5 p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-[#FAF4FD] via-[#FCFAFE] to-[#FFFDF7] border-l-4 border-[#D49B24] border-t border-r border-b border-[#EEDBFA]/80 shadow-sm max-w-xl">
+                      <div className="flex items-start gap-2.5">
+                        <Quote className="w-4 h-4 text-[#7137A5] shrink-0 mt-0.5" />
+                        <p className="text-xs sm:text-[13px] text-[#44364D] italic leading-relaxed font-medium">
+                          {active.quote}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -425,16 +479,48 @@ export const Hero: React.FC<HeroProps> = ({
               <div className="hidden lg:block absolute -top-10 -bottom-10 left-[4%] w-1.5 bg-gradient-to-b from-[#7137A5]/40 via-[#D49B24] to-[#7137A5]/40 transform rotate-6 z-20 opacity-70 pointer-events-none shadow-[0_0_15px_rgba(212,155,36,0.5)]" />
 
               {/* High-Resolution Slide Image with Smooth Crossfade */}
-              <div key={active.id + '-image'} className="relative w-full h-full animate-in fade-in duration-700">
-                <img
-                  src={active.image}
-                  alt={active.imageAlt}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-1000 ease-out"
-                />
+              <div key={active.id + '-image'} className="relative w-full h-full animate-in fade-in duration-700 flex items-center justify-center">
+                {active.imageFit === 'contain' ? (
+                  <div className="relative w-full h-full p-4 sm:p-6 lg:p-7 flex items-center justify-center bg-gradient-to-br from-[#230B3A] via-[#1A062B] to-[#0E0317] overflow-hidden">
+                    {/* Glowing radial backlight */}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(212,155,36,0.22)_0%,transparent_70%)] pointer-events-none" />
+                    
+                    {/* Certificate Presentation Frame */}
+                    <a
+                      href="/iso_9001_certificate.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Click to view full ISO 9001:2015 Certificate PDF"
+                      className="relative block max-h-full max-w-[320px] sm:max-w-[370px] rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.65)] border-2 border-[#D49B24]/70 bg-white transition-all duration-500 hover:scale-[1.02] hover:border-[#D49B24] cursor-pointer group/cert z-10"
+                    >
+                      <img
+                        src={active.image}
+                        alt={active.imageAlt}
+                        className="w-full h-auto max-h-[440px] sm:max-h-[490px] object-contain mx-auto"
+                      />
+                      
+                      {/* Hover Overlay with View Icon */}
+                      <div className="absolute inset-0 bg-[#32164F]/30 opacity-0 group-hover/cert:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#7137A5] text-white text-xs font-bold shadow-xl border border-white/30">
+                          <ShieldCheck className="w-4 h-4 text-[#D49B24]" />
+                          <span>View Official PDF</span>
+                        </span>
+                      </div>
+                    </a>
+                  </div>
+                ) : (
+                  <>
+                    <img
+                      src={active.image}
+                      alt={active.imageAlt}
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-1000 ease-out"
+                    />
 
-                {/* Ambient Cinematic Gradient Overlays */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1F0A33]/95 via-[#1F0A33]/25 to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#7137A5]/25 to-transparent mix-blend-overlay" />
+                    {/* Ambient Cinematic Gradient Overlays */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1F0A33]/95 via-[#1F0A33]/25 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#7137A5]/25 to-transparent mix-blend-overlay" />
+                  </>
+                )}
 
                 {/* Category Pill Over Image */}
                 <div className="absolute top-5 right-5 z-20 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#180829]/80 backdrop-blur-md border border-white/20 text-white text-[11px] font-semibold shadow-md">
@@ -444,7 +530,7 @@ export const Hero: React.FC<HeroProps> = ({
                 </div>
 
                 {/* Bottom Visual Caption */}
-                <div className="absolute bottom-6 left-6 right-6 z-20 text-white">
+                <div className="absolute bottom-6 left-6 right-6 z-20 text-white pointer-events-none">
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#E8C56A]">
                     LEVIX Biosciences
                   </p>
@@ -481,7 +567,7 @@ export const Hero: React.FC<HeroProps> = ({
               key={`progress-bar-${currentSlide}`}
               className="h-full bg-gradient-to-r from-[#7137A5] via-[#A855F7] to-[#D49B24] rounded-r-full"
               style={{
-                animation: 'heroSlideProgress 4.5s linear forwards',
+                animation: 'heroSlideProgress 6s linear forwards',
               }}
             />
           </div>
@@ -523,7 +609,7 @@ export const Hero: React.FC<HeroProps> = ({
                         key={`dot-prog-${currentSlide}`}
                         className="absolute inset-0 rounded-full bg-gradient-to-r from-[#7137A5] to-[#D49B24]"
                         style={{
-                          animation: 'heroSlideProgress 4.5s linear forwards',
+                          animation: 'heroSlideProgress 6s linear forwards',
                         }}
                       />
                     )}

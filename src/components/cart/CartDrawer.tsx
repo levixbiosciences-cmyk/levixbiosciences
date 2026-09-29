@@ -38,9 +38,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [copiedToast, setCopiedToast] = useState(false);
   const [uploadedPrescriptionUrl, setUploadedPrescriptionUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [submittedOrderId, setSubmittedOrderId] = useState<string | null>(null);
+  const [prescriptionBase64, setPrescriptionBase64] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  if (!isOpen) return null;
 
   const totalItemsCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   const subtotal = cartItems.reduce((acc, item) => acc + (item.product.price || 0) * item.quantity, 0);
@@ -140,9 +140,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     setIsUploading(false);
     return null;
   };
-
-  const [submittedOrderId, setSubmittedOrderId] = useState<string | null>(null);
-  const [prescriptionBase64, setPrescriptionBase64] = useState<string | null>(null);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -329,6 +326,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
     setHasOpenedWhatsApp(true);
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">

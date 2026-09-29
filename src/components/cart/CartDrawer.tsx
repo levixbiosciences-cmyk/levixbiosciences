@@ -6,6 +6,7 @@ import {
   Check, Camera, AlertTriangle, Loader2, ExternalLink
 } from 'lucide-react';
 import { CartItem } from '../../types';
+import { fileToDataUrl, saveOrder, StoredOrder } from '../../utils/orderStorage';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -92,52 +93,57 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   // Helper: Upload prescription image to permanent storage so WhatsApp has the permanent photo link
   const uploadPrescriptionFile = async (file: File): Promise<string | null> => {
     setIsUploading(true);
+
+    // 1. Direct browser upload to tmpfiles.org (CORS allowed, instant public photo link)
     try {
       const formData = new FormData();
-      formData.append('reqtype', 'fileupload');
-      formData.append('fileToUpload', file, file.name);
+      formData.append('file', file, file.name);
 
-      const res = await fetch('/api/upload-prescription', {
+      const res = await fetch('https://tmpfiles.org/api/v1/upload', {
         method: 'POST',
         body: formData,
       });
 
       if (res.ok) {
         const data = await res.json();
-        if (data?.success && data?.url) {
-          setUploadedPrescriptionUrl(data.url);
+        if (data?.data?.url) {
+          setUploadedPrescriptionUrl(data.data.url);
           setIsUploading(false);
-          return data.url;
+          return data.data.url;
         }
       }
     } catch (err) {
-      console.warn('Proxy upload failed, attempting fallback...', err);
+      console.warn('Direct cloud upload note:', err);
     }
 
-    // Direct fallback (uguu) if proxy is offline
+    // 2. Fallback to server endpoint /api/upload-prescription
     try {
       const form = new FormData();
-      form.append('files[]', file, file.name);
-      const res = await fetch('https://n.uguu.se/upload', {
+      form.append('file', file, file.name);
+      const res = await fetch('/api/upload-prescription', {
         method: 'POST',
         body: form,
       });
-      const json = await res.json();
-      if (json?.files?.[0]?.url) {
-        const url = json.files[0].url;
-        setUploadedPrescriptionUrl(url);
-        setIsUploading(false);
-        return url;
+      if (res.ok) {
+        const json = await res.json();
+        if (json?.url) {
+          setUploadedPrescriptionUrl(json.url);
+          setIsUploading(false);
+          return json.url;
+        }
       }
     } catch (err2) {
-      console.warn('Fallback upload failed:', err2);
+      console.warn('Proxy upload failed:', err2);
     }
 
     setIsUploading(false);
     return null;
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [submittedOrderId, setSubmittedOrderId] = useState<string | null>(null);
+  const [prescriptionBase64, setPrescriptionBase64] = useState<string | null>(null);
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -150,24 +156,31 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     setPrescriptionError(null);
     setUploadedPrescriptionUrl(null);
 
-    if (file.type.startsWith('image/')) {
-      const url = URL.createObjectURL(file);
-      setPrescriptionPreview(url);
-      copyImageToClipboard(file);
-    } else {
-      setPrescriptionPreview(null);
+    try {
+      const dataUrl = await fileToDataUrl(file);
+      setPrescriptionBase64(dataUrl);
+
+      if (file.type.startsWith('image/')) {
+        setPrescriptionPreview(dataUrl);
+        copyImageToClipboard(file);
+      } else {
+        setPrescriptionPreview(null);
+      }
+    } catch (err) {
+      console.warn('Could not read file preview:', err);
     }
 
-    // Start background permanent upload immediately
+    // Also attempt background cloud upload if available
     uploadPrescriptionFile(file);
   };
 
   const handleRemoveFile = () => {
-    if (prescriptionPreview) {
+    if (prescriptionPreview && prescriptionPreview.startsWith('blob:')) {
       URL.revokeObjectURL(prescriptionPreview);
     }
     setPrescriptionFile(null);
     setPrescriptionPreview(null);
+    setPrescriptionBase64(null);
     setPrescriptionError(null);
     setUploadedPrescriptionUrl(null);
     setIsUploading(false);
@@ -194,18 +207,69 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       copyImageToClipboard(prescriptionFile);
     }
 
-    // Ensure prescription is uploaded and we have the permanent direct URL
-    let directPhotoUrl = uploadedPrescriptionUrl;
-    if (!directPhotoUrl) {
-      directPhotoUrl = await uploadPrescriptionFile(prescriptionFile);
+    // Ensure base64 is ready
+    let base64Data = prescriptionBase64;
+    if (!base64Data) {
+      try {
+        base64Data = await fileToDataUrl(prescriptionFile);
+        setPrescriptionBase64(base64Data);
+      } catch (e) {
+        console.error('Failed to convert file to dataUrl:', e);
+      }
     }
 
+    const orderId = `LX-${Math.floor(100000 + Math.random() * 900000)}`;
     const fileSizeFormatted = (prescriptionFile.size / 1024 < 1024)
       ? `${(prescriptionFile.size / 1024).toFixed(1)} KB`
       : `${(prescriptionFile.size / (1024 * 1024)).toFixed(1)} MB`;
 
-    // Generate formatted WhatsApp message
+    // 1. Permanently Save Order & High-Res Prescription into IndexedDB
+    const orderRecord: StoredOrder = {
+      id: orderId,
+      timestamp: Date.now(),
+      formattedDate: new Date().toLocaleString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+      customerName: customerName.trim(),
+      customerPhone: customerPhone.trim(),
+      deliveryAddress: deliveryAddress.trim(),
+      orderNotes: orderNotes.trim(),
+      items: cartItems.map((item) => ({
+        productId: item.product.id,
+        productName: item.product.name,
+        packSize: item.product.packSize,
+        quantity: item.quantity,
+        unitPrice: item.product.price || 0,
+        totalPrice: (item.product.price || 0) * item.quantity,
+      })),
+      totalAmount: subtotal,
+      prescription: {
+        fileName: prescriptionFile.name,
+        fileSize: prescriptionFile.size,
+        fileType: prescriptionFile.type,
+        fileSizeFormatted,
+        dataUrl: base64Data || '',
+      },
+      status: 'new',
+    };
+
+    await saveOrder(orderRecord);
+    setSubmittedOrderId(orderId);
+
+    // 2. Dispatch to server & Outlook notification API in background
+    fetch('/api/submit-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderRecord),
+    }).catch((err) => console.warn('Server sync note:', err));
+
+    // 3. Format WhatsApp message
     let message = `*NEW ORDER - LEVIX BIO SCIENCE PVT LTD*\n`;
+    message += `*Order ID:* #${orderId}\n`;
     message += `----------------------------------------\n`;
 
     if (customerName.trim()) {
@@ -235,14 +299,25 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     message += `*TOTAL AMOUNT: ₹${subtotal.toLocaleString('en-IN')}*\n`;
     message += `----------------------------------------\n`;
 
-    // Prescription info in WhatsApp message with PERMANENT DIRECT PHOTO LINK
+    // Ensure prescription is uploaded and we have the permanent direct URL
+    let directPhotoUrl = uploadedPrescriptionUrl;
+    if (!directPhotoUrl) {
+      directPhotoUrl = await uploadPrescriptionFile(prescriptionFile);
+    }
+
+    const liveVaultUrl = typeof window !== 'undefined'
+      ? `${window.location.origin}/api/view-prescription?id=${orderId}`
+      : '';
+
+    // Prescription info in WhatsApp message
     message += `*📋 DOCTOR PRESCRIPTION (Rx) - MANDATORY VERIFIED:*\n`;
     message += `• Prescription File: ${prescriptionFile.name} (${fileSizeFormatted})\n`;
-    message += `• Upload Status: ✓ VERIFIED ON SITE\n`;
+    message += `• Storage Status: ✓ SAVED IN LEVIX ADMIN STORAGE VAULT\n`;
+    message += `• Vault Order Ref: #${orderId}\n`;
     if (directPhotoUrl) {
-      message += `• 📸 *View Prescription Photo:*\n${directPhotoUrl}\n`;
+      message += `• 📸 *View / Download Prescription Photo:*\n${directPhotoUrl}\n`;
     } else {
-      message += `• 📎 _(Prescription photo uploaded from website)_\n`;
+      message += `• 📸 *View Prescription in Admin Vault:*\n${liveVaultUrl}\n`;
     }
     message += `----------------------------------------\n`;
     message += `Please confirm my order and share payment/delivery schedule. Thank you!`;
@@ -615,15 +690,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5 font-bold text-emerald-900 text-xs">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                      <span>Prescription Linked to WhatsApp!</span>
+                      <span>Prescription Saved to Admin Vault!</span>
                     </div>
-                    <span className="text-[10px] bg-emerald-200 text-emerald-800 font-bold px-2 py-0.5 rounded-full font-mono">
-                      1-Click Order
-                    </span>
+                    {submittedOrderId && (
+                      <span className="text-[10px] bg-emerald-200 text-emerald-900 font-bold px-2 py-0.5 rounded-full font-mono">
+                        #{submittedOrderId}
+                      </span>
+                    )}
                   </div>
 
                   <p className="text-[11px] text-emerald-950 leading-relaxed bg-white/90 p-2.5 rounded-xl border border-emerald-200">
-                    ✓ Your prescription photo link is <strong>already attached</strong> inside your WhatsApp order message. Simply press <strong>Send</strong> in WhatsApp!
+                    ✓ Your order and doctor prescription photo are <strong>safely archived</strong> in the LEVIX Admin Storage Vault. Press <strong>Send</strong> in WhatsApp to confirm with our pharmacist!
                   </p>
                 </div>
               )}

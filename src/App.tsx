@@ -9,6 +9,7 @@ import { ContactMinimal } from './components/sections/ContactMinimal';
 import { FooterMinimal } from './components/footer/FooterMinimal';
 import { FloatingQuickCall } from './components/common/FloatingQuickCall';
 import { CartDrawer } from './components/cart/CartDrawer';
+import { AdminPortalModal } from './components/admin/AdminPortalModal';
 import { CartItem, Product } from './types';
 import { ShoppingBag } from 'lucide-react';
 import { NeuralSignalNetwork } from './components/common/NeuralSignalNetwork';
@@ -17,6 +18,19 @@ export function App() {
   const [activeSection, setActiveSection] = useState<string>('home');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+
+  // Check URL hash for direct admin access (#admin)
+  useEffect(() => {
+    const handleHash = () => {
+      if (window.location.hash === '#admin') {
+        setIsAdminOpen(true);
+      }
+    };
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
 
   // IntersectionObserver to sync active section with Navbar on scroll
   useEffect(() => {
@@ -104,6 +118,7 @@ export function App() {
         onSectionClick={handleSectionClick}
         cartCount={totalCartCount}
         onOpenCart={() => setIsCartOpen(true)}
+        onOpenAdmin={() => setIsAdminOpen(true)}
       />
 
       {/* Main Single-Page Cohesive Flow */}
@@ -140,7 +155,10 @@ export function App() {
       </main>
 
       {/* Clean Minimal Footer */}
-      <FooterMinimal onSectionClick={handleSectionClick} />
+      <FooterMinimal
+        onSectionClick={handleSectionClick}
+        onOpenAdmin={() => setIsAdminOpen(true)}
+      />
 
       {/* Floating 1-Tap Mobile Call / WhatsApp Bar */}
       <FloatingQuickCall />
@@ -173,6 +191,17 @@ export function App() {
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onClearCart={handleClearCart}
+      />
+
+      {/* Admin Storage Vault Modal */}
+      <AdminPortalModal
+        isOpen={isAdminOpen}
+        onClose={() => {
+          setIsAdminOpen(false);
+          if (window.location.hash === '#admin') {
+            history.pushState('', document.title, window.location.pathname + window.location.search);
+          }
+        }}
       />
 
     </div>

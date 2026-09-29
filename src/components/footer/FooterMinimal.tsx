@@ -6,6 +6,7 @@ import {
   ShieldCheck,
   Instagram,
   Facebook,
+  Lock,
 } from 'lucide-react';
 import { LevixLogo } from '../common/LevixLogo';
 import { companyInfo } from '../../data/company';
@@ -13,10 +14,12 @@ import { NeuralSignalNetwork } from '../common/NeuralSignalNetwork';
 
 interface FooterMinimalProps {
   onSectionClick?: (sectionId: string) => void;
+  onOpenAdmin?: () => void;
 }
 
 export const FooterMinimal: React.FC<FooterMinimalProps> = ({
   onSectionClick,
+  onOpenAdmin,
 }) => {
   const handleNav = (id: string) => {
     if (onSectionClick) {
@@ -261,6 +264,20 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
             <span className="text-[#D49B24] font-semibold">
               ISO 9001:2015 Certified
             </span>
+
+            {onOpenAdmin && (
+              <>
+                <span className="text-white/20">•</span>
+                <button
+                  onClick={onOpenAdmin}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 hover:text-[#D8B4FE] transition-colors border border-white/10 text-[10px] font-mono"
+                  title="Open Doctor Prescription & Order Admin Storage Vault"
+                >
+                  <Lock className="w-3 h-3 text-[#D8B4FE]" />
+                  <span>Admin Storage</span>
+                </button>
+              </>
+            )}
 
           </div>
 

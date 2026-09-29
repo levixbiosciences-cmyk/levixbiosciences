@@ -12,6 +12,7 @@ import {
   Facebook,
   Instagram,
   Clock,
+  Lock,
 } from 'lucide-react';
 import LevixLogo from '../common/Levix.jpeg';
 import { companyInfo } from '../../data/company';
@@ -21,6 +22,7 @@ interface NavbarProps {
   onSectionClick?: (sectionId: string) => void;
   cartCount?: number;
   onOpenCart?: () => void;
+  onOpenAdmin?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -28,6 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSectionClick,
   cartCount = 0,
   onOpenCart,
+  onOpenAdmin,
 }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -319,6 +322,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                   </svg>
                 </button>
+
+                {onOpenAdmin && (
+                  <>
+                    <span className="text-white/20">|</span>
+                    <button
+                      type="button"
+                      onClick={onOpenAdmin}
+                      className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/10 hover:bg-[#E0B44C] hover:text-[#32164F] text-white/80 transition-colors text-[10px] font-mono cursor-pointer"
+                      title="Open Prescription & Order Admin Storage"
+                    >
+                      <Lock size={10} />
+                      <span>Admin Storage</span>
+                    </button>
+                  </>
+                )}
 
               </div>
             </div>

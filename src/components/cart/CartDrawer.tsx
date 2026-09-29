@@ -36,8 +36,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [prescriptionError, setPrescriptionError] = useState<string | null>(null);
   const [hasOpenedWhatsApp, setHasOpenedWhatsApp] = useState(false);
   const [copiedToast, setCopiedToast] = useState(false);
+  const [copiedMessageToast, setCopiedMessageToast] = useState(false);
   const [uploadedPrescriptionUrl, setUploadedPrescriptionUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
+  const [activeWhatsAppUrl, setActiveWhatsAppUrl] = useState<string | null>(null);
+  const [lastOrderMessage, setLastOrderMessage] = useState<string | null>(null);
   const [submittedOrderId, setSubmittedOrderId] = useState<string | null>(null);
   const [prescriptionBase64, setPrescriptionBase64] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -91,27 +95,41 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   };
 
   // Helper: Upload prescription image to permanent storage so WhatsApp has the permanent photo link
-  const uploadPrescriptionFile = async (file: File): Promise<string | null> => {
+  const uploadPrescriptionFile = async (file: File, base64Override?: string): Promise<string | null> => {
     setIsUploading(true);
 
-    // 1. Primary: Permanent High-Res Image CDN Proxy (/api/upload-prescription -> https://iili.io/...)
-    try {
-      const form = new FormData();
-      form.append('file', file, file.name);
-      const res = await fetch('/api/upload-prescription', {
-        method: 'POST',
-        body: form,
-      });
-      if (res.ok) {
-        const json = await res.json();
-        if (json?.success && json?.url) {
-          setUploadedPrescriptionUrl(json.url);
-          setIsUploading(false);
-          return json.url;
-        }
+    let base64 = base64Override || prescriptionBase64;
+    if (!base64) {
+      try {
+        base64 = await fileToDataUrl(file);
+        setPrescriptionBase64(base64);
+      } catch (err) {
+        console.warn('Could not read base64 in upload:', err);
       }
-    } catch (err) {
-      console.warn('Permanent CDN upload note:', err);
+    }
+
+    // 1. Primary: Permanent High-Res Image CDN Proxy (/api/upload-prescription -> https://iili.io/...)
+    if (base64) {
+      try {
+        const res = await fetch('/api/upload-prescription', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            base64,
+            filename: file.name,
+          }),
+        });
+        if (res.ok) {
+          const json = await res.json();
+          if (json?.success && json?.url) {
+            setUploadedPrescriptionUrl(json.url);
+            setIsUploading(false);
+            return json.url;
+          }
+        }
+      } catch (err) {
+        console.warn('Permanent CDN upload JSON note:', err);
+      }
     }
 
     // 2. Direct browser upload to tmpfiles.org as backup
@@ -154,8 +172,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     setPrescriptionError(null);
     setUploadedPrescriptionUrl(null);
 
+    let dataUrl = '';
     try {
-      const dataUrl = await fileToDataUrl(file);
+      dataUrl = await fileToDataUrl(file);
       setPrescriptionBase64(dataUrl);
 
       if (file.type.startsWith('image/')) {
@@ -168,8 +187,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       console.warn('Could not read file preview:', err);
     }
 
-    // Also attempt background cloud upload if available
-    uploadPrescriptionFile(file);
+    // Start background permanent cloud CDN upload immediately
+    uploadPrescriptionFile(file, dataUrl);
   };
 
   const handleRemoveFile = () => {
@@ -199,6 +218,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       }
       return;
     }
+
+    setIsProcessingCheckout(true);
 
     // Auto-copy image to clipboard as instant backup
     if (prescriptionFile.type.startsWith('image/')) {
@@ -255,7 +276,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       status: 'new',
     };
 
-    await saveOrder(orderRecord);
+    try {
+      await saveOrder(orderRecord);
+    } catch (saveErr) {
+      console.warn('saveOrder caught error:', saveErr);
+    }
     setSubmittedOrderId(orderId);
 
     // 2. Dispatch to server & Outlook notification API in background
@@ -265,7 +290,25 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       body: JSON.stringify(orderRecord),
     }).catch((err) => console.warn('Server sync note:', err));
 
-    // 3. Format WhatsApp message
+    // 3. Quick check for direct photo link (max 1.5s race if not already uploaded)
+    let directPhotoUrl = uploadedPrescriptionUrl;
+    if (!directPhotoUrl && prescriptionFile) {
+      try {
+        const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 1500));
+        directPhotoUrl = await Promise.race([
+          uploadPrescriptionFile(prescriptionFile, base64Data || undefined),
+          timeoutPromise
+        ]);
+      } catch (raceErr) {
+        console.warn('Upload race note:', raceErr);
+      }
+    }
+
+    const liveVaultUrl = typeof window !== 'undefined'
+      ? `${window.location.origin}/api/view-prescription?id=${orderId}`
+      : '';
+
+    // 4. Format WhatsApp message
     let message = `*NEW ORDER - LEVIX BIO SCIENCE PVT LTD*\n`;
     message += `*Order ID:* #${orderId}\n`;
     message += `----------------------------------------\n`;
@@ -297,16 +340,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     message += `*TOTAL AMOUNT: ₹${subtotal.toLocaleString('en-IN')}*\n`;
     message += `----------------------------------------\n`;
 
-    // Ensure prescription is uploaded and we have the permanent direct URL
-    let directPhotoUrl = uploadedPrescriptionUrl;
-    if (!directPhotoUrl) {
-      directPhotoUrl = await uploadPrescriptionFile(prescriptionFile);
-    }
-
-    const liveVaultUrl = typeof window !== 'undefined'
-      ? `${window.location.origin}/api/view-prescription?id=${orderId}`
-      : '';
-
     // Prescription info in WhatsApp message
     message += `*📋 DOCTOR PRESCRIPTION (Rx) - MANDATORY VERIFIED:*\n`;
     message += `• Prescription File: ${prescriptionFile.name} (${fileSizeFormatted})\n`;
@@ -320,11 +353,26 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     message += `----------------------------------------\n`;
     message += `Please confirm my order and share payment/delivery schedule. Thank you!`;
 
-    // Open WhatsApp Chat directly
+    setLastOrderMessage(message);
+
+    // Universal WhatsApp Link (wa.me)
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://api.whatsapp.com/send?phone=${targetWhatsAppNumber}&text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    const whatsappUrl = `https://wa.me/${targetWhatsAppNumber}?text=${encodedMessage}`;
+    
+    setActiveWhatsAppUrl(whatsappUrl);
     setHasOpenedWhatsApp(true);
+    setIsProcessingCheckout(false);
+
+    // Open WhatsApp Chat directly
+    const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      window.location.href = whatsappUrl;
+    } else {
+      const opened = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      if (!opened) {
+        window.location.href = whatsappUrl;
+      }
+    }
   };
 
   if (!isOpen) return null;
@@ -686,7 +734,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           {cartItems.length > 0 && (
             <div className="p-5 border-t border-[#E2E8F0] bg-white space-y-3">
               {hasOpenedWhatsApp && (
-                <div className="p-3.5 rounded-2xl bg-emerald-50 border-2 border-emerald-400 text-emerald-950 text-xs space-y-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <div className="p-3.5 rounded-2xl bg-emerald-50 border-2 border-emerald-400 text-emerald-950 text-xs space-y-2.5 animate-in fade-in slide-in-from-bottom-2 duration-300">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5 font-bold text-emerald-900 text-xs">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -700,30 +748,73 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   </div>
 
                   <p className="text-[11px] text-emerald-950 leading-relaxed bg-white/90 p-2.5 rounded-xl border border-emerald-200">
-                    ✓ Your order and doctor prescription photo are <strong>safely archived</strong> in the LEVIX Admin Storage Vault. Press <strong>Send</strong> in WhatsApp to confirm with our pharmacist!
+                    ✓ Your order and doctor prescription photo are <strong>safely archived</strong> in the LEVIX Admin Storage Vault. Tap the button below to confirm with our pharmacist in WhatsApp!
                   </p>
+
+                  {/* UNBLOCKABLE DIRECT LINK: 100% immune to popup blockers */}
+                  {activeWhatsAppUrl && (
+                    <a
+                      href={activeWhatsAppUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-3.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-extrabold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/30 text-center cursor-pointer transition-all active:scale-98"
+                    >
+                      <MessageSquare className="w-4 h-4 fill-white shrink-0" />
+                      <span>👉 TAP TO OPEN WHATSAPP CHAT</span>
+                      <ExternalLink className="w-4 h-4 shrink-0" />
+                    </a>
+                  )}
+
+                  {lastOrderMessage && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (typeof navigator !== 'undefined' && navigator.clipboard) {
+                          navigator.clipboard.writeText(lastOrderMessage);
+                          setCopiedMessageToast(true);
+                          setTimeout(() => setCopiedMessageToast(false), 3000);
+                        }
+                      }}
+                      className="w-full py-2 px-3 rounded-lg bg-white border border-emerald-300 text-emerald-800 text-xs font-semibold flex items-center justify-center gap-1.5 hover:bg-emerald-100/50 transition-colors cursor-pointer"
+                    >
+                      <Check className="w-3.5 h-3.5" />
+                      <span>{copiedMessageToast ? '✓ Order Text Copied to Clipboard!' : 'Copy Order Text to Clipboard'}</span>
+                    </button>
+                  )}
                 </div>
               )}
 
-              <button
-                onClick={handleWhatsAppCheckout}
-                disabled={isUploading}
-                className="w-full py-3.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] disabled:opacity-80 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/25 hover:shadow-xl transition-all duration-300 touch-target group cursor-pointer"
-                id="whatsapp-checkout-btn"
-              >
-                {isUploading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin text-white" />
-                    <span>Attaching Prescription Photo...</span>
-                  </>
-                ) : (
-                  <>
-                    <MessageSquare className="w-4 h-4 fill-white" />
-                    <span>{hasOpenedWhatsApp ? 'Re-open WhatsApp Chat' : `Order via WhatsApp (₹${subtotal.toLocaleString('en-IN')})`}</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </>
-                )}
-              </button>
+              {!hasOpenedWhatsApp && (
+                <button
+                  onClick={handleWhatsAppCheckout}
+                  disabled={isProcessingCheckout}
+                  className="w-full py-3.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] disabled:opacity-80 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/25 hover:shadow-xl transition-all duration-300 touch-target group cursor-pointer"
+                  id="whatsapp-checkout-btn"
+                >
+                  {isProcessingCheckout ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-white" />
+                      <span>Preparing WhatsApp Order...</span>
+                    </>
+                  ) : (
+                    <>
+                      <MessageSquare className="w-4 h-4 fill-white" />
+                      <span>Order via WhatsApp (₹{subtotal.toLocaleString('en-IN')})</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </button>
+              )}
+
+              {hasOpenedWhatsApp && (
+                <button
+                  onClick={handleWhatsAppCheckout}
+                  disabled={isProcessingCheckout}
+                  className="w-full py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <span>Re-send Order via WhatsApp</span>
+                </button>
+              )}
 
               <div className="flex flex-col items-center justify-center gap-1 text-[11px] text-[#64748B]">
                 <div className="flex items-center gap-2">

@@ -375,7 +375,7 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                 className="
                   shrink-0
                   h-11
-                  px-4
+                  px-3.5
                   sm:px-5
                   rounded-full
                   bg-[#7137A5]
@@ -385,18 +385,21 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                   font-bold
                   flex
                   items-center
-                  gap-2
+                  gap-1.5
+                  sm:gap-2
                   shadow-lg
                   shadow-[#7137A5]/20
                   transition-all
                   hover:-translate-y-0.5
+                  cursor-pointer
                 "
+                aria-label="View Cart"
               >
 
                 <ShoppingBag className="w-4 h-4" />
 
-                <span className="hidden sm:inline">
-                  View Cart
+                <span className="inline whitespace-nowrap">
+                  View Cart {Object.values(cartProductIds).reduce((a, b) => a + b, 0) > 0 ? `(${Object.values(cartProductIds).reduce((a, b) => a + b, 0)})` : ''}
                 </span>
 
               </button>
@@ -989,7 +992,13 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                       {/* ADD TO CART */}
 
                       <button
-                        onClick={() => handleAdd(product)}
+                        onClick={() => {
+                          if (countInCart > 0 && onOpenCart) {
+                            onOpenCart();
+                          } else {
+                            handleAdd(product);
+                          }
+                        }}
                         className={`
                           py-3
                           px-3
@@ -1001,6 +1010,7 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                           items-center
                           justify-center
                           gap-1.5
+                          cursor-pointer
                           ${isJustAdded
                             ? `
                                 bg-[#23834E]
@@ -1010,7 +1020,7 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                               ? `
                                 bg-[#7137A5]
                                 text-white
-                                shadow-md
+                                shadow-md hover:bg-[#5D278C]
                               `
                               : `
                                 bg-[#F5EFF9]
@@ -1021,6 +1031,7 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                               `
                           }
                         `}
+                        title={countInCart > 0 ? "Click to Open Cart & Checkout" : "Add to Cart"}
                       >
 
                         {isJustAdded ? (
@@ -1036,7 +1047,7 @@ export const FormulationsMinimal: React.FC<FormulationsMinimalProps> = ({
                             <ShoppingBag className="w-3.5 h-3.5" />
 
                             <span>
-                              In Cart ({countInCart})
+                              View in Cart ({countInCart})
                             </span>
                           </>
                         ) : (

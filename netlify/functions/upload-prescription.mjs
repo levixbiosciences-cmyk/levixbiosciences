@@ -1,5 +1,5 @@
 export default async (req) => {
-  // CORS Preflight
+  // Handle CORS Preflight
   if (req.method === 'OPTIONS') {
     return new Response(null, {
       status: 204,
@@ -22,11 +22,23 @@ export default async (req) => {
   }
 
   try {
-    const formData = await req.formData();
-    const file = formData.get('file') || formData.get('fileToUpload');
+    const contentType = req.headers.get('content-type') || '';
+    let base64Data = null;
 
-    if (!file) {
-      return new Response(JSON.stringify({ success: false, error: 'No file provided' }), {
+    if (contentType.includes('application/json')) {
+      const json = await req.json();
+      base64Data = json.base64;
+    } else {
+      const formData = await req.formData();
+      const file = formData.get('file') || formData.get('fileToUpload');
+      if (file && typeof file.arrayBuffer === 'function') {
+        const buffer = await file.arrayBuffer();
+        base64Data = Buffer.from(buffer).toString('base64');
+      }
+    }
+
+    if (!base64Data) {
+      return new Response(JSON.stringify({ success: false, error: 'No image data provided' }), {
         status: 400,
         headers: {
           'Content-Type': 'application/json',
@@ -35,12 +47,15 @@ export default async (req) => {
       });
     }
 
+    // Clean base64 prefix if present
+    const cleanBase64 = base64Data.replace(/^data:.+?;base64,/, '');
+
     // 1. Upload to FreeImage.host CDN (Permanent Image CDN Hosting)
     try {
       const uploadFd = new FormData();
       uploadFd.append('key', '6d207e02198a847aa98d0a2a901485a5');
       uploadFd.append('action', 'upload');
-      uploadFd.append('source', file);
+      uploadFd.append('source', cleanBase64);
       uploadFd.append('format', 'json');
 
       const res = await fetch('https://freeimage.host/api/1/upload', {
@@ -71,8 +86,9 @@ export default async (req) => {
 
     // 2. Backup upload to tmpfiles.org
     try {
+      const buf = Buffer.from(cleanBase64, 'base64');
       const backupFd = new FormData();
-      backupFd.append('file', file);
+      backupFd.append('file', new Blob([buf], { type: 'image/jpeg' }), 'prescription.jpg');
       const res = await fetch('https://tmpfiles.org/api/v1/upload', {
         method: 'POST',
         body: backupFd,

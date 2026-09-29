@@ -764,6 +764,42 @@ export const Navbar: React.FC<NavbarProps> = ({
                   );
                 })}
 
+                {onOpenCart && (
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onOpenCart();
+                    }}
+                    className="
+                      w-full
+                      flex
+                      items-center
+                      justify-between
+                      px-4
+                      py-3.5
+                      rounded-xl
+                      text-sm
+                      font-bold
+                      bg-[#FAF6FD]
+                      border
+                      border-[#E9DCF2]
+                      text-[#7137A5]
+                      hover:bg-[#F3EAF8]
+                      transition-all
+                      cursor-pointer
+                      mt-2
+                    "
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <ShoppingBag size={17} />
+                      <span>View Order Cart</span>
+                    </div>
+
+                    <span className="px-2.5 py-0.5 rounded-full bg-[#7137A5] text-white text-xs font-bold font-mono">
+                      {cartCount} item{cartCount !== 1 ? 's' : ''}
+                    </span>
+                  </button>
+                )}
               </div>
 
               {/* MOBILE CONTACT */}

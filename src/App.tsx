@@ -20,16 +20,22 @@ export function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
 
-  // Check URL hash for direct admin access (#admin)
+  // Check URL hash for direct admin access (#admin) and custom cart open events
   useEffect(() => {
     const handleHash = () => {
       if (window.location.hash === '#admin') {
         setIsAdminOpen(true);
       }
     };
+    const handleOpenCart = () => setIsCartOpen(true);
+
     handleHash();
     window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
+    window.addEventListener('open-cart', handleOpenCart);
+    return () => {
+      window.removeEventListener('hashchange', handleHash);
+      window.removeEventListener('open-cart', handleOpenCart);
+    };
   }, []);
 
   // IntersectionObserver to sync active section with Navbar on scroll
@@ -163,11 +169,11 @@ export function App() {
       {/* Floating 1-Tap Mobile Call / WhatsApp Bar */}
       <FloatingQuickCall />
 
-      {/* Floating Cart Trigger Widget (Desktop & Tablet) */}
+      {/* Floating Cart Trigger Widget (Above mobile bar on mobile, bottom right on desktop) */}
       {totalCartCount > 0 && (
         <button
           onClick={() => setIsCartOpen(true)}
-          className="fixed bottom-6 right-6 z-40 bg-[#0066CC] hover:bg-[#0052CC] text-white p-3.5 sm:px-5 sm:py-3.5 rounded-full shadow-2xl flex items-center gap-2.5 transition-all duration-300 hover:scale-105 animate-in slide-in-from-bottom-5 border-2 border-white/20 touch-target"
+          className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-50 bg-[#7137A5] hover:bg-[#5D278C] text-white p-3.5 sm:px-5 sm:py-3.5 rounded-full shadow-2xl flex items-center gap-2.5 transition-all duration-300 hover:scale-105 animate-in slide-in-from-bottom-5 border-2 border-white/40 cursor-pointer touch-target"
           id="floating-cart-btn"
           aria-label="View Cart and Order"
         >
@@ -177,7 +183,7 @@ export function App() {
               {totalCartCount}
             </span>
           </div>
-          <span className="hidden sm:inline font-bold text-xs">
+          <span className="inline font-bold text-xs">
             View Cart ({totalCartCount})
           </span>
         </button>

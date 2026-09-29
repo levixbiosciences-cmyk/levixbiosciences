@@ -94,7 +94,27 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const uploadPrescriptionFile = async (file: File): Promise<string | null> => {
     setIsUploading(true);
 
-    // 1. Direct browser upload to tmpfiles.org (CORS allowed, instant public photo link)
+    // 1. Primary: Permanent High-Res Image CDN Proxy (/api/upload-prescription -> https://iili.io/...)
+    try {
+      const form = new FormData();
+      form.append('file', file, file.name);
+      const res = await fetch('/api/upload-prescription', {
+        method: 'POST',
+        body: form,
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json?.success && json?.url) {
+          setUploadedPrescriptionUrl(json.url);
+          setIsUploading(false);
+          return json.url;
+        }
+      }
+    } catch (err) {
+      console.warn('Permanent CDN upload note:', err);
+    }
+
+    // 2. Direct browser upload to tmpfiles.org as backup
     try {
       const formData = new FormData();
       formData.append('file', file, file.name);
@@ -107,33 +127,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       if (res.ok) {
         const data = await res.json();
         if (data?.data?.url) {
-          setUploadedPrescriptionUrl(data.data.url);
+          const directUrl = data.data.url.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
+          setUploadedPrescriptionUrl(directUrl);
           setIsUploading(false);
-          return data.data.url;
-        }
-      }
-    } catch (err) {
-      console.warn('Direct cloud upload note:', err);
-    }
-
-    // 2. Fallback to server endpoint /api/upload-prescription
-    try {
-      const form = new FormData();
-      form.append('file', file, file.name);
-      const res = await fetch('/api/upload-prescription', {
-        method: 'POST',
-        body: form,
-      });
-      if (res.ok) {
-        const json = await res.json();
-        if (json?.url) {
-          setUploadedPrescriptionUrl(json.url);
-          setIsUploading(false);
-          return json.url;
+          return directUrl;
         }
       }
     } catch (err2) {
-      console.warn('Proxy upload failed:', err2);
+      console.warn('Backup upload note:', err2);
     }
 
     setIsUploading(false);

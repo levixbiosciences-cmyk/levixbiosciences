@@ -129,19 +129,43 @@ function uploadPrescriptionPlugin(): Plugin {
                 const buffer = Buffer.concat(chunks);
                 const contentType = req.headers['content-type'] || '';
 
+                // Try FreeImage.host
+                try {
+                  const uploadFd = new FormData();
+                  uploadFd.append('key', '6d207e02198a847aa98d0a2a901485a5');
+                  uploadFd.append('action', 'upload');
+                  uploadFd.append('source', new Blob([buffer], { type: contentType.split(';')[0] || 'image/jpeg' }), 'rx.jpeg');
+                  uploadFd.append('format', 'json');
+
+                  const response = await fetch('https://freeimage.host/api/1/upload', {
+                    method: 'POST',
+                    body: uploadFd,
+                  });
+                  const json = await response.json();
+                  if (json?.status_code === 200 && json?.image?.url) {
+                    res.setHeader('Content-Type', 'application/json');
+                    res.statusCode = 200;
+                    res.end(JSON.stringify({ success: true, url: json.image.url }));
+                    return;
+                  }
+                } catch (fiErr) {
+                  console.warn('FreeImage dev server error:', fiErr);
+                }
+
+                // Fallback to tmpfiles
+                const backupFd = new FormData();
+                backupFd.append('file', new Blob([buffer], { type: contentType }), 'rx.jpeg');
                 const response = await fetch('https://tmpfiles.org/api/v1/upload', {
                   method: 'POST',
-                  headers: {
-                    'content-type': contentType,
-                  },
-                  body: buffer,
+                  body: backupFd,
                 });
 
                 const json = await response.json();
                 if (json?.data?.url) {
+                  const directUrl = json.data.url.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
                   res.setHeader('Content-Type', 'application/json');
                   res.statusCode = 200;
-                  res.end(JSON.stringify({ success: true, url: json.data.url }));
+                  res.end(JSON.stringify({ success: true, url: directUrl }));
                   return;
                 }
 

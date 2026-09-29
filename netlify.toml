@@ -3,6 +3,11 @@
   publish = "dist"
   functions = "netlify/functions"
 
+[build.environment]
+  NODE_VERSION = "20"
+  NETLIFY_USE_PNPM = "false"
+  NPM_FLAGS = "--legacy-peer-deps"
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"

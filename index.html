@@ -14,11 +14,50 @@
   <meta property="og:image" content="/levix-logo.jpg" />
   <meta name="twitter:image" content="/levix-logo.jpg" />
   
-  <!-- Official Favicons & App Icons for Search Engines & Browsers -->
+  <link rel="canonical" href="https://www.levixbiosciences.com/" />
+  <meta name="theme-color" content="#7137A5" />
+
+  <!-- Google Search & Modern Browser Favicon Standards (Multiples of 48px) -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="/levix-logo.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Google Structured Data (Schema.org) for Brand Logo and Site Name in Search Results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://www.levixbiosciences.com/#organization",
+        "name": "LEVIX Bio Science Pvt Ltd",
+        "url": "https://www.levixbiosciences.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.levixbiosciences.com/levix-logo.png",
+          "width": 768,
+          "height": 768
+        },
+        "image": "https://www.levixbiosciences.com/levix-logo.png",
+        "description": "Specialized Neurological & Therapeutic Formulations delivering quality neuro and health solutions."
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://www.levixbiosciences.com/#website",
+        "url": "https://www.levixbiosciences.com",
+        "name": "LEVIX Bio Science",
+        "publisher": {
+          "@id": "https://www.levixbiosciences.com/#organization"
+        }
+      }
+    ]
+  }
+  </script>
 
   <link rel="preload" as="image" href="/dna.gif" type="image/gif">
   <link rel="preload" as="image" href="/levix-logo.png" type="image/png">

@@ -7,6 +7,7 @@ import {
   Instagram,
   Facebook,
   Lock,
+  Dna,
 } from 'lucide-react';
 import { LevixLogo } from '../common/LevixLogo';
 import { companyInfo } from '../../data/company';
@@ -270,7 +271,7 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
                 <span className="text-white/20">•</span>
                 <button
                   onClick={onOpenAdmin}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 hover:text-[#D8B4FE] transition-colors border border-white/10 text-[10px] font-mono"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 hover:text-[#D8B4FE] transition-colors border border-white/10 text-[10px] font-mono cursor-pointer"
                   title="Open Doctor Prescription & Order Admin Storage Vault"
                 >
                   <Lock className="w-3 h-3 text-[#D8B4FE]" />
@@ -278,6 +279,16 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
                 </button>
               </>
             )}
+
+            <span className="text-white/20">•</span>
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent('replay-intro'))}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 hover:text-cyan-300 transition-colors border border-white/10 text-[10px] font-mono cursor-pointer"
+              title="Experience LEVIX Molecular DNA Intro Animation"
+            >
+              <Dna className="w-3 h-3 text-cyan-400" />
+              <span>Replay DNA Intro</span>
+            </button>
 
           </div>
 

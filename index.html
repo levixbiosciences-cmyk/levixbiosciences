@@ -11,6 +11,17 @@
   <meta property="og:description"
     content="Specialized Neurological & Therapeutic Formulations. Explore formulations, order via WhatsApp, and access doctor prescription verification." />
   <meta property="og:type" content="website" />
+  <meta property="og:image" content="/levix-logo.jpg" />
+  <meta name="twitter:image" content="/levix-logo.jpg" />
+  
+  <!-- Official Favicons & App Icons for Search Engines & Browsers -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/levix-logo.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+  <link rel="preload" as="image" href="/dna.gif" type="image/gif">
+  <link rel="preload" as="image" href="/levix-logo.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -19,7 +30,19 @@
 </head>
 
 <body class="bg-[#F7F9F8] text-[#17212B] antialiased selection:bg-[#087F8C] selection:text-white overflow-x-hidden">
-  <div id="root"></div>
+  <div id="root">
+    <!-- Instant Fallback Biotech Preloader -->
+    <div id="levix-initial-loader" style="position:fixed;inset:0;background-color:#060A12;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;font-family:'Manrope',-apple-system,sans-serif;color:#ffffff;">
+      <div style="position:relative;width:76px;height:76px;border-radius:18px;overflow:hidden;box-shadow:0 0 35px rgba(113,55,165,0.6);margin-bottom:16px;background:#ffffff;padding:6px;display:flex;align-items:center;justify-content:center;">
+        <img src="/levix-logo.png" alt="LEVIX Logo" style="width:100%;height:100%;object-fit:contain;" />
+      </div>
+      <div style="position:relative;width:140px;height:140px;border-radius:24px;border:1px solid rgba(255,255,255,0.2);overflow:hidden;box-shadow:0 0 45px rgba(113,55,165,0.45);display:flex;align-items:center;justify-content:center;background:#0A0F1D;">
+        <img src="/dna.gif" alt="LEVIX DNA" style="width:100%;height:100%;object-fit:cover;" />
+      </div>
+      <div style="margin-top:20px;font-size:16px;font-weight:800;letter-spacing:0.18em;color:#ffffff;">LEVIX BIO SCIENCE</div>
+      <div style="margin-top:8px;font-size:11px;color:#A855F7;letter-spacing:0.08em;font-family:monospace;">INITIALIZING BIO-MOLECULAR MATRIX...</div>
+    </div>
+  </div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 

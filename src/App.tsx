@@ -13,12 +13,21 @@ import { AdminPortalModal } from './components/admin/AdminPortalModal';
 import { CartItem, Product } from './types';
 import { ShoppingBag } from 'lucide-react';
 import { NeuralSignalNetwork } from './components/common/NeuralSignalNetwork';
+import { LoadingScreen } from './components/common/LoadingScreen';
 
 export function App() {
+  const [showLoading, setShowLoading] = useState(true);
   const [activeSection, setActiveSection] = useState<string>('home');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+
+  // Custom event listener to replay intro if requested
+  useEffect(() => {
+    const handleReplayIntro = () => setShowLoading(true);
+    window.addEventListener('replay-intro', handleReplayIntro);
+    return () => window.removeEventListener('replay-intro', handleReplayIntro);
+  }, []);
 
   // Check URL hash for direct admin access (#admin) and custom cart open events
   useEffect(() => {
@@ -115,6 +124,11 @@ export function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8FC] text-[#0F172A] font-['DM_Sans'] antialiased selection:bg-[#7137A5] selection:text-white relative">
       
+      {/* Impressive Biotech DNA Intro & Preloader */}
+      {showLoading && (
+        <LoadingScreen onComplete={() => setShowLoading(false)} />
+      )}
+
       {/* Global Biological Brain Nerve Process Background */}
       <NeuralSignalNetwork fixed variant="light" opacity={0.42} />
 

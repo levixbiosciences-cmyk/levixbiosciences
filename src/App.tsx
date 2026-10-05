@@ -124,9 +124,12 @@ export function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8FC] text-[#0F172A] font-['DM_Sans'] antialiased selection:bg-[#7137A5] selection:text-white relative">
       
-      {/* Impressive Biotech DNA Intro & Preloader */}
+      {/* Clean Biotech Video Intro */}
       {showLoading && (
-        <LoadingScreen onComplete={() => setShowLoading(false)} />
+        <LoadingScreen 
+          videoSrc="/levix-front-loading.mp4" 
+          onComplete={() => setShowLoading(false)} 
+        />
       )}
 
       {/* Global Biological Brain Nerve Process Background */}

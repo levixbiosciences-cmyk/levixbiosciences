@@ -7,7 +7,7 @@ import {
   Instagram,
   Facebook,
   Lock,
-  Dna,
+  Play,
 } from 'lucide-react';
 import { LevixLogo } from '../common/LevixLogo';
 import { companyInfo } from '../../data/company';
@@ -284,10 +284,10 @@ export const FooterMinimal: React.FC<FooterMinimalProps> = ({
             <button
               onClick={() => window.dispatchEvent(new CustomEvent('replay-intro'))}
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 hover:text-cyan-300 transition-colors border border-white/10 text-[10px] font-mono cursor-pointer"
-              title="Experience LEVIX Molecular DNA Intro Animation"
+              title="Watch LEVIX Introduction Video"
             >
-              <Dna className="w-3 h-3 text-cyan-400" />
-              <span>Replay DNA Intro</span>
+              <Play className="w-2.5 h-2.5 text-cyan-400 fill-cyan-400" />
+              <span>Replay Video Intro</span>
             </button>
 
           </div>

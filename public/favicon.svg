@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B3AB8"/>
+      <stop offset="50%" stop-color="#6A1B9A"/>
+      <stop offset="100%" stop-color="#4A0E6C"/>
+    </linearGradient>
+    <linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="50%" stop-color="#E2E8F0"/>
+      <stop offset="100%" stop-color="#94A3B8"/>
+    </linearGradient>
+    <linearGradient id="dnaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9C27B0"/>
+      <stop offset="100%" stop-color="#4A148C"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Clean Circle Base -->
+  <circle cx="256" cy="256" r="248" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="4" filter="url(#shadow)"/>
+
+  <!-- Embedded High-Definition LEVIX LB Logo Image -->
+  <image href="/levix-logo.png" x="26" y="26" width="460" height="460" preserveAspectRatio="xMidYMid meet"/>
+</svg>
